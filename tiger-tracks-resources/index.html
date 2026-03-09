@@ -10,12 +10,9 @@
 #password-gate .gate-logo { font-size:1.5rem;font-weight:800;color:#fff;margin-bottom:.25rem;font-family:Georgia,'Playfair Display',serif; }
 #password-gate .gate-logo span { color:#229FA1; }
 #password-gate .gate-sub { color:#9E9E9E;font-size:.8rem;margin-bottom:1.5rem; }
-#password-gate input { width:100%;padding:.75rem 1rem;border:2px solid #2a2f35;border-radius:8px;background:#0A1119;color:#fff;font-size:1rem;text-align:center;letter-spacing:3px;outline:none;transition:border-color .2s; }
-#password-gate input:focus { border-color:#229FA1; }
-#password-gate button { width:100%;margin-top:1rem;padding:.7rem;background:#229FA1;color:#fff;border:none;border-radius:8px;font-size:.9rem;font-weight:700;cursor:pointer;transition:background .2s; }
-#password-gate button:hover { background:#1F807E; }
 #password-gate .gate-error { color:#ef4444;font-size:.8rem;margin-top:.75rem;display:none; }
 #password-gate .gate-lock { font-size:2.5rem;margin-bottom:1rem; }
+#password-gate .gate-hint { color:#9E9E9E;font-size:.75rem;margin-top:1rem; }
 .site-hidden { display:none !important; }
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -258,49 +255,71 @@ tr:hover td { background: #f9fafb; }
 </style>
 </head>
 <body>
-<!-- PASSWORD GATE -->
+<!-- GOOGLE OAUTH GATE -->
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <div id="password-gate">
   <div class="gate-box">
     <div class="gate-lock">🔒</div>
     <div class="gate-logo">TIGER <span>TRACKS</span></div>
     <div class="gate-sub">Team Resources Hub</div>
-    <input type="password" id="gate-input" placeholder="Enter access code" autofocus onkeydown="if(event.key==='Enter')checkGate()">
-    <button onclick="checkGate()">Access Site</button>
-    <div class="gate-error" id="gate-error">Incorrect code. Try again.</div>
+    <div id="g_id_onload"
+      data-client_id="1010698547754-h3pfeegsn3tkemksjjtjlcgccoqtqbt6.apps.googleusercontent.com"
+      data-callback="handleResourcesLogin"
+      data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-size="large"
+      data-theme="filled_black"
+      data-text="sign_in_with"
+      data-shape="rectangular"
+      data-logo_alignment="left">
+    </div>
+    <div class="gate-error" id="gate-error">Access denied. A tigertracks.ai email is required.</div>
+    <div class="gate-hint">Sign in with your @tigertracks.ai Google account</div>
   </div>
 </div>
 <script>
 (function(){
-  var PASS_HASH = 'b27f5dd4b61162d334ce841d1a37f24cc252556e265723edca743bb2579035ef';
-  // Check if already authenticated this session
-  if(sessionStorage.getItem('tt_auth')==='1'){
+  var STORAGE_KEY='tt_res_email';
+  var EXP_KEY='tt_res_exp';
+  function showSite(){
     document.getElementById('password-gate').style.display='none';
-  } else {
-    // Hide site content until authenticated
+    document.querySelectorAll('.site-hidden').forEach(function(el){el.classList.remove('site-hidden');});
+  }
+  function hideSite(){
     document.addEventListener('DOMContentLoaded',function(){
-      var main=document.querySelector('.topnav');if(main)main.classList.add('site-hidden');
-      var hero=document.querySelector('.hero');if(hero)hero.classList.add('site-hidden');
-      var container=document.querySelector('.container');if(container)container.classList.add('site-hidden');
+      ['topnav','hero','container'].forEach(function(cls){
+        var el=document.querySelector('.'+cls);if(el)el.classList.add('site-hidden');
+      });
       var fab=document.querySelector('.chat-fab');if(fab)fab.classList.add('site-hidden');
       var panel=document.querySelector('.chat-panel');if(panel)panel.classList.add('site-hidden');
       var back=document.getElementById('backTop');if(back)back.classList.add('site-hidden');
     });
   }
-  window.checkGate=function(){
-    var input=document.getElementById('gate-input').value;
-    // Simple hash check
-    crypto.subtle.digest('SHA-256',new TextEncoder().encode(input)).then(function(buf){
-      var hash=Array.from(new Uint8Array(buf)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
-      if(hash===PASS_HASH){
-        sessionStorage.setItem('tt_auth','1');
-        document.getElementById('password-gate').style.display='none';
-        document.querySelectorAll('.site-hidden').forEach(function(el){el.classList.remove('site-hidden');});
-      } else {
-        document.getElementById('gate-error').style.display='block';
-        document.getElementById('gate-input').value='';
-        document.getElementById('gate-input').focus();
+  // Auto-login if token still valid
+  var savedEmail=localStorage.getItem(STORAGE_KEY);
+  var savedExp=parseInt(localStorage.getItem(EXP_KEY)||'0');
+  if(savedEmail&&savedExp>Date.now()&&savedEmail.endsWith('@tigertracks.ai')){
+    showSite();
+  } else {
+    hideSite();
+  }
+  window.handleResourcesLogin=function(response){
+    var errEl=document.getElementById('gate-error');
+    errEl.style.display='none';
+    try {
+      var payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+      var email=(payload.email||'').toLowerCase();
+      if(!email.endsWith('@tigertracks.ai')){
+        errEl.style.display='block';return;
       }
-    });
+      localStorage.setItem(STORAGE_KEY,email);
+      localStorage.setItem(EXP_KEY,String(Date.now()+30*24*60*60*1000));
+      showSite();
+    } catch(e){
+      errEl.textContent='Sign-in error. Please try again.';errEl.style.display='block';
+    }
   };
 })();
 </script>
