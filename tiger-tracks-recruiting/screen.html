@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiger Tracks - Video Screening</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --accent: #229FA1;
+  --accent-dark: #1A7477;
+  --bg: #f8f7f4;
+  --bg-card: #ffffff;
+  --text: #1B2126;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --success: #059669;
+  --danger: #dc2626;
+  --warning: #f59e0b;
+  --nav-bg: #1B2126;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+.header { background: var(--nav-bg); padding: 1rem 2rem; display: flex; align-items: center; gap: .75rem; }
+.header img { height: 28px; }
+.header span { color: var(--accent); font-weight: 800; font-size: .95rem; letter-spacing: .5px; }
+.header .subtitle { color: rgba(255,255,255,.5); font-size: .8rem; margin-left: auto; }
+
+.container { max-width: 900px; margin: 0 auto; padding: 2rem; }
+
+.card { background: var(--bg-card); border-radius: 12px; padding: 2rem; box-shadow: 0 2px 12px rgba(0,0,0,.06); margin-bottom: 1.5rem; }
+
+h1 { font-size: 1.5rem; font-weight: 800; margin-bottom: .5rem; }
+h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: .5rem; }
+h3 { font-size: .95rem; font-weight: 700; margin-bottom: .5rem; }
+
+.btn { padding: .75rem 1.5rem; border: none; border-radius: 8px; font-weight: 700; font-family: inherit; cursor: pointer; font-size: .9rem; transition: all .2s; display: inline-flex; align-items: center; gap: .5rem; }
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary:hover { background: var(--accent-dark); }
+.btn-danger { background: var(--danger); color: #fff; }
+.btn-outline { background: transparent; border: 2px solid var(--border); color: var(--text); }
+.btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+.btn-lg { padding: 1rem 2.5rem; font-size: 1.1rem; }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+.form-input { padding: .6rem .75rem; border: 2px solid var(--border); border-radius: 8px; font-family: inherit; font-size: .9rem; width: 100%; }
+.form-input:focus { outline: none; border-color: var(--accent); }
+.form-label { font-size: .8rem; font-weight: 600; display: block; margin-bottom: .3rem; }
+
+/* VIDEO */
+.video-container { position: relative; background: #000; border-radius: 12px; overflow: hidden; aspect-ratio: 16/9; margin-bottom: 1rem; }
+.video-container video { width: 100%; height: 100%; object-fit: cover; }
+.video-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-direction: column; color: #fff; background: rgba(0,0,0,.6); }
+.video-overlay.hidden { display: none; }
+
+/* RECORDING INDICATOR */
+.rec-dot { width: 14px; height: 14px; background: var(--danger); border-radius: 50%; animation: pulse 1.2s infinite; display: inline-block; }
+@keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+
+/* TIMER */
+.timer-ring { position: relative; width: 80px; height: 80px; }
+.timer-ring svg { transform: rotate(-90deg); }
+.timer-ring .bg { fill: none; stroke: rgba(255,255,255,.15); stroke-width: 6; }
+.timer-ring .fg { fill: none; stroke: var(--accent); stroke-width: 6; stroke-linecap: round; transition: stroke-dashoffset .5s linear; }
+.timer-ring .time-text { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 900; color: #fff; }
+
+/* QUESTION CARD */
+.question-display { background: linear-gradient(135deg, var(--nav-bg), #2d3748); color: #fff; border-radius: 12px; padding: 1.5rem 2rem; margin-bottom: 1rem; min-height: 120px; display: flex; flex-direction: column; justify-content: center; }
+.question-display .q-number { font-size: .75rem; text-transform: uppercase; letter-spacing: 2px; color: var(--accent); font-weight: 700; margin-bottom: .5rem; }
+.question-display .q-text { font-size: 1.1rem; font-weight: 600; line-height: 1.6; }
+.question-display .q-context { font-size: .8rem; color: rgba(255,255,255,.5); margin-top: .5rem; }
+
+/* PROGRESS BAR */
+.progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin-bottom: 1rem; overflow: hidden; }
+.progress-bar .fill { height: 100%; background: var(--accent); border-radius: 3px; transition: width .3s; }
+
+/* STATUS BADGES */
+.status-badge { display: inline-flex; align-items: center; gap: .35rem; padding: .3rem .75rem; border-radius: 20px; font-size: .75rem; font-weight: 700; }
+.status-badge.recording { background: rgba(220,38,38,.1); color: var(--danger); }
+.status-badge.ready { background: rgba(5,150,105,.1); color: var(--success); }
+.status-badge.complete { background: rgba(34,159,161,.1); color: var(--accent); }
+
+/* WELCOME */
+.welcome-hero { text-align: center; padding: 2rem 0; }
+.welcome-hero .icon { font-size: 3.5rem; margin-bottom: 1rem; }
+.welcome-hero h1 { font-size: 1.8rem; margin-bottom: .5rem; }
+.welcome-hero p { color: var(--text-light); max-width: 500px; margin: 0 auto; }
+
+/* RULES */
+.rules-list { list-style: none; padding: 0; }
+.rules-list li { padding: .6rem 0; border-bottom: 1px solid var(--border); font-size: .88rem; display: flex; align-items: flex-start; gap: .5rem; }
+.rules-list li:last-child { border: none; }
+.rules-list .icon { font-size: 1rem; flex-shrink: 0; margin-top: .1rem; }
+
+/* REVIEW */
+.recording-card { background: var(--bg); border-radius: 10px; padding: 1rem; margin-bottom: .75rem; }
+.recording-card video { width: 100%; border-radius: 8px; margin-top: .5rem; }
+
+/* PHASE STEPPER */
+.stepper { display: flex; justify-content: center; gap: .5rem; margin-bottom: 2rem; }
+.step { width: 40px; height: 6px; border-radius: 3px; background: var(--border); }
+.step.active { background: var(--accent); }
+.step.done { background: var(--success); }
+
+@media (max-width: 600px) {
+  .container { padding: 1rem; }
+  .card { padding: 1.25rem; }
+  .question-display .q-text { font-size: .95rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="https://eliz.cliffeliz.ai/logo.png" alt="TT" onerror="this.style.display='none'">
+  <span>TIGER TRACKS</span>
+  <span class="subtitle">Live Video Screening</span>
+</div>
+
+<!-- PHASE 1: WELCOME & SETUP -->
+<div class="container" id="phase-welcome">
+  <div class="stepper"><div class="step active"></div><div class="step"></div><div class="step"></div><div class="step"></div></div>
+
+  <div class="welcome-hero">
+    <div class="icon">🎬</div>
+    <h1>Video Screening</h1>
+    <p>You'll be asked a series of questions and will record your responses on video. Questions are presented one at a time and cannot be seen in advance.</p>
+  </div>
+
+  <div class="card">
+    <h2>Before We Begin</h2>
+    <ul class="rules-list">
+      <li><span class="icon">📹</span> You'll need a working webcam and microphone</li>
+      <li><span class="icon">⏱️</span> Each question has a time limit - answer within the allotted time</li>
+      <li><span class="icon">🔒</span> Questions are hidden until recording begins - no advance preparation</li>
+      <li><span class="icon">🚫</span> You cannot pause, go back, or re-record a response</li>
+      <li><span class="icon">💡</span> Be specific - use real names, numbers, dates, and examples from your experience</li>
+      <li><span class="icon">🎯</span> There are no trick questions - we want to hear how you think and communicate</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>Confirm Your Info</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.75rem;">
+      <div>
+        <label class="form-label">Full Name *</label>
+        <input class="form-input" id="candName" placeholder="Your full name" required>
+      </div>
+      <div>
+        <label class="form-label">Email *</label>
+        <input class="form-input" id="candEmail" type="email" placeholder="Your email" required>
+      </div>
+    </div>
+    <div style="margin-top:1rem;">
+      <label class="form-label">Resume / CV *</label>
+      <div id="resumeDropZone" style="border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('resumeFile').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleResumeDrop(event)">
+        <div style="font-size:1.5rem;margin-bottom:.35rem;">📄</div>
+        <div style="font-size:.85rem;font-weight:600;" id="resumeLabel">Click or drag to upload your resume</div>
+        <div style="font-size:.72rem;color:var(--text-light);">PDF, DOC, or DOCX (max 10MB)</div>
+        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display:none;" onchange="handleResumeSelect(this)">
+      </div>
+    </div>
+    <div style="margin-top:1rem;text-align:center;">
+      <button class="btn btn-primary btn-lg" onclick="startSetup()">Continue to Camera Setup →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 2: CAMERA SETUP -->
+<div class="container" id="phase-setup" style="display:none;">
+  <div class="stepper"><div class="step done"></div><div class="step active"></div><div class="step"></div><div class="step"></div></div>
+
+  <div class="card" style="text-align:center;">
+    <h2>📹 Camera & Mic Check</h2>
+    <p style="color:var(--text-light);font-size:.88rem;margin-bottom:1rem;">Make sure your camera and microphone are working. You should see yourself below and the audio meter should respond to your voice.</p>
+
+    <div class="video-container" style="max-width:640px;margin:0 auto 1rem;">
+      <video id="setupVideo" autoplay muted playsinline></video>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:1rem;align-items:center;margin-bottom:1.5rem;">
+      <div>
+        <span class="form-label">Audio Level</span>
+        <div style="width:200px;height:12px;background:var(--border);border-radius:6px;overflow:hidden;margin-top:.3rem;">
+          <div id="audioMeter" style="height:100%;background:var(--success);border-radius:6px;width:0%;transition:width .1s;"></div>
+        </div>
+      </div>
+      <span class="status-badge ready" id="setupStatus">Camera Ready</span>
+    </div>
+
+    <div style="display:flex;justify-content:center;gap:.75rem;">
+      <button class="btn btn-outline" onclick="goToPhase('welcome')">← Back</button>
+      <button class="btn btn-primary btn-lg" id="beginBtn" onclick="beginScreening()">Begin Screening →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 3: SCREENING (Questions + Recording) -->
+<div class="container" id="phase-screening" style="display:none;">
+  <div class="stepper"><div class="step done"></div><div class="step done"></div><div class="step active"></div><div class="step"></div></div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem;">
+    <span class="status-badge recording" id="recBadge"><span class="rec-dot"></span> Recording</span>
+    <span style="font-size:.82rem;font-weight:600;color:var(--text-light);" id="qProgress">Question 1 of 5</span>
+  </div>
+
+  <div class="progress-bar"><div class="fill" id="qProgressBar" style="width:0%;"></div></div>
+
+  <div style="display:grid;grid-template-columns:1fr 280px;gap:1rem;">
+    <div>
+      <div class="question-display" id="questionDisplay">
+        <div class="q-number" id="qNum">QUESTION 1</div>
+        <div class="q-text" id="qText">Loading question...</div>
+        <div class="q-context" id="qContext"></div>
+      </div>
+
+      <div class="video-container" style="aspect-ratio:4/3;">
+        <video id="screenVideo" autoplay muted playsinline></video>
+        <div class="video-overlay hidden" id="videoCountdown">
+          <div style="font-size:3rem;font-weight:900;" id="countdownNum">3</div>
+          <div style="font-size:.9rem;margin-top:.5rem;">Get ready...</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card" style="text-align:center;padding:1.25rem;">
+        <h3 style="margin-bottom:.75rem;">Time Remaining</h3>
+        <div class="timer-ring" style="margin:0 auto;">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle class="bg" cx="40" cy="40" r="35"></circle>
+            <circle class="fg" id="timerCircle" cx="40" cy="40" r="35" stroke-dasharray="220" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="time-text" id="timerText">0:00</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:1rem;">
+        <h3 style="font-size:.82rem;margin-bottom:.5rem;">Tips</h3>
+        <ul style="font-size:.72rem;color:var(--text-light);padding-left:1rem;">
+          <li>Speak clearly and at a natural pace</li>
+          <li>Use specific examples with real details</li>
+          <li>It's okay to take a breath before answering</li>
+          <li>Look at the camera, not the screen</li>
+        </ul>
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;margin-top:.5rem;" id="nextQBtn" onclick="nextQuestion()">Next Question →</button>
+      <button class="btn btn-outline" style="width:100%;margin-top:.5rem;font-size:.78rem;" id="skipBtn" onclick="skipQuestion()">Skip This Question</button>
+    </div>
+  </div>
+</div>
+
+<!-- PHASE 4: COMPLETE -->
+<div class="container" id="phase-complete" style="display:none;">
+  <div class="stepper"><div class="step done"></div><div class="step done"></div><div class="step done"></div><div class="step active"></div></div>
+
+  <div class="card" style="text-align:center;">
+    <div style="font-size:3rem;margin-bottom:.5rem;">✅</div>
+    <h1>Screening Complete</h1>
+    <p style="color:var(--text-light);margin-bottom:1.5rem;">Thank you for completing the video screening. Your responses have been recorded and will be reviewed by our team.</p>
+    <div style="background:var(--bg);border-radius:10px;padding:1rem;display:inline-block;text-align:left;font-size:.85rem;">
+      <div><strong>Candidate:</strong> <span id="compName"></span></div>
+      <div><strong>Position:</strong> <span id="compRole"></span></div>
+      <div><strong>Questions Answered:</strong> <span id="compCount"></span></div>
+      <div><strong>Total Time:</strong> <span id="compTime"></span></div>
+    </div>
+  </div>
+
+  <div class="card" style="text-align:center;margin-top:1rem;">
+    <p style="font-size:.88rem;color:var(--text-light);margin-bottom:1rem;">Your video responses are ready to submit. Once submitted, they will be reviewed by the Tiger Tracks recruiting team.</p>
+    <button class="btn btn-primary btn-lg" onclick="submitRecordings()">📤 Submit My Screening</button>
+    <p style="font-size:.72rem;color:var(--text-light);margin-top:.75rem;">You can only submit once. Make sure you are ready before clicking submit.</p>
+  </div>
+</div>
+
+<script>
+// ===== CONFIG (set via URL params) =====
+var params=new URLSearchParams(window.location.search);
+var roleKey=params.get('role')||'BD';
+var candidateId=params.get('cid')||'';
+var sessionToken=params.get('token')||'';
+
+// ===== QUESTION BANKS PER ROLE =====
+var SCREEN_QUESTIONS={
+  AC:[
+    {q:'Tell us about yourself. What drew you to digital marketing and why are you interested in this role?',time:120,context:'We want to hear genuine interest, not a rehearsed pitch.'},
+    {q:'Describe a time you caught an error that could have caused a problem. What was the error, who was it for, and what did you do?',time:120,context:'Be specific - names, dates, what the error actually was.'},
+    {q:'You are managing tasks for 4 different clients and all have deadlines today. Walk us through exactly how you prioritize and get through the day.',time:120,context:'We want to see your actual process, not a generic answer.'},
+    {q:'What paid media platforms have you actually worked in? Pick one and tell us something specific you learned or a mistake you made.',time:120,context:'Hands-on experience only. If you have not used them, say so.'},
+    {q:'Tell us about a time you received critical feedback from a manager. What was it, and what did you change?',time:90,context:'We value coachability. Be honest.'}
+  ],
+  AS:[
+    {q:'Walk us through a campaign you optimized that improved performance. What was the account, what did you change, and what were the before/after numbers?',time:150,context:'Specific metrics required - ROAS, CPA, CTR, budget amounts.'},
+    {q:'You notice a client campaign is overspending by 30% halfway through the month. What do you do in the next 60 minutes?',time:120,context:'We want your actual steps, not theory.'},
+    {q:'Tell us about a time you had to push back on a client request because the data did not support it. What was the request, what did the data show, and how did you handle it?',time:150,context:'Real example with real details.'},
+    {q:'You are given a new account with $50K/month in spend across Google and Meta. Walk us through your first week - what do you look at, what questions do you ask, what do you prioritize?',time:150,context:'Show us your audit process.'},
+    {q:'What is a testing framework you have used? Give us a specific test you ran, the hypothesis, and the result.',time:120,context:'We want methodology, not buzzwords.'}
+  ],
+  AM:[
+    {q:'Tell us about a client relationship that was in trouble. What happened, what did you do specifically to fix it, and what was the outcome?',time:150,context:'Names and details matter. Vague answers will not score well.'},
+    {q:'Walk us through how you run a client status meeting. What do you prepare, what is the agenda, and how do you handle it when a client raises an unexpected issue during the call?',time:150,context:'Show us your process.'},
+    {q:'You just found out a campaign significantly underperformed last month. The client does not know yet. What do you do?',time:120,context:'We are evaluating your communication instincts.'},
+    {q:'Tell us about a time you identified and closed an upsell or expansion opportunity with an existing client. What was the opportunity, how did you pitch it, and what was the revenue impact?',time:150,context:'Revenue numbers required.'},
+    {q:'How do you prioritize when you have 8 clients, 3 are unhappy, and your team member just called out sick?',time:120,context:'Real-world chaos management.'},
+    {q:'Describe a time you coached or mentored someone more junior. What was the situation and what did you teach them?',time:120,context:'Leadership instincts matter at this level.'}
+  ],
+  SrAM:[
+    {q:'You manage a team of 3 AMs. One of them is consistently missing deadlines and clients are starting to notice. Walk us through exactly how you handle this over the next 2 weeks.',time:180,context:'We want specific steps, conversations, documentation.'},
+    {q:'Tell us about the largest account you have personally managed. What was the monthly spend, how many stakeholders, and what was your biggest challenge on that account?',time:150,context:'Scale and complexity matter.'},
+    {q:'Walk us through a time you had to deliver bad news to a senior client stakeholder. What was the news, how did you deliver it, and what happened?',time:150,context:'Executive communication skills.'},
+    {q:'You are reviewing your team portfolio and notice one AM has 3 accounts all showing declining performance. How do you diagnose whether it is the AM, the accounts, or the strategy?',time:150,context:'Analytical leadership.'},
+    {q:'Tell us about a time you built or improved a process that made your team more efficient. What was broken, what did you change, and what was the measurable result?',time:150,context:'Operational leadership.'},
+    {q:'What is the most revenue you have personally been responsible for retaining or growing in a single quarter? Walk us through how.',time:120,context:'Revenue accountability.'}
+  ],
+  AD:[
+    {q:'Tell us about the largest team you have led. How many people, what was the revenue under management, and how did you structure the team?',time:180,context:'Organizational design and scale.'},
+    {q:'Walk us through a time you had to make a difficult people decision - termination, restructure, or performance plan. What was the situation and how did you handle it?',time:150,context:'Leadership under pressure.'},
+    {q:'You just inherited a portfolio of clients where 40% have declining performance and retention is at risk. What is your 30-60-90 day plan?',time:180,context:'Strategic turnaround thinking.'},
+    {q:'How do you balance being client-facing vs. managing your team internally? Give us a specific example of a week where you had to navigate both.',time:150,context:'Time allocation and priority management at the director level.'},
+    {q:'Tell us about a time you had to have a difficult conversation with a peer or a leader above you. What was it about and how did you handle it?',time:120,context:'Executive courage.'}
+  ],
+  BD:[
+    {q:'Walk us through your last 3 closed deals. For each one: who was the prospect, what was the deal size, how long was the sales cycle, and what got them over the line?',time:180,context:'We need real specifics - company names, dollar amounts, timelines.'},
+    {q:'You are about to get on a pitch call with a $25K/month prospect. They currently run Google and Meta in-house. Walk us through your pitch - what do you open with, what do you show, and how do you close?',time:180,context:'Live pitch. Treat this like the real thing.'},
+    {q:'Tell us about a deal you lost. What happened, where did it go wrong, and what would you do differently?',time:150,context:'Self-awareness and learning ability.'},
+    {q:'You review the pipeline and see 15 deals sitting in proposal stage for more than 3 weeks. How do you diagnose and triage this?',time:150,context:'Pipeline management and urgency.'},
+    {q:'What is your outbound prospecting process? Walk us through a typical week - how many touches, what channels, what tools, and what is your conversion rate from outreach to meeting?',time:150,context:'Activity-level detail required.'},
+    {q:'A prospect says "we already work with an agency and we are happy." How do you respond? Give us the actual words you would use.',time:120,context:'Objection handling in real time.'},
+    {q:'Tell us about a time you sourced a partner or referral relationship that generated significant pipeline. Who was the partner, how did you build the relationship, and what was the result?',time:150,context:'Partner channel development.'}
+  ],
+  MKT:[
+    {q:'Show us your portfolio. Pick your 3 best pieces of content and for each one tell us: the brief, your process, and the measurable result.',time:180,context:'We want to see real work with real numbers.'},
+    {q:'Walk us through the organic content strategy you would build for an agency like Tiger Tracks. What channels, what content types, what cadence, and how do you measure success?',time:180,context:'Strategic thinking, not generic answers.'},
+    {q:'Tell us about a time your content directly generated inbound leads. What was the content, where did you distribute it, and how many leads did it drive?',time:150,context:'Lead generation focus, not just engagement.'},
+    {q:'You are given a LinkedIn company page with 2,000 followers and mediocre engagement. What do you do in the first 30 days to turn it around?',time:150,context:'Tactical execution plan.'},
+    {q:'What is the best headline you have ever written? Why did it work? Write us a headline for Tiger Tracks right now.',time:120,context:'Writing instinct in real time.'},
+    {q:'How do you decide what to create vs. what to delegate? Walk us through your creative process for a major content piece.',time:150,context:'Hands-on vs. strategic balance.'}
+  ]
+};
+
+// ===== STATE =====
+var stream=null, mediaRecorder=null, audioCtx=null, analyser=null;
+var questions=[], currentQ=0, recordings=[], timerInterval=null, timeLeft=0;
+var startTime=null, isRecording=false;
+var resumeFile=null;
+
+// ===== RESUME HANDLING =====
+function handleResumeSelect(input){
+  if(input.files&&input.files[0]) setResume(input.files[0]);
+}
+function handleResumeDrop(e){
+  if(e.dataTransfer.files&&e.dataTransfer.files[0]) setResume(e.dataTransfer.files[0]);
+}
+function setResume(file){
+  var valid=['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+  if(valid.indexOf(file.type)<0){alert('Please upload a PDF, DOC, or DOCX file.');return;}
+  if(file.size>10*1024*1024){alert('File too large. Max 10MB.');return;}
+  resumeFile=file;
+  document.getElementById('resumeLabel').innerHTML='✅ <strong>'+file.name+'</strong> ('+Math.round(file.size/1024)+'KB)';
+  document.getElementById('resumeDropZone').style.borderColor='var(--success)';
+}
+
+// ===== PHASE NAVIGATION =====
+function goToPhase(phase){
+  ['welcome','setup','screening','complete'].forEach(function(p){
+    document.getElementById('phase-'+p).style.display=p===phase?'block':'none';
+  });
+  window.scrollTo(0,0);
+}
+
+// ===== PHASE 1: WELCOME =====
+function startSetup(){
+  var name=document.getElementById('candName').value.trim();
+  var email=document.getElementById('candEmail').value.trim();
+  if(!name){alert('Please enter your name.');return;}
+  if(!email){alert('Please enter your email.');return;}
+  if(!resumeFile){alert('Please upload your resume.');return;}
+
+  goToPhase('setup');
+  initCamera('setupVideo');
+}
+
+// ===== CAMERA INIT =====
+function initCamera(videoId){
+  navigator.mediaDevices.getUserMedia({video:{width:{ideal:1280},height:{ideal:720},facingMode:'user'},audio:true})
+  .then(function(s){
+    stream=s;
+    var v=document.getElementById(videoId);
+    if(v){v.srcObject=s;}
+
+    // Audio meter
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    var source=audioCtx.createMediaStreamSource(s);
+    analyser=audioCtx.createAnalyser();
+    analyser.fftSize=256;
+    source.connect(analyser);
+    updateAudioMeter();
+
+    document.getElementById('setupStatus').textContent='Camera Ready';
+    document.getElementById('setupStatus').className='status-badge ready';
+  })
+  .catch(function(err){
+    document.getElementById('setupStatus').textContent='Camera Error: '+err.message;
+    document.getElementById('setupStatus').className='status-badge recording';
+  });
+}
+
+function updateAudioMeter(){
+  if(!analyser)return;
+  var data=new Uint8Array(analyser.frequencyBinCount);
+  analyser.getByteFrequencyData(data);
+  var avg=data.reduce(function(a,b){return a+b;},0)/data.length;
+  var meter=document.getElementById('audioMeter');
+  if(meter) meter.style.width=Math.min(100,avg*1.5)+'%';
+  requestAnimationFrame(updateAudioMeter);
+}
+
+// ===== PHASE 2: BEGIN SCREENING =====
+function beginScreening(){
+  questions=SCREEN_QUESTIONS[roleKey]||SCREEN_QUESTIONS['BD'];
+  currentQ=0;
+  recordings=[];
+  startTime=Date.now();
+
+  goToPhase('screening');
+
+  // Move stream to screening video
+  var v=document.getElementById('screenVideo');
+  if(v&&stream) v.srcObject=stream;
+
+  showCountdown(function(){
+    presentQuestion();
+  });
+}
+
+function showCountdown(cb){
+  var overlay=document.getElementById('videoCountdown');
+  var num=document.getElementById('countdownNum');
+  overlay.classList.remove('hidden');
+  var count=3;
+  num.textContent=count;
+  var iv=setInterval(function(){
+    count--;
+    if(count<=0){
+      clearInterval(iv);
+      overlay.classList.add('hidden');
+      if(cb)cb();
+    } else {
+      num.textContent=count;
+    }
+  },1000);
+}
+
+// ===== PRESENT QUESTION =====
+function presentQuestion(){
+  if(currentQ>=questions.length){finishScreening();return;}
+  var q=questions[currentQ];
+
+  document.getElementById('qNum').textContent='QUESTION '+(currentQ+1);
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('qContext').textContent=q.context||'';
+  document.getElementById('qProgress').textContent='Question '+(currentQ+1)+' of '+questions.length;
+  document.getElementById('qProgressBar').style.width=((currentQ)/questions.length*100)+'%';
+
+  // Start timer
+  timeLeft=q.time;
+  updateTimer();
+  timerInterval=setInterval(function(){
+    timeLeft--;
+    updateTimer();
+    if(timeLeft<=0){
+      clearInterval(timerInterval);
+      stopRecordingChunk();
+      currentQ++;
+      if(currentQ<questions.length){
+        showCountdown(function(){presentQuestion();});
+      } else {
+        finishScreening();
+      }
+    }
+  },1000);
+
+  // Start recording this chunk
+  startRecordingChunk();
+}
+
+function updateTimer(){
+  var m=Math.floor(timeLeft/60);
+  var s=timeLeft%60;
+  document.getElementById('timerText').textContent=m+':'+(s<10?'0':'')+s;
+
+  var totalTime=questions[currentQ]?questions[currentQ].time:120;
+  var pct=(1-timeLeft/totalTime)*220;
+  document.getElementById('timerCircle').style.strokeDashoffset=pct;
+
+  // Color warning
+  var circle=document.getElementById('timerCircle');
+  if(timeLeft<=10) circle.style.stroke='var(--danger)';
+  else if(timeLeft<=30) circle.style.stroke='var(--warning)';
+  else circle.style.stroke='var(--accent)';
+}
+
+// ===== RECORDING =====
+function startRecordingChunk(){
+  if(!stream)return;
+  var chunks=[];
+  try{
+    mediaRecorder=new MediaRecorder(stream,{mimeType:'video/webm;codecs=vp9,opus'});
+  }catch(e){
+    try{mediaRecorder=new MediaRecorder(stream,{mimeType:'video/webm'});}
+    catch(e2){mediaRecorder=new MediaRecorder(stream);}
+  }
+  mediaRecorder.ondataavailable=function(e){if(e.data.size>0)chunks.push(e.data);};
+  mediaRecorder.onstop=function(){
+    var blob=new Blob(chunks,{type:'video/webm'});
+    recordings.push({
+      questionIndex:currentQ,
+      question:questions[currentQ].q,
+      blob:blob,
+      url:URL.createObjectURL(blob),
+      duration:questions[currentQ].time-timeLeft,
+      skipped:false
+    });
+  };
+  mediaRecorder.start();
+  isRecording=true;
+  document.getElementById('recBadge').style.display='inline-flex';
+}
+
+function stopRecordingChunk(){
+  if(mediaRecorder&&mediaRecorder.state==='recording'){
+    mediaRecorder.stop();
+  }
+  isRecording=false;
+}
+
+// ===== NAVIGATION =====
+function nextQuestion(){
+  clearInterval(timerInterval);
+  stopRecordingChunk();
+  currentQ++;
+  if(currentQ<questions.length){
+    showCountdown(function(){presentQuestion();});
+  } else {
+    finishScreening();
+  }
+}
+
+function skipQuestion(){
+  clearInterval(timerInterval);
+  if(mediaRecorder&&mediaRecorder.state==='recording'){
+    mediaRecorder.stop();
+    // Mark as skipped
+    setTimeout(function(){
+      if(recordings.length>0&&recordings[recordings.length-1].questionIndex===currentQ){
+        recordings[recordings.length-1].skipped=true;
+      }
+    },100);
+  }
+  currentQ++;
+  if(currentQ<questions.length){
+    showCountdown(function(){presentQuestion();});
+  } else {
+    finishScreening();
+  }
+}
+
+// ===== FINISH =====
+function finishScreening(){
+  if(stream){stream.getTracks().forEach(function(t){t.stop();});}
+
+  var totalSec=Math.round((Date.now()-startTime)/1000);
+  var mins=Math.floor(totalSec/60);
+  var secs=totalSec%60;
+  var answered=recordings.filter(function(r){return !r.skipped}).length;
+
+  document.getElementById('compName').textContent=document.getElementById('candName').value;
+  document.getElementById('compRole').textContent=ROLES_DISPLAY[roleKey]||roleKey;
+  document.getElementById('compCount').textContent=answered+' of '+questions.length;
+  document.getElementById('compTime').textContent=mins+'m '+secs+'s';
+
+  goToPhase('complete');
+}
+
+function submitRecordings(){
+  if(hasAlreadySubmitted()){alert('You have already submitted this screening.');return;}
+  var name=document.getElementById('candName').value;
+  var email=document.getElementById('candEmail').value;
+  var submitBtn=document.querySelector('#phase-complete .btn-primary');
+  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Submitting...';}
+
+  // Build form data with resume + recordings + metadata
+  var formData=new FormData();
+  formData.append('candidate',name);
+  formData.append('email',email);
+  formData.append('role',roleKey);
+  formData.append('roleName',ROLES_DISPLAY[roleKey]||roleKey);
+  formData.append('date',new Date().toISOString());
+  formData.append('questionsAnswered',recordings.filter(function(r){return !r.skipped}).length);
+  formData.append('totalQuestions',questions.length);
+  formData.append('questions',JSON.stringify(recordings.map(function(r){return {q:r.question,duration:r.duration,skipped:r.skipped};})));
+
+  // Attach resume
+  if(resumeFile) formData.append('resume',resumeFile,resumeFile.name);
+
+  // Attach video recordings
+  recordings.forEach(function(r,i){
+    if(!r.skipped&&r.blob){
+      formData.append('video_'+i,r.blob,name.replace(/\s+/g,'_')+'_Q'+(r.questionIndex+1)+'.webm');
+    }
+  });
+
+  fetch('/api/screening-submit',{method:'POST',body:formData})
+  .then(function(res){return res.json()})
+  .then(function(data){
+    if(data.success){
+      alert('Your responses have been submitted successfully. Thank you, '+name+'! The Tiger Tracks team will review your screening and be in touch.');
+    } else {
+      alert('Submitted. Thank you, '+name+'!');
+    }
+    markSubmitted();
+    if(submitBtn){submitBtn.textContent='✅ Submitted';submitBtn.disabled=true;}
+  })
+  .catch(function(err){
+    // Fallback: save to localStorage
+    var submissions=JSON.parse(localStorage.getItem('ttrec_video_submissions')||'[]');
+    submissions.push({candidate:name,email:email,role:roleKey,date:new Date().toISOString(),
+      questions:recordings.map(function(r){return {q:r.question,duration:r.duration,skipped:r.skipped};}),
+      total:recordings.filter(function(r){return !r.skipped}).length});
+    localStorage.setItem('ttrec_video_submissions',JSON.stringify(submissions));
+    markSubmitted();
+    alert('Submitted locally. Thank you, '+name+'!');
+    if(submitBtn){submitBtn.textContent='✅ Submitted';submitBtn.disabled=true;}
+  });
+}
+
+var ROLES_DISPLAY={
+  AC:'Account Coordinator',AS:'Account Strategist',AM:'Account Manager',
+  SrAM:'Senior Account Manager',AD:'Associate Director',
+  BD:'Director of Partnerships, Performance',MKT:'Marketing Director',
+  DCS:'Director of Client Success',SrDCS:'Senior Director of Client Success'
+};
+
+// ===== SUBMISSION LOCK =====
+function getSubmissionKey(){
+  return 'ttrec_submitted_'+roleKey+'_'+(params.get('token')||'');
+}
+function hasAlreadySubmitted(){
+  return localStorage.getItem(getSubmissionKey())==='true';
+}
+function markSubmitted(){
+  localStorage.setItem(getSubmissionKey(),'true');
+}
+
+// ===== INIT =====
+// Pre-fill from URL params
+if(params.get('name')) document.getElementById('candName').value=params.get('name');
+if(params.get('email')) document.getElementById('candEmail').value=params.get('email');
+
+// Check if already submitted
+if(hasAlreadySubmitted()){
+  document.getElementById('phase-welcome').innerHTML='<div class="card" style="text-align:center;margin-top:3rem;"><div style="font-size:3rem;margin-bottom:.5rem;">✅</div><h1>Already Submitted</h1><p style="color:var(--text-light);margin-top:.5rem;">You have already completed this video screening. Your responses have been submitted and are under review. If you believe this is an error, please contact the Tiger Tracks recruiting team.</p></div>';
+}
+</script>
+</body>
+</html>

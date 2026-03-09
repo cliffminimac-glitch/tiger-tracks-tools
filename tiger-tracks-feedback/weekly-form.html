@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiger Tracks Weekly Check-In</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<style>
+:root { --accent:#229FA1; --accent-light:#e0f7f7; --text:#1a1a2e; --text-light:#6b7280; --border:#e5e7eb; --bg:#f9fafb; --panel:#fff; --success:#10b981; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+.header { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); color:#fff; padding:1.5rem 2rem; display:flex; align-items:center; gap:1rem; }
+.header img { height:44px; }
+.header h1 { font-size:1.15rem; font-weight:700; }
+.header .sub { font-size:.8rem; color:#94a3b8; margin-top:.15rem; }
+.container { max-width:720px; margin:2rem auto; padding:0 1.5rem; }
+.card { background:var(--panel); border-radius:12px; border:1px solid var(--border); padding:1.5rem; margin-bottom:1.25rem; }
+.card h2 { font-size:1rem; color:var(--accent); margin-bottom:.75rem; }
+label { font-size:.82rem; font-weight:600; display:block; margin-bottom:.3rem; }
+.hint { font-size:.75rem; color:var(--text-light); margin-bottom:.4rem; font-style:italic; }
+textarea { width:100%; padding:.6rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:.85rem; resize:vertical; min-height:70px; }
+textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(34,159,161,.15); }
+select { width:100%; padding:.5rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:.85rem; }
+.rv-radio { display:inline-flex; align-items:center; gap:.35rem; font-size:.85rem; cursor:pointer; margin-right:.75rem; }
+.btn { display:inline-block; padding:.7rem 1.5rem; background:var(--accent); color:#fff; border:none; border-radius:8px; font-weight:700; font-size:.9rem; cursor:pointer; font-family:inherit; }
+.btn:hover { opacity:.9; }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.success-msg { display:none; padding:1.25rem; background:#dcfce7; border:1px solid #86efac; border-radius:10px; text-align:center; }
+.success-msg h2 { color:#059669; margin-bottom:.3rem; }
+.meta-bar { display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:.5rem; font-size:.85rem; }
+.meta-bar strong { color:var(--accent); }
+.template-box { border:1px solid var(--border); border-radius:8px; padding:1rem; margin:.75rem 0; }
+.template-box .label { font-size:.7rem; font-weight:700; text-transform:uppercase; color:var(--accent); letter-spacing:1px; margin-bottom:.5rem; }
+.checklist-item { display:flex; align-items:flex-start; gap:.5rem; margin-bottom:.35rem; font-size:.83rem; }
+.checklist-item input[type="checkbox"] { margin-top:.25rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="/logo.png" alt="Tiger Tracks">
+  <div>
+    <h1>Weekly Check-In</h1>
+    <div class="sub" id="headerSub">Loading...</div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- GOOGLE SIGN-IN GATE -->
+  <div id="emailGate" class="card" style="max-width:440px;margin:3rem auto;padding:2rem;text-align:center;">
+    <h2 style="font-size:1.1rem;color:var(--accent);margin-bottom:.5rem;">🔒 Sign In to Continue</h2>
+    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:1.25rem;">Sign in with your Tiger Tracks Google account to access your check-in form.</p>
+    <div id="g_id_onload"
+      data-client_id="1010698547754-h3pfeegsn3tkemksjjtjlcgccoqtqbt6.apps.googleusercontent.com"
+      data-callback="handleGoogleSignIn"
+      data-auto_prompt="false">
+    </div>
+    <div class="g_id_signin"
+      data-type="standard"
+      data-shape="rectangular"
+      data-theme="outline"
+      data-text="sign_in_with"
+      data-size="large"
+      data-logo_alignment="left"
+      data-width="360">
+    </div>
+    <div id="gateError" style="display:none;margin-top:.6rem;color:#dc2626;font-size:.82rem;font-weight:600;"></div>
+  </div>
+
+  <div id="formArea" style="display:none;">
+    <div class="card">
+      <div class="meta-bar">
+        <div><strong>Employee:</strong> <span id="metaEmployee">--</span></div>
+        <div><strong>Role:</strong> <span id="metaRole">--</span></div>
+        <div><strong>Manager:</strong> <span id="metaManager">--</span></div>
+        <div><strong>Week of:</strong> <span id="metaWeek">--</span></div>
+      </div>
+    </div>
+
+    <!-- Employee Section -->
+    <div class="card">
+      <div class="template-box">
+        <div class="label">Employee Section</div>
+
+        <h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">🏆 Wins & Progress This Week</h4>
+        <textarea id="f_wins" rows="3" placeholder="List 1-2 wins or progress highlights..."></textarea>
+
+        <h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">🎯 Top Priority This Week</h4>
+        <textarea id="f_priority" rows="2" placeholder="What is your #1 focus?"></textarea>
+
+        <h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">⚠️ Risks, Blockers, or Deadlines at Risk</h4>
+        <textarea id="f_risks" rows="2" placeholder="Include churn risks if applicable..."></textarea>
+
+        <h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">👥 Direct Reports Check-In <span style="font-weight:400;color:var(--text-light);">(if applicable)</span></h4>
+        <textarea id="f_reports" rows="2" placeholder="Accounts / Bandwidth / Feedback / People Management..."></textarea>
+
+        <h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">📊 Capacity</h4>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin:.5rem 0;">
+          <label class="rv-radio"><input type="radio" name="f_capacity" value="under"> 🔵 Under</label>
+          <label class="rv-radio"><input type="radio" name="f_capacity" value="at"> 🟢 At</label>
+          <label class="rv-radio"><input type="radio" name="f_capacity" value="over"> 🔴 Over</label>
+        </div>
+        <textarea id="f_capacity_note" rows="1" placeholder="If over: what needs to shift?"></textarea>
+
+        <h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">🙋 Support / Feedback Needed From Manager</h4>
+        <textarea id="f_support" rows="2" placeholder="If nothing is blocked, say so clearly."></textarea>
+      </div>
+    </div>
+
+    <!-- Role-specific section -->
+    <div id="roleSection"></div>
+
+    <div style="text-align:center;margin:1.5rem 0;">
+      <button class="btn" id="submitBtn" onclick="submitWeekly()">Submit Weekly Check-In</button>
+      <div id="autoSaveStatus" style="font-size:.75rem;color:var(--success);margin-top:.4rem;opacity:.5;">Auto-saves as you type</div>
+    </div>
+  </div>
+
+  <div id="successMsg" class="success-msg">
+    <h2>Check-In Submitted!</h2>
+    <p>Thank you for completing your weekly check-in. Your manager will review it.</p>
+  </div>
+</div>
+
+<script>
+// ===== ACCESS CONTROL =====
+var EMAIL_MAP={"Riley Abercrombie":"riley@tigertracks.ai","Hannah Price":"hannah@tigertracks.ai","Charlotte Pohl":"charlotte@tigertracks.ai","Allison Long":"allison@tigertracks.ai","Rachel Scharett":"rachael@tigertracks.ai","Shelby Nations":"shelby@tigertracks.ai","Owen Phipps":"owen@tigertracks.ai","Megan Brenneke":"meganb@tigertracks.ai","Seth McDaniel":"seth@tigertracks.ai","Mary McCambridge":"mary@tigertracks.ai","Will Sokol":"will@tigertracks.ai","Gretchen Hess":"gretchen@tigertracks.ai","Megan Klein":"megank@tigertracks.ai","Daren Kalkoffen":"daren@tigertracks.ai","Evin Leclerc":"evin@tigertracks.ai","Kiyana Saidi-Nejad":"kiyana@tigertracks.ai","Bruno Milalaf":"bruno@tigertracks.ai","Billy Bevevino":"billy@tigertracks.ai","Tate Dewey":"tate@tigertracks.ai","Sanad Shuman":"sanad@tigertracks.ai","Alex Blumberg":"alex@tigertracks.ai","Steven Jatich":"steven@tigertracks.ai","Kersten Kruse":"kersten@tigertracks.ai","Anirudh Venkat":"anirudh@tigertracks.ai","Ashley Kaika":"ashley@tigertracks.ai"};
+var ORG={"Riley Abercrombie":{manager:"Rachel Scharett",practice:"am"},"Hannah Price":{manager:"Rachel Scharett",practice:"am"},"Charlotte Pohl":{manager:"Rachel Scharett",practice:"am"},"Allison Long":{manager:"Rachel Scharett",practice:"am"},"Rachel Scharett":{manager:"",practice:"am"},"Shelby Nations":{manager:"Riley Abercrombie",practice:"am"},"Owen Phipps":{manager:"Riley Abercrombie",practice:"am"},"Megan Brenneke":{manager:"Shelby Nations",practice:"am"},"Seth McDaniel":{manager:"Shelby Nations",practice:"am"},"Mary McCambridge":{manager:"Hannah Price",practice:"am"},"Will Sokol":{manager:"Hannah Price",practice:"am"},"Gretchen Hess":{manager:"Mary McCambridge",practice:"am"},"Megan Klein":{manager:"Will Sokol",practice:"am"},"Daren Kalkoffen":{manager:"Gretchen Hess",practice:"am"},"Evin Leclerc":{manager:"Gretchen Hess",practice:"am"},"Kiyana Saidi-Nejad":{manager:"Charlotte Pohl",practice:"am"},"Bruno Milalaf":{manager:"Charlotte Pohl",practice:"am"},"Billy Bevevino":{manager:"Charlotte Pohl",practice:"am"},"Tate Dewey":{manager:"Kiyana Saidi-Nejad",practice:"am"},"Sanad Shuman":{manager:"Charlotte Pohl",practice:"am"},"Alex Blumberg":{manager:"Ashley Kaika",practice:"part"},"Steven Jatich":{manager:"Ashley Kaika",practice:"part"},"Kersten Kruse":{manager:"Ashley Kaika",practice:"mkt"},"Anirudh Venkat":{manager:"Kersten Kruse",practice:"mkt"},"Ashley Kaika":{manager:"",practice:"part"}};
+var GLOBAL_ADMINS=["cliff@tigertracks.ai","elizabeth@tigertracks.ai"];
+
+function buildAllowedEmails(name){
+  var allowed=GLOBAL_ADMINS.slice();
+  if(EMAIL_MAP[name])allowed.push(EMAIL_MAP[name]);
+  var p=ORG[name];
+  if(p&&p.manager&&EMAIL_MAP[p.manager])allowed.push(EMAIL_MAP[p.manager]);
+  if(p&&p.practice==='am')allowed.push("rachael@tigertracks.ai");
+  return allowed.map(function(e){return e.toLowerCase();});
+}
+
+var _verifiedEmail='';
+
+function handleGoogleSignIn(response){
+  var errEl=document.getElementById('gateError');
+  errEl.style.display='none';
+  try {
+    // Decode JWT payload (base64)
+    var payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+    var email=(payload.email||'').toLowerCase();
+    if(!email){errEl.textContent='Could not read email from Google account.';errEl.style.display='block';return;}
+    var allowed=buildAllowedEmails(employee);
+    if(allowed.indexOf(email)<0){
+      errEl.textContent='Access denied. Use your authorized Tiger Tracks Google account.';
+      errEl.style.display='block';return;
+    }
+    _verifiedEmail=email;
+    localStorage.setItem('tt_google_email',email);
+    localStorage.setItem('tt_google_exp',String(Date.now()+30*24*60*60*1000)); // 30 days
+    document.getElementById('emailGate').style.display='none';
+    document.getElementById('formArea').style.display='';
+    loadSaved();setTimeout(attachAutoSave,500);
+  } catch(e){
+    errEl.textContent='Sign-in error. Please try again.';errEl.style.display='block';
+  }
+}
+
+// Params
+var params=new URLSearchParams(window.location.search);
+var employee=params.get('employee')||'';
+var manager=params.get('manager')||'';
+var role=params.get('role')||'';
+var week=params.get('week')||new Date().toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+
+// Auto-bypass if Google signed in (persists 30 days)
+(function(){
+  var v=localStorage.getItem('tt_google_email');
+  var exp=parseInt(localStorage.getItem('tt_google_exp')||'0');
+  if(v&&exp>Date.now()&&buildAllowedEmails(employee).indexOf(v)>=0){
+    _verifiedEmail=v;
+    document.getElementById('emailGate').style.display='none';
+    document.getElementById('formArea').style.display='';
+    loadSaved();setTimeout(attachAutoSave,500);
+  }
+})();
+
+document.getElementById('metaEmployee').textContent=employee;
+document.getElementById('metaRole').textContent=role;
+document.getElementById('metaManager').textContent=manager;
+document.getElementById('metaWeek').textContent=week;
+document.getElementById('headerSub').textContent=employee+' | Week of '+week;
+
+// ===== ROLE-SPECIFIC SECTIONS =====
+var partnershipsSections={
+  "Partnerships Director":{
+    title:"Partnerships Director Weekly Check",
+    sections:[
+      {h:"1. Deal Ownership",items:["Did every active deal have an owner?","A next-step task?","Logged activity in last 7 days?","Any deal approaching the 7-day inactivity rule?","Any deal missing a next step?"]},
+      {h:"2. OKR Weekly Check",items:["Weekly outbound emails sent: x/150","Reply rate: 6-10%","Weekly brand discovery calls: x/5","Warm reactivation meetings: x/1","Go-forwards/audits presented: x/2","Total Value of Deals Owned MTD - Pipeline: $___","Total Value of Deals Owned MTD - Closed: $___"]},
+      {h:"3. Audit & Go-Forward Coordination",items:["Any enterprise audits scheduled this week?","SWAT channel created within 24 hours?","Intake sheet + discovery recording pinned?","Any gaps Ops had to fill?"]},
+      {h:"4. Availability, Risk, Escalation",items:["Any audits, kickoffs, or deals at risk?","Any unclear scopes needing tightening?","Any communication gaps with AM team?","Anything blocking outbound consistency?"]}
+    ]
+  },
+  "Head of Partnerships":{
+    title:"Head of Partnerships Weekly Check",
+    sections:[
+      {h:"1. Enterprise Deal Ownership",items:["Which enterprise deals moved forward this week?","Any deal approaching the 7-day inactivity rule?","Any enterprise deal missing a next step?"]},
+      {h:"2. OKR Weekly Check",items:["Outbound Emails Sent (x/180): 30 Agency + 150 T1-2 Brand","Tier 1-2 Brand Discovery (Cold): x/5","Partner-Intro'd Brand Meetings: x/1","Fund/Agency Partner Meetings: x/2","Go-forwards/audits presented: x/2","Total Value MTD - Pipeline: $___","Total Value MTD - Closed: $___"]},
+      {h:"3. Enterprise Audit Coordination >$30K",items:["Any enterprise audits scheduled?","SWAT channel created within 24 hours?","Intake sheet + discovery recording pinned?"]},
+      {h:"4. Leadership & Ownership Check",items:["How is the Partnerships Director doing against SOP?","What feedback did you deliver this week?","What was corrected immediately?","Any missed expectations from downline?"]},
+      {h:"5. Risks & Escalation",items:["Any enterprise deal at risk?","Any partner relationship needing attention?","Anywhere CEO still being pulled in unnecessarily?"]}
+    ]
+  }
+};
+
+var tmpl=partnershipsSections[role];
+if(tmpl){
+  var h='<div class="card"><div class="template-box" style="background:#f0fafa;border-color:#229FA1;"><div class="label">'+tmpl.title+'</div>';
+  tmpl.sections.forEach(function(sec){
+    h+='<h4 style="margin:.75rem 0 .5rem;font-size:.9rem;">'+sec.h+'</h4>';
+    sec.items.forEach(function(item){
+      h+='<div class="checklist-item"><input type="checkbox"><span>'+item+'</span></div>';
+    });
+    h+='<textarea rows="2" placeholder="Notes..." style="margin-top:.3rem;margin-bottom:.5rem;"></textarea>';
+  });
+  h+='</div></div>';
+  document.getElementById('roleSection').innerHTML=h;
+}
+
+// ===== AUTO-SAVE =====
+var saveKey='tt_wk_'+btoa(employee+'-'+week).replace(/=/g,'');
+var _saveTimer=null;
+var _lastSaved='';
+
+function gatherData(){
+  var data={type:'weekly',employee:employee,manager:manager,role:role,week:week};
+  data.wins=document.getElementById('f_wins').value;
+  data.priority=document.getElementById('f_priority').value;
+  data.risks=document.getElementById('f_risks').value;
+  data.reports=document.getElementById('f_reports').value;
+  var cap=document.querySelector('input[name="f_capacity"]:checked');
+  data.capacity=cap?cap.value:'';
+  data.capacityNote=document.getElementById('f_capacity_note').value;
+  data.support=document.getElementById('f_support').value;
+  // Role section textareas
+  var roleTAs=document.querySelectorAll('#roleSection textarea');
+  var roleNotes=[];roleTAs.forEach(function(ta){roleNotes.push(ta.value);});
+  if(roleNotes.length)data.roleNotes=roleNotes;
+  // Role section checkboxes
+  var roleCBs=document.querySelectorAll('#roleSection input[type="checkbox"]');
+  var checks=[];roleCBs.forEach(function(cb){checks.push(cb.checked);});
+  if(checks.length)data.roleChecks=checks;
+  return data;
+}
+
+function autoSave(){
+  var data=gatherData();
+  var json=JSON.stringify(data);
+  if(json===_lastSaved)return; // no changes
+  _lastSaved=json;
+  // Save locally
+  localStorage.setItem(saveKey,json);
+  // Save to server (upsert)
+  fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:json}).then(function(){
+    var el=document.getElementById('autoSaveStatus');
+    if(el){el.textContent='Auto-saved';el.style.opacity='1';setTimeout(function(){el.style.opacity='.5';},1500);}
+  }).catch(function(){});
+}
+
+function triggerAutoSave(){
+  clearTimeout(_saveTimer);
+  _saveTimer=setTimeout(autoSave,1500);
+}
+
+// Restore saved data on load
+function restoreData(data){
+  if(!data)return;
+  if(data.wins)document.getElementById('f_wins').value=data.wins;
+  if(data.priority)document.getElementById('f_priority').value=data.priority;
+  if(data.risks)document.getElementById('f_risks').value=data.risks;
+  if(data.reports)document.getElementById('f_reports').value=data.reports;
+  if(data.capacity){
+    var r=document.querySelector('input[name="f_capacity"][value="'+data.capacity+'"]');
+    if(r)r.checked=true;
+  }
+  if(data.capacityNote)document.getElementById('f_capacity_note').value=data.capacityNote;
+  if(data.support)document.getElementById('f_support').value=data.support;
+  if(data.roleNotes){
+    var roleTAs=document.querySelectorAll('#roleSection textarea');
+    data.roleNotes.forEach(function(v,i){if(roleTAs[i])roleTAs[i].value=v;});
+  }
+  if(data.roleChecks){
+    var roleCBs=document.querySelectorAll('#roleSection input[type="checkbox"]');
+    data.roleChecks.forEach(function(v,i){if(roleCBs[i])roleCBs[i].checked=v;});
+  }
+  _lastSaved=JSON.stringify(gatherData());
+}
+
+// Try loading from server first, fall back to localStorage
+function loadSaved(){
+  fetch('/api/feedback?type=weekly&employee='+encodeURIComponent(employee)+'&week='+encodeURIComponent(week))
+    .then(function(r){return r.json();})
+    .then(function(all){
+      var match=null;
+      if(Array.isArray(all)){
+        for(var i=all.length-1;i>=0;i--){
+          if(all[i].employee===employee&&all[i].week===week&&all[i].type==='weekly'){match=all[i];break;}
+        }
+      }
+      if(match){
+        restoreData(match);
+        if(match.finalSubmitted){
+          document.getElementById('formArea').style.display='none';
+          document.getElementById('successMsg').style.display='block';
+        }
+      } else {
+        var local=localStorage.getItem(saveKey);
+        if(local) try{restoreData(JSON.parse(local));}catch(e){}
+      }
+    })
+    .catch(function(){
+      var local=localStorage.getItem(saveKey);
+      if(local) try{restoreData(JSON.parse(local));}catch(e){}
+    });
+}
+
+// Attach auto-save listeners after form is shown
+function attachAutoSave(){
+  document.querySelectorAll('#formArea textarea, #formArea input, #roleSection textarea, #roleSection input').forEach(function(el){
+    el.addEventListener('input',triggerAutoSave);
+    el.addEventListener('change',triggerAutoSave);
+  });
+}
+
+// If already verified on load (handled by auto-bypass above)
+
+// ===== SUBMIT =====
+function submitWeekly(){
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Submitting...';
+
+  var data=gatherData();
+  data.finalSubmitted=true;
+  data.submitted=new Date().toISOString();
+
+  fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){});
+  localStorage.setItem(saveKey,JSON.stringify(data));
+
+  document.getElementById('formArea').style.display='none';
+  document.getElementById('successMsg').style.display='block';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

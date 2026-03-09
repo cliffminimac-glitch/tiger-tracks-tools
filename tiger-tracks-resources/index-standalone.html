@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiger Tracks | Team Resources</title>
+<style>
+:root {
+  --primary: #1a1a2e;
+  --accent: #e8a838;
+  --accent-light: #f5c563;
+  --bg: #fafafa;
+  --card-bg: #ffffff;
+  --text: #2d2d2d;
+  --text-light: #6b7280;
+  --border: #e5e7eb;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #3b82f6;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+a { color: var(--accent); text-decoration: none; }
+
+/* NAV */
+.topnav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--primary); padding: 0 2rem; height: 64px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 12px rgba(0,0,0,.15);
+}
+.topnav .logo { color: var(--accent); font-weight: 800; font-size: 1.25rem; letter-spacing: .5px; }
+.topnav .logo span { color: #fff; }
+.nav-links { display: flex; gap: 1.5rem; }
+.nav-links a { color: #cbd5e1; font-size: .875rem; font-weight: 500; transition: color .2s; }
+.nav-links a:hover { color: var(--accent); }
+.mobile-toggle { display: none; background: none; border: none; color: #fff; font-size: 1.5rem; cursor: pointer; }
+
+/* HERO */
+.hero {
+  margin-top: 64px; padding: 4rem 2rem 3rem;
+  background: linear-gradient(135deg, var(--primary) 0%, #16213e 100%);
+  color: #fff; text-align: center;
+}
+.hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: .5rem; }
+.hero h1 span { color: var(--accent); }
+.hero p { color: #94a3b8; max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+/* LAYOUT */
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+/* SECTION NAV CARDS */
+.section-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem; margin: 2rem 0 3rem;
+}
+.section-card {
+  background: var(--card-bg); border-radius: 12px; padding: 1.5rem;
+  border: 1px solid var(--border); cursor: pointer; transition: all .2s;
+  text-align: center;
+}
+.section-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,.08); }
+.section-card .icon { font-size: 2rem; margin-bottom: .5rem; }
+.section-card h3 { font-size: .95rem; font-weight: 700; margin-bottom: .25rem; }
+.section-card p { font-size: .8rem; color: var(--text-light); }
+
+/* SECTIONS */
+.section { margin-bottom: 3rem; scroll-margin-top: 80px; }
+.section-header {
+  display: flex; align-items: center; gap: .75rem;
+  margin-bottom: 1.5rem; padding-bottom: .75rem; border-bottom: 2px solid var(--accent);
+}
+.section-header .emoji { font-size: 1.75rem; }
+.section-header h2 { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+/* CARDS */
+.card {
+  background: var(--card-bg); border-radius: 12px; padding: 1.75rem;
+  border: 1px solid var(--border); margin-bottom: 1.25rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,.04);
+}
+.card h3 { font-size: 1.1rem; font-weight: 700; color: var(--primary); margin-bottom: .75rem; }
+.card h4 { font-size: .95rem; font-weight: 700; color: var(--text); margin: 1rem 0 .5rem; }
+.card p, .card li { font-size: .9rem; color: var(--text); }
+.card ul, .card ol { padding-left: 1.25rem; margin: .5rem 0; }
+.card li { margin-bottom: .35rem; }
+
+/* COLLAPSIBLE */
+.collapsible { cursor: pointer; user-select: none; }
+.collapsible::after { content: ' ▸'; font-size: .8rem; color: var(--accent); }
+.collapsible.open::after { content: ' ▾'; }
+.collapsible-content { display: none; margin-top: .75rem; }
+.collapsible-content.show { display: block; }
+
+/* ROLE CARDS */
+.role-header {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .5rem;
+}
+.badge {
+  display: inline-block; padding: .2rem .6rem; border-radius: 20px;
+  font-size: .75rem; font-weight: 600;
+}
+.badge-revenue { background: #dcfce7; color: #166534; }
+.badge-accounts { background: #dbeafe; color: #1e40af; }
+.badge-tier { background: #fef3c7; color: #92400e; }
+
+/* TABLE */
+.table-wrap { overflow-x: auto; margin: 1rem 0; }
+table { width: 100%; border-collapse: collapse; font-size: .85rem; }
+th { background: var(--primary); color: #fff; padding: .6rem .75rem; text-align: left; font-weight: 600; }
+td { padding: .6rem .75rem; border-bottom: 1px solid var(--border); }
+tr:hover td { background: #f9fafb; }
+
+/* ORG CHART */
+.org-tree { padding-left: 0; list-style: none; }
+.org-tree li { position: relative; padding-left: 1.5rem; margin: .35rem 0; font-size: .9rem; }
+.org-tree li::before {
+  content: ''; position: absolute; left: 0; top: .6rem;
+  width: 1rem; border-bottom: 2px solid var(--accent);
+}
+.org-tree li::after {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  border-left: 2px solid #e5e7eb;
+}
+.org-tree li:last-child::after { height: .65rem; }
+.org-tree .name { font-weight: 600; }
+.org-tree .title { color: var(--text-light); font-size: .8rem; }
+.org-tree ul { margin-left: .5rem; }
+
+/* TEMPLATE BOX */
+.template-box {
+  background: #f8fafc; border: 1px dashed var(--border); border-radius: 8px;
+  padding: 1.25rem; margin: .75rem 0; font-size: .85rem;
+}
+.template-box .label { font-weight: 700; color: var(--accent); font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; margin-bottom: .5rem; }
+
+/* CALLOUT */
+.callout {
+  border-left: 4px solid var(--accent); background: #fffbeb;
+  padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0;
+  font-size: .9rem;
+}
+.callout.blue { border-color: var(--info); background: #eff6ff; }
+.callout.green { border-color: var(--success); background: #ecfdf5; }
+.callout.red { border-color: var(--danger); background: #fef2f2; }
+
+/* STEPS */
+.steps { counter-reset: step; list-style: none; padding: 0; }
+.steps li {
+  counter-increment: step; position: relative; padding-left: 2.5rem; margin-bottom: 1rem;
+}
+.steps li::before {
+  content: counter(step); position: absolute; left: 0; top: 0;
+  width: 1.75rem; height: 1.75rem; border-radius: 50%;
+  background: var(--accent); color: #fff; font-weight: 700; font-size: .8rem;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* PRINT */
+.print-btn {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: var(--primary); color: #fff; border: none; padding: .5rem 1rem;
+  border-radius: 8px; font-size: .85rem; font-weight: 600; cursor: pointer;
+  transition: background .2s;
+}
+.print-btn:hover { background: #16213e; }
+
+/* BACK TO TOP */
+.back-top {
+  position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px;
+  border-radius: 50%; background: var(--accent); color: #fff; border: none;
+  font-size: 1.25rem; cursor: pointer; display: none; align-items: center;
+  justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,.15);
+  transition: opacity .2s;
+}
+.back-top.show { display: flex; }
+
+/* SEARCH */
+.search-wrap { max-width: 400px; margin: 0 auto 1rem; position: relative; }
+.search-wrap input {
+  width: 100%; padding: .65rem 1rem .65rem 2.5rem; border: 1px solid var(--border);
+  border-radius: 8px; font-size: .9rem; background: var(--card-bg);
+}
+.search-wrap input:focus { outline: none; border-color: var(--accent); }
+.search-wrap::before { content: '🔍'; position: absolute; left: .75rem; top: 50%; transform: translateY(-50%); font-size: .9rem; }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .hero h1 { font-size: 1.75rem; }
+  .nav-links { display: none; flex-direction: column; position: absolute; top: 64px; left: 0; right: 0; background: var(--primary); padding: 1rem 2rem; gap: .75rem; }
+  .nav-links.open { display: flex; }
+  .mobile-toggle { display: block; }
+  .section-grid { grid-template-columns: 1fr 1fr; }
+}
+@media print { .topnav, .back-top, .print-btn, .search-wrap, .section-grid { display: none !important; } .hero { margin-top: 0; padding: 1.5rem; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="topnav">
+  <div class="logo"><img src="data:image/png;base64,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gmjWuS69vdcXiMB/bvd1IbPVd0KSVs2wDKs1VOvTrN/3UQpSq32MkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJa8r/Bw7k3sZrHwQNAAAAAElFTkSuQmCC" alt="Tiger Tracks" style="height:36px;vertical-align:middle;margin-right:8px;filter:invert(1);">TIGER <span>TRACKS</span></div>
+  <button class="mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')">☰</button>
+  <div class="nav-links">
+    <a href="#roles">Roles</a>
+    <a href="#playbook">Playbook</a>
+    <a href="#mos">MOS</a>
+    <a href="#templates">Templates</a>
+    <a href="#training">Training</a>
+    <a href="#org">Org Chart</a>
+    <a href="#escalation">Escalation</a>
+    <a href="#handbook">Handbook</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <img src="data:image/png;base64,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gmjWuS69vdcXiMB/bvd1IbPVd0KSVs2wDKs1VOvTrN/3UQpSq32MkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJkiRJa8r/Bw7k3sZrHwQNAAAAAElFTkSuQmCC" alt="Tiger Tracks" style="height:80px;margin-bottom:1rem;filter:invert(1);">
+  <h1>Team <span>Resource Hub</span></h1>
+  <p>Everything you need — role expectations, management playbook, templates, training, org structure, and employee handbook — all in one place.</p>
+</div>
+
+<div class="container">
+
+<!-- SEARCH -->
+<div class="search-wrap">
+  <input type="text" id="search" placeholder="Search resources...">
+</div>
+
+<!-- QUICK NAV -->
+<div class="section-grid">
+  <a href="#roles" class="section-card"><div class="icon">🎯</div><h3>Role Expectations</h3><p>AC → Senior Director</p></a>
+  <a href="#playbook" class="section-card"><div class="icon">📘</div><h3>Management Playbook</h3><p>Philosophy & principles</p></a>
+  <a href="#mos" class="section-card"><div class="icon">⚙️</div><h3>Manager Operating System</h3><p>Weekly/monthly rhythms</p></a>
+  <a href="#templates" class="section-card"><div class="icon">📋</div><h3>Templates & Tools</h3><p>1:1s, delegation, feedback</p></a>
+  <a href="#training" class="section-card"><div class="icon">🎓</div><h3>Micro-Training</h3><p>4 modules for managers</p></a>
+  <a href="#org" class="section-card"><div class="icon">🏗️</div><h3>Org Chart</h3><p>Reporting lines & pods</p></a>
+  <a href="#escalation" class="section-card"><div class="icon">🚨</div><h3>Escalation & Performance</h3><p>Paths, 3 C's, PIPs</p></a>
+  <a href="#handbook" class="section-card"><div class="icon">📖</div><h3>Employee Handbook</h3><p>Policies, benefits, conduct</p></a>
+</div>
+
+<!-- ===================== ROLES ===================== -->
+<div class="section" id="roles">
+  <div class="section-header"><span class="emoji">🎯</span><h2>Role Expectations & Performance Framework</h2></div>
+
+  <div class="callout">
+    <strong>Purpose:</strong> This defines what is expected at each level. It provides role clarity, reinforces swim lanes, supports performance conversations, and anchors all roles to the North Star: <strong>Customer Success</strong> (measured by sustained managed revenue growth).
+  </div>
+
+  <!-- AC -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Account Coordinator (AC)</h3>
+      <div><span class="badge badge-accounts">6–10 accounts</span> <span class="badge badge-revenue">$12K+/mo MR</span></div>
+    </div>
+    <p><em>Early-career execution and operational support role focused on building strong paid media fundamentals, accuracy, and professional confidence.</em></p>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Build campaigns and ad sets under strategist guidance</li>
+        <li>Execute basic optimizations and bid adjustments</li>
+        <li>Rotate and traffic creative assets</li>
+        <li>Prepare reporting screenshots and slides</li>
+        <li>Maintain UTMs, change logs, and tracking documentation</li>
+        <li>QA campaign setups and data accuracy</li>
+        <li>Support pacing checks and budget tracking</li>
+        <li>Take notes on internal and client calls</li>
+        <li>Update task management tools and timelines</li>
+        <li>Organize assets and documentation</li>
+        <li>Support testing execution</li>
+        <li>Validate links, tracking, and conversions</li>
+        <li>Assist with ad copy updates</li>
+        <li>Monitor alerts and platform notifications</li>
+        <li>Flag issues or errors immediately</li>
+        <li>Follow documented processes and templates</li>
+        <li>Communicate task status proactively</li>
+        <li>Support strategist workload during high-volume periods</li>
+      </ul>
+    </div>
+    <h4 class="collapsible" onclick="toggle(this)">Success Metrics</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Build error-free campaign components with &lt;1% QA rework</li>
+        <li>Improve turnaround time on assigned tasks</li>
+        <li>Demonstrate readiness for increased ownership</li>
+        <li>Task completion accuracy &amp; on-time delivery rate</li>
+        <li>Reduction in rework</li>
+        <li>Manager/strategist feedback</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- AS -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Account Strategist (AS)</h3>
+      <div><span class="badge badge-accounts">3–6 accounts</span> <span class="badge badge-revenue">$15K+/mo MR</span></div>
+    </div>
+    <p><em>Owner of in-platform performance and channel execution. Strategists translate strategy into results through daily optimization and testing.</em></p>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Build, launch, and optimize Google and Meta campaigns</li>
+        <li>Own daily pacing and performance monitoring</li>
+        <li>Execute bid, audience, and budget adjustments</li>
+        <li>Develop testing hypotheses and roadmaps</li>
+        <li>Analyze performance data and trends</li>
+        <li>QA tracking, conversions, and UTMs</li>
+        <li>Troubleshoot performance or tracking issues</li>
+        <li>Surface proactive insights and risks</li>
+        <li>Prepare insights for reporting and calls</li>
+        <li>Support technical discussions on client calls</li>
+        <li>Delegate execution tasks to ACs</li>
+        <li>Review AC output for quality and accuracy</li>
+        <li>Maintain testing and performance documentation</li>
+        <li>Stay current on platform updates</li>
+        <li>Recommend strategic adjustments to AMs</li>
+        <li>Support onboarding of new accounts</li>
+        <li>Escalate risks early</li>
+      </ul>
+    </div>
+    <h4 class="collapsible" onclick="toggle(this)">Success Metrics</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Improve CPA / ROAS against client targets</li>
+        <li>Launch X tests per quarter with documented learnings</li>
+        <li>Reduce pacing or performance surprises</li>
+        <li>Channel performance vs goals</li>
+        <li>Pacing accuracy &amp; testing velocity</li>
+        <li>Insight quality</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- AM -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Account Manager (AM)</h3>
+      <div><span class="badge badge-accounts">3–6 accounts</span> <span class="badge badge-revenue">$22K+/mo MR</span> <span class="badge badge-tier">Tier 3–4 primary</span></div>
+    </div>
+    <p><em>Communication and execution alignment leader. AMs own client communication, timelines, and coordination across the pod, with growing responsibility for revenue expansion and account health.</em></p>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Serve as primary POC for Tier 3–4 clients</li>
+        <li>Co-lead Tier 2–3 client meetings</li>
+        <li>Create agendas, recaps, and action items</li>
+        <li>Own client reporting preparation and QA</li>
+        <li>Manage timelines, deliverables, and workflows</li>
+        <li>Delegate work to AS and AC roles</li>
+        <li>Run weekly 1:1s with direct reports</li>
+        <li>Escalate delivery or performance risks early</li>
+        <li>Identify upsell and expansion opportunities</li>
+        <li>Pitch budget increases and new initiatives</li>
+        <li>Document pitches and outcomes in Client Success Trix</li>
+        <li>Coordinate with ADs on Tier 1–2 accounts</li>
+        <li>Maintain client documentation and notes</li>
+        <li>Ensure internal alignment before client communication</li>
+        <li>Flag account health risks</li>
+        <li>Track and report on revenue growth</li>
+      </ul>
+    </div>
+    <h4 class="collapsible" onclick="toggle(this)">Success Metrics</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Client trust and clarity</li>
+        <li>Smooth execution flow</li>
+        <li>Revenue protection and growth</li>
+        <li>Proactive communication</li>
+        <li>Professional presence</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Sr AM -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Senior Account Manager (Sr AM)</h3>
+      <div><span class="badge badge-tier">Tier 2–3 primary</span></div>
+    </div>
+    <p><em>Manages AMs + client experience. Coaches AMs on leadership, client management, and communication. First escalation point for AMs.</em></p>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Own Tier 2–3 client experience; supports ADs on Tier 1</li>
+        <li>Coach AMs on leadership, client management, communication</li>
+        <li>Review strategy, insights, and roadmaps</li>
+        <li>Ensure consistency across pod standards</li>
+        <li>First escalation point for AMs</li>
+        <li>Participate in performance reviews (per pod structure)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- AD -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Associate Director (AD)</h3>
+      <div><span class="badge badge-tier">Tier 1–2 primary</span></div>
+    </div>
+    <p><em>Leads teams of Sr AMs + AMs, ensures operational excellence. ADs must spend the majority of time client-facing, not internally project-managing.</em></p>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Own Tier 1–2 relationships and executive-level communication</li>
+        <li>Drive strategic vision, narrative, and roadmap execution</li>
+        <li>Oversee pod performance: revenue protection, retention, growth</li>
+        <li>Capacity planning and resourcing</li>
+        <li>Final escalation point before Ops/Leadership</li>
+        <li>Lead QBRs and define success metrics with client leadership</li>
+        <li>Conduct performance reviews for Sr AMs</li>
+      </ul>
+    </div>
+    <div class="callout red" style="margin-top:1rem">
+      <strong>No-Fly Zone:</strong> ADs and Sr AMs should not be doing tactical work that sits with AS/AC. When exceptions happen, communicate early so the pod can support.
+    </div>
+  </div>
+
+  <!-- Director -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Director of Client Success</h3>
+    </div>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Set quality benchmarks for client deliverables, communication, and reporting across all pods</li>
+        <li>Identify recurring service gaps or client friction points and drive systemic fixes</li>
+        <li>Lead cross-pod initiatives that improve the overall client experience</li>
+        <li>Own the client health scoring model and ensure it is actively used in reviews</li>
+        <li>Design and refine internal workflows that improve speed, accuracy, and consistency of service delivery</li>
+        <li>Partner with ADs to align account strategies with company-wide revenue goals</li>
+        <li>Mentor and develop ADs to grow into stronger strategic leaders</li>
+        <li>Build and maintain dashboards or scorecards that give leadership visibility into client performance</li>
+        <li>Lead initiative to collect and act on client feedback in a structured way</li>
+        <li>Serve as executive-level escalation for at-risk accounts</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Senior Director -->
+  <div class="card">
+    <div class="role-header">
+      <h3>Senior Director of Client Success</h3>
+    </div>
+    <h4 class="collapsible" onclick="toggle(this)">Core Responsibilities</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Define the long-term client success strategy for the agency including retention expansion and satisfaction targets</li>
+        <li>Translate company growth goals into operational plans that Client Success teams can execute against</li>
+        <li>Set and evolve the operating model for how pods are structured and how they scale</li>
+        <li>Build the cross-functional rhythm between Client Success, Creative, Analytics, and New Business</li>
+        <li>Own the relationship between Client Success performance and company revenue</li>
+        <li>Guide thought leadership agenda for the agency</li>
+        <li>Lead senior talent planning including succession plans</li>
+        <li>Monitor client satisfaction and retention trends across the portfolio</li>
+        <li>Represent the agency externally at key client meetings, conferences, and partner events</li>
+      </ul>
+    </div>
+  </div>
+
+</div>
+
+<!-- ===================== PLAYBOOK ===================== -->
+<div class="section" id="playbook">
+  <div class="section-header"><span class="emoji">📘</span><h2>Management Playbook</h2></div>
+
+  <div class="card">
+    <h3>Our North Star</h3>
+    <div class="callout green">
+      <strong>Customer Success</strong> is the North Star for every role, decision, and priority. It means: protecting and growing managed revenue, delivering clear and confident communication, providing strategic insight that builds trust, and creating stable, scalable client relationships.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The Organizational Philosophy</h3>
+    <p>Tiger Tracks' leadership model prioritizes:</p>
+    <ul>
+      <li><strong>Ownership</strong> over tasks and outcomes</li>
+      <li><strong>Clear expectations</strong> over assumptions</li>
+      <li><strong>Fast feedback</strong> over delayed course-correction</li>
+      <li><strong>Simplicity</strong> over bureaucracy</li>
+      <li><strong>Coaching</strong> over directing</li>
+      <li><strong>High performance with humanity</strong></li>
+      <li><strong>Customer success</strong> above everything</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>What It Means to Be a Manager Here</h3>
+    <p>You are accountable for five outcomes:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Outcome</th><th>What It Means</th></tr>
+        <tr><td><strong>Clarity</strong></td><td>Your report knows what success looks like, why it matters, and how it ties to customer success</td></tr>
+        <tr><td><strong>Communication</strong></td><td>Information flows down (expectations, priorities) and up (risks, blockers) early</td></tr>
+        <tr><td><strong>Coaching</strong></td><td>You develop people through structured touchpoints—weekly tactical, monthly coaching</td></tr>
+        <tr><td><strong>Consistency</strong></td><td>Your report experiences a predictable rhythm. Calm comes from routine</td></tr>
+        <tr><td><strong>Quality</strong></td><td>You ensure work is client-ready and meets Tiger Tracks standards</td></tr>
+      </table>
+    </div>
+
+    <h4>You are NOT expected to:</h4>
+    <ul>
+      <li>Act as a therapist</li>
+      <li>Spend hours a week in 1:1s</li>
+      <li>Resolve every problem personally</li>
+      <li>Carry all the workload yourself</li>
+    </ul>
+
+    <h4>You ARE expected to:</h4>
+    <ul>
+      <li>Set expectations early</li>
+      <li>Provide direction and guardrails</li>
+      <li>Give feedback quickly (not late)</li>
+      <li>Delegate appropriately</li>
+      <li>Escalate early</li>
+      <li>Develop people over time</li>
+    </ul>
+
+    <p style="margin-top:1rem"><strong>Leadership tone:</strong> Warmth + Standards (clear, direct, supportive, customer-first)</p>
+  </div>
+
+  <div class="card">
+    <h3>The Pod Model</h3>
+    <p>Pods are designed to have clear reporting lines, maintain healthy manager ratios (1–2 direct reports per layer), stay intact as the business grows, and flex cross-functionally during high-volume periods.</p>
+    <div class="callout blue">
+      <strong>Pods are benches, not families.</strong> When someone levels up, they move to a new bench. The existing bench stays intact. Open roles are backfilled intentionally. Growth is based on business need and performance, not tenure alone.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Role Swim Lanes</h3>
+    <p>As you move up, you shift away from tactical execution and toward strategic leadership:</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Role</th><th>Focus</th></tr>
+        <tr><td><strong>AC</strong></td><td>Pipeline + execution support. High coaching needs.</td></tr>
+        <tr><td><strong>AS</strong></td><td>In-platform performance, optimization, insights, testing. Delegates to ACs.</td></tr>
+        <tr><td><strong>AM</strong></td><td>Tier 3–4 communication, workflow, reporting, QA. Manages downward.</td></tr>
+        <tr><td><strong>Sr AM</strong></td><td>Tier 2–3 client experience. Coaches AMs. First escalation point.</td></tr>
+        <tr><td><strong>AD</strong></td><td>Tier 1–2 strategic leadership. Revenue, narrative, QBRs, performance reviews.</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== MOS ===================== -->
+<div class="section" id="mos">
+  <div class="section-header"><span class="emoji">⚙️</span><h2>Manager Operating System (MOS)</h2></div>
+
+  <div class="card">
+    <h3>Weekly Rhythm (30–45 min per direct report)</h3>
+    <ul>
+      <li><strong>15-minute 1:1</strong></li>
+      <li><strong>5-min expectations check</strong></li>
+      <li><strong>5-min priorities + delegation</strong> (what moves this week?)</li>
+      <li><strong>5-min blockers/risk</strong> (what needs escalation?)</li>
+      <li><strong>Mid-week Slack pulse:</strong> "Any blockers?" (short + consistent)</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Monthly Cadence</h3>
+    <p>Structured coaching — not constant criticism.</p>
+    <ul>
+      <li>Performance pulse check</li>
+      <li>Review goals / growth tracking</li>
+      <li>Identify support needs</li>
+      <li>Flag any concerns early</li>
+      <li>15-minute 1:1 dedicated to feedback</li>
+    </ul>
+    <p style="margin-top:.5rem"><strong>Led by:</strong> AD for Sr AM → Sr AM for AM → AM for AS and AC</p>
+  </div>
+
+  <div class="card">
+    <h3>Quarterly (Led by Pod AD)</h3>
+    <ul>
+      <li>Pod-based review</li>
+      <li>Deep-dive development conversation</li>
+      <li>Reset expectations</li>
+      <li>Review goals + stretch opportunities</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Q1 Success Measures</h3>
+    <ul>
+      <li>Account health</li>
+      <li>Revenue protection &amp; expansion</li>
+      <li>Client trust signals</li>
+      <li>Reduced escalations</li>
+      <li>Improved delegation + workload balance</li>
+      <li>Manager adherence to MOS</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== TEMPLATES ===================== -->
+<div class="section" id="templates">
+  <div class="section-header"><span class="emoji">📋</span><h2>Templates & Tools</h2></div>
+
+  <!-- 1:1 Direct Report -->
+  <div class="card">
+    <h3>Direct Report: 15-Minute Weekly 1:1 Template</h3>
+    <div class="template-box">
+      <div class="label">Template</div>
+      <p><strong>Name:</strong> _____ &nbsp; <strong>Manager:</strong> _____ &nbsp; <strong>Week of:</strong> _____</p>
+      <h4>Account Updates</h4>
+      <ul>
+        <li>Wins & Progress (1–2 bullets)</li>
+        <li>Top Priority This Week</li>
+        <li>Risks, Blockers, or Deadlines at Risk (including Churn)</li>
+      </ul>
+      <h4>Direct Reports Check In</h4>
+      <ul>
+        <li>Accounts / Bandwidth / Feedback / People Management</li>
+      </ul>
+      <h4>Capacity Check</h4>
+      <ul>
+        <li>Under / At / Over — (If over: what needs to shift?)</li>
+      </ul>
+      <h4>Support/Feedback Needed From My Manager</h4>
+      <p><em>If nothing is blocked, say so clearly.</em></p>
+    </div>
+  </div>
+
+  <!-- Manager 1:1 -->
+  <div class="card">
+    <h3>Manager: Weekly 1:1 Template</h3>
+    <div class="callout blue">
+      Ensure direct reports have meaningful, clearly defined work filling their calendars. Everyone should begin calendar blocking so workload and priorities are visible and transparent. If someone is underutilized or overloaded, call it out early.
+    </div>
+    <div class="template-box">
+      <div class="label">Template</div>
+      <h4>Priorities & Workload</h4>
+      <ul>
+        <li>What's your #1 priority this week?</li>
+        <li>Any blockers?</li>
+        <li>Any deadlines at risk?</li>
+        <li>Do you have capacity? (Under/At/Over)</li>
+      </ul>
+      <h4>Support Needed</h4>
+      <ul>
+        <li>What do you need from me?</li>
+        <li>Where can I unblock you?</li>
+      </ul>
+      <h4>Wins & Progress</h4>
+      <ul>
+        <li>What went well this week?</li>
+        <li>Any work you're proud of?</li>
+      </ul>
+      <h4>Alignment & Next Steps</h4>
+      <ul>
+        <li>Confirm top 1–2 priorities</li>
+        <li>Document actions in one sentence each</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Expectations Setting -->
+  <div class="card">
+    <h3>Expectations-Setting Template</h3>
+    <p><em>Use when you first become someone's manager or when resetting expectations.</em></p>
+    <div class="template-box">
+      <div class="label">Template</div>
+      <ol>
+        <li>Define outcomes tied to customer success (and managed revenue where relevant)</li>
+        <li>Clarify behaviors and communication norms</li>
+        <li>Set cadence (weekly tactical, monthly development, async check-ins)</li>
+        <li>Confirm understanding (have them repeat it back)</li>
+        <li>90-day goals: [Goal #1], [Goal #2], [Goal #3] — each must support customer success</li>
+        <li>How we'll work together: weekly 1:1s, quick Slack check-ins, monthly feedback-focused 1:1</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- Delegation -->
+  <div class="card">
+    <h3>Delegation Checklist</h3>
+    <ol class="steps">
+      <li><strong>Define the outcome</strong> — What does "good" look like?</li>
+      <li><strong>Clarify ownership</strong> — "You own this from start to finish."</li>
+      <li><strong>Set the deadline</strong></li>
+      <li><strong>Check understanding</strong> — "Can you repeat back what you're delivering and by when?"</li>
+      <li><strong>Define check-in level</strong> — No check-ins (autonomy) / One (accountability) / Multiple (coaching)</li>
+      <li><strong>Provide context or links</strong></li>
+      <li><strong>Ask:</strong> "What could get in your way?"</li>
+      <li><strong>Confirm priority level</strong></li>
+      <li><strong>Log it</strong> in your manager notes</li>
+    </ol>
+  </div>
+
+  <!-- Capacity -->
+  <div class="card">
+    <h3>Capacity Check-In Template</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Capacity</th><th>Range</th></tr>
+        <tr><td style="color:var(--info)">🔵 Underloaded</td><td>0–25%</td></tr>
+        <tr><td style="color:var(--success)">🟢 Healthy</td><td>25–75%</td></tr>
+        <tr><td style="color:var(--warning)">🟡 At Capacity</td><td>75–100%</td></tr>
+        <tr><td style="color:var(--danger)">🔴 Overloaded</td><td>100%+</td></tr>
+      </table>
+    </div>
+    <h4>Weekly Questions</h4>
+    <ul>
+      <li>What % capacity are you at?</li>
+      <li>What's your top priority?</li>
+      <li>Any deadlines at risk?</li>
+      <li>What can we shift/delegate?</li>
+      <li>Do you need anything from me?</li>
+    </ul>
+  </div>
+
+  <!-- Underperformance -->
+  <div class="card">
+    <h3>Underperformance Correction Template</h3>
+    <p><em>Use when you need structure but not a formal PIP.</em></p>
+    <div class="template-box">
+      <div class="label">Template</div>
+      <p>Hi [Name],</p>
+      <p>I want to align on a few areas where I'm seeing gaps and help you get back on track. Here's what I need to see over the next 2–4 weeks:</p>
+      <h4>Areas for Improvement</h4>
+      <p>[Issue #1] / [Issue #2] / [Issue #3] — at least one should reference customer success impact.</p>
+      <h4>Expectations Going Forward</h4>
+      <p>[Expectation #1] / [Expectation #2] / [Expectation #3] — set expectations that support revenue protection and client experience.</p>
+      <h4>How I Will Support You</h4>
+      <ul><li>Weekly check-ins</li><li>Extra reviews as needed</li><li>Clear deadlines</li><li>Guidance when stuck</li></ul>
+      <h4>Success Indicators</h4>
+      <p>By end of period: [Indicator #1] / [Indicator #2] / [Indicator #3] — must align to client outcomes.</p>
+    </div>
+  </div>
+
+  <!-- Weekly Rhythm for Underperformers -->
+  <div class="card">
+    <h3>Weekly Manager Rhythm (Underperformers)</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Day</th><th>Action</th></tr>
+        <tr><td><strong>Monday</strong></td><td>Review team workload, align on priorities, adjust deadlines</td></tr>
+        <tr><td><strong>Wednesday</strong></td><td>Slack pulse: "How's workload? Any blockers?" + review risks</td></tr>
+        <tr><td><strong>Friday</strong></td><td>Document wins, confirm next week's priorities, send 1 piece of feedback</td></tr>
+      </table>
+    </div>
+    <p><em>Total time commitment: ~30 minutes/week per report</em></p>
+  </div>
+</div>
+
+<!-- ===================== TRAINING ===================== -->
+<div class="section" id="training">
+  <div class="section-header"><span class="emoji">🎓</span><h2>Micro-Training Modules</h2></div>
+
+  <!-- Module 1 -->
+  <div class="card">
+    <h3>Module 1: Giving Feedback Quickly & Kindly</h3>
+
+    <h4>The Tiger Tracks 3-Step Feedback Model</h4>
+    <ol class="steps">
+      <li><strong>Observation</strong> — State what happened, factually.<br><em>"Yesterday's performance update didn't include pacing context."</em></li>
+      <li><strong>Impact</strong> — Explain why it matters.<br><em>"That made it hard for the client to understand what the numbers meant."</em></li>
+      <li><strong>Next Step</strong> — Give the future behavior you want.<br><em>"Next time, add a 1–2 sentence interpretation with each key metric."</em></li>
+    </ol>
+
+    <h4>Tone & Delivery Tips</h4>
+    <ul>
+      <li>Keep voice calm + warm</li>
+      <li>Assume positive intent</li>
+      <li>Don't apologize for giving feedback</li>
+      <li>Be direct but human</li>
+      <li>Give one note at a time</li>
+      <li>Praise publicly, course-correct privately</li>
+    </ul>
+
+    <h4>Phrases That Work</h4>
+    <ul>
+      <li>"One thing that would level this up is…"</li>
+      <li>"A small adjustment will make a big difference…"</li>
+      <li>"To help you be successful here…"</li>
+    </ul>
+
+    <h4>10 Ready-to-Use Feedback Scripts</h4>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Topic</th><th>Script</th></tr>
+        <tr><td>Communication</td><td>"Your updates are clear, but they're coming in later than we need. Moving forward, send them by 10am so the team can adjust plans."</td></tr>
+        <tr><td>Quality</td><td>"The deliverable was 80% strong, but we need the data validated more thoroughly. Let's build a quick checklist you can follow before sending."</td></tr>
+        <tr><td>Proactiveness</td><td>"If you see something that could impact revenue or performance, flag it immediately. Customer success is the bar."</td></tr>
+        <tr><td>Ownership</td><td>"When something slips, I want to hear from you before the client does."</td></tr>
+        <tr><td>Prioritization</td><td>"When many tasks hit at once, pick your top 2 and communicate them. I'll help with the rest."</td></tr>
+        <tr><td>Resourcefulness</td><td>"Before coming to me, take 10 minutes to try solving it yourself. If still unclear, come to me with two possible options."</td></tr>
+        <tr><td>Delegation</td><td>"When passing a task to the team, make sure you state ownership, deadline, and the expected outcome."</td></tr>
+        <tr><td>Meeting Readiness</td><td>"Your client calls are solid. Next step is arriving with a 1-page agenda and expected outcomes."</td></tr>
+        <tr><td>Accountability</td><td>"If we commit to a date, I need you to either deliver or flag early that it won't happen."</td></tr>
+        <tr><td>Emotional Regulation</td><td>"When things get stressful, take a breath, assess the facts, and then respond with clarity. You set the tone."</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Module 2 -->
+  <div class="card">
+    <h3>Module 2: Delegation Without Micromanaging</h3>
+    <p>Your job as a manager is not to do more — it's to elevate the team.</p>
+    <div class="callout">
+      <strong>Micromanaging</strong> happens when the outcome isn't clear.<br>
+      <strong>Laissez-faire</strong> happens when ownership isn't clear.<br>
+      We want the middle: <strong>structured autonomy.</strong>
+    </div>
+    <h4>Common Delegation Mistakes</h4>
+    <ul>
+      <li>Over-explaining → micromanaging</li>
+      <li>Under-explaining → confusion</li>
+      <li>Assuming someone knows your standard</li>
+      <li>Assigning tasks without context</li>
+      <li>Delegating too much at once</li>
+      <li>Not aligning on "done" — <strong>Fix: define DONE.</strong></li>
+    </ul>
+  </div>
+
+  <!-- Module 3 -->
+  <div class="card">
+    <h3>Module 3: Prioritization & Protecting Your Team</h3>
+    <h4>The Priority Pyramid</h4>
+    <ol class="steps">
+      <li><strong>Level 1: Client commitments</strong> — Anything promised with a date → non-negotiable</li>
+      <li><strong>Level 2: Account health</strong> — Pacing, performance, reporting</li>
+      <li><strong>Level 3: Internal tasks</strong> — Decks, analysis, documentation</li>
+      <li><strong>Level 4: Nice-to-haves</strong> — Stretch projects, optional improvements</li>
+    </ol>
+    <h4>When everything feels urgent, rank by:</h4>
+    <ul><li>Impact → Effort → Deadlines → Risk</li></ul>
+    <h4>Manager's Weekly Questions</h4>
+    <ul>
+      <li>"What's your #1 priority?"</li>
+      <li>"What deadlines are at risk?"</li>
+      <li>"What can we drop/defer?"</li>
+      <li>"Do you have capacity?"</li>
+    </ul>
+    <p><em>Normalize renegotiating deadlines early. Managers must model this.</em></p>
+  </div>
+
+  <!-- Module 4 -->
+  <div class="card">
+    <h3>Module 4: Running Clean, Effective 1:1s</h3>
+    <p>1:1s are the most important tool you have as a manager. They are not status meetings — they're coaching conversations.</p>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Minutes</th><th>Focus</th></tr>
+        <tr><td>1–3</td><td><strong>Wins & Progress</strong> — "What went well this week?"</td></tr>
+        <tr><td>4–7</td><td><strong>Priorities & Workload</strong> — #1 priority, deadlines at risk, capacity %</td></tr>
+        <tr><td>8–11</td><td><strong>Coaching Moment</strong> — One clear piece of feedback (Observation → Impact → Next Step)</td></tr>
+        <tr><td>12–14</td><td><strong>Support Needed</strong> — "How can I support you? What blockers?"</td></tr>
+        <tr><td>15</td><td><strong>Alignment</strong> — Summarize top 1–2 priorities</td></tr>
+      </table>
+    </div>
+    <h4>What NOT to Do</h4>
+    <ul>
+      <li>Turn it into a status dump</li>
+      <li>Skip coaching</li>
+      <li>Make the meeting all about problems</li>
+      <li>Reschedule it weekly</li>
+      <li>Let them walk away unclear</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== ORG ===================== -->
+<div class="section" id="org">
+  <div class="section-header"><span class="emoji">🏗️</span><h2>Org Chart & Reporting Lines</h2></div>
+
+  <div class="card">
+    <h3>Account Management (Dept 200)</h3>
+    <ul class="org-tree">
+      <li>
+        <span class="name">Rachel Scharett</span> <span class="title">— Senior Director of Client Success</span>
+        <ul class="org-tree">
+          <li>
+            <span class="name">Riley Abercrombie</span> <span class="title">— Associate Director</span>
+            <ul class="org-tree">
+              <li><span class="name">Shelby Nations</span> <span class="title">— Senior Account Manager</span>
+                <ul class="org-tree">
+                  <li><span class="name">Megan Brenneke</span> <span class="title">— Account Coordinator</span></li>
+                  <li><span class="name">Seth McDaniel</span> <span class="title"></span></li>
+                </ul>
+              </li>
+              <li><span class="name">Owen Phipps</span> <span class="title">— Account Strategist</span></li>
+            </ul>
+          </li>
+          <li>
+            <span class="name">Hannah Price</span> <span class="title">— Associate Director</span>
+            <ul class="org-tree">
+              <li><span class="name">Mary McCambridge</span> <span class="title">— Senior Account Manager</span>
+                <ul class="org-tree">
+                  <li><span class="name">Gretchen Hess</span> <span class="title">— Account Manager</span>
+                    <ul class="org-tree">
+                      <li><span class="name">Daren Kalkoffen</span> <span class="title">— Account Strategist</span>
+                        <ul class="org-tree">
+                          <li><span class="name">Evin Leclerc</span> <span class="title">— Account Coordinator</span></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </li>
+                  <li><span class="name">Kevin Christopher</span> <span class="title"></span></li>
+                </ul>
+              </li>
+              <li><span class="name">Will Sokol</span> <span class="title">— Senior Account Manager</span>
+                <ul class="org-tree">
+                  <li><span class="name">Megan Klein</span> <span class="title">— Account Manager</span>
+                    <ul class="org-tree">
+                      <li><span class="name">Yana Markova</span> <span class="title">— Account Strategist</span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <span class="name">Charlotte Pohl</span> <span class="title">— Senior Account Manager</span>
+            <ul class="org-tree">
+              <li><span class="name">Kiyana Saidi-Nejad</span> <span class="title">— Account Manager</span>
+                <ul class="org-tree">
+                  <li><span class="name">Tate Dewey</span> <span class="title">— Account Strategist</span></li>
+                </ul>
+              </li>
+              <li><span class="name">Bruno Milalaf</span> <span class="title">— Account Manager</span>
+                <ul class="org-tree">
+                  <li><span class="name">Billy Bevevino</span> <span class="title">— Account Manager</span>
+                    <ul class="org-tree">
+                      <li><span class="name">Sanad Shuman</span> <span class="title">— Account Coordinator</span></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><span class="name">Megan Brenneke</span> <span class="title">— Account Coordinator</span></li>
+            </ul>
+          </li>
+          <li><span class="name">Kersten Kruse</span> <span class="title">— Director of Client Success</span>
+            <ul class="org-tree">
+              <li><span class="name">Anirudh</span> <span class="title"></span></li>
+            </ul>
+          </li>
+          <li><span class="name">Allison Long</span> <span class="title">— Senior Account Manager (PT, 30 hrs)</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Business Development (Dept 250)</h3>
+    <ul class="org-tree">
+      <li>
+        <span class="name">Alex Blumberg</span> <span class="title">— Head of Partnerships</span>
+        <ul class="org-tree">
+          <li><span class="name">Steven Jatich</span> <span class="title">— Director of Partnerships</span></li>
+          <li><span class="name">Camryn</span> <span class="title">— EA</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- ===================== ESCALATION ===================== -->
+<div class="section" id="escalation">
+  <div class="section-header"><span class="emoji">🚨</span><h2>Escalation & Performance</h2></div>
+
+  <div class="card">
+    <h3>When to Escalate</h3>
+    <ul>
+      <li>Risk of delay</li>
+      <li>Repeated quality issues</li>
+      <li>Client tension</li>
+      <li>Workload imbalance</li>
+      <li>Missed expectations</li>
+      <li>Behavioral issues</li>
+      <li>Anything that threatens customer success or managed revenue growth</li>
+    </ul>
+    <div class="callout red">
+      <strong>Escalate early, not when it's urgent.</strong> If a problem has been escalated twice without resolution, the team member can bring it to the next level.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Escalation Path</h3>
+    <div style="display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; font-size:.95rem; font-weight:600; margin:.75rem 0;">
+      <span style="background:#dbeafe;padding:.3rem .7rem;border-radius:6px;">AS</span> →
+      <span style="background:#dbeafe;padding:.3rem .7rem;border-radius:6px;">AM</span> →
+      <span style="background:#dbeafe;padding:.3rem .7rem;border-radius:6px;">Sr AM</span> →
+      <span style="background:#dbeafe;padding:.3rem .7rem;border-radius:6px;">AD</span> →
+      <span style="background:#dbeafe;padding:.3rem .7rem;border-radius:6px;">Leadership</span>
+    </div>
+    <p><strong>Any level → HR</strong> for behavior, repeated underperformance, documentation needs, harassment, or discrimination.</p>
+  </div>
+
+  <div class="card">
+    <h3>Evaluating Performance: The 3 C's</h3>
+    <div class="table-wrap">
+      <table>
+        <tr><th>C</th><th>Question</th></tr>
+        <tr><td><strong>Competence</strong></td><td>Is the work accurate, strategic, and client-ready?</td></tr>
+        <tr><td><strong>Communication</strong></td><td>Are updates timely, clear, and proactive?</td></tr>
+        <tr><td><strong>Consistency</strong></td><td>Are they reliable day-to-day and week-to-week?</td></tr>
+      </table>
+    </div>
+    <h4>When a report is struggling:</h4>
+    <ol>
+      <li>Clarify the expectation</li>
+      <li>Provide examples of good vs. not-good</li>
+      <li>Create a simple improvement plan (1–3 items)</li>
+      <li>Follow up weekly using MOS</li>
+      <li>Escalate if it doesn't improve</li>
+    </ol>
+  </div>
+
+  <div class="card">
+    <h3>Manager Culture</h3>
+    <p>Managers contribute to a culture of:</p>
+    <ul>
+      <li>Psychological safety + high performance</li>
+      <li>Transparency</li>
+      <li>Accountability with compassion</li>
+      <li>Direct communication without harshness</li>
+      <li>Growth and development</li>
+      <li>Ownership at every level</li>
+      <li>Predictable routines</li>
+    </ul>
+    <div class="callout green">
+      We care deeply about people <strong>and</strong> about the quality of work. This hybrid tone is the backbone of our leadership philosophy.
+    </div>
+  </div>
+</div>
+
+<!-- ===================== HANDBOOK ===================== -->
+<div class="section" id="handbook">
+  <div class="section-header"><span class="emoji">📖</span><h2>Employee Handbook</h2></div>
+  <p style="color:var(--text-light);margin-bottom:1.5rem;"><em>Tiger Tracks Employee Handbook — February 4, 2026</em></p>
+
+  <!-- Section 1 -->
+  <div class="card">
+    <h3>Section 1 — Governing Principles of Employment</h3>
+
+    <h4 class="collapsible" onclick="toggle(this)">1-1 Introduction</h4>
+    <div class="collapsible-content">
+      <p>For employees commencing employment with Tiger Tracks, we extend a warm and sincere welcome. For employees who have been with us, thank you for your continued contributions and dedication. We wish you success and fulfillment at Tiger Tracks.</p>
+      <p><em>— Cliff Simmons & Henry Kittle</em></p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">1-2 Equal Employment Opportunity</h4>
+    <div class="collapsible-content">
+      <p>Tiger Tracks is an Equal Opportunity Employer. The Company does not discriminate on the basis of race, color, creed, religion, national origin, ancestry, citizenship status, age, sex or gender, gender identity or expression, sexual orientation, marital status, military service or veteran status, physical or mental disability, genetic information, or any other characteristic protected by applicable law.</p>
+      <p>This policy applies to all employment decisions including recruitment, hiring, placement, promotion, transfer, training, compensation, benefits, discipline, and termination.</p>
+      <p>Retaliation against any individual for raising a concern or participating in an investigation is strictly prohibited. Violations may result in disciplinary action up to and including termination.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">1-3 Reasonable Accommodations & Interactive Dialogue</h4>
+    <div class="collapsible-content">
+      <p>Tiger Tracks complies with the ADA, New York State Human Rights Law, and the Pregnant Workers Fairness Act. The Company will engage in good-faith interactive dialogue for accommodations related to:</p>
+      <ul>
+        <li>Disability</li>
+        <li>Sincerely held religious beliefs and practices</li>
+        <li>Needs as a victim of domestic violence, sex offenses, or stalking</li>
+        <li>Pregnancy, childbirth, or related medical conditions</li>
+        <li>Any other reason required by applicable law</li>
+      </ul>
+      <p>Requests should be directed to People Operations. Retaliation is prohibited.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">1-4 Non-Harassment</h4>
+    <div class="collapsible-content">
+      <p>Tiger Tracks is committed to a work environment free from unlawful harassment. This applies to conduct in the workplace, while working remotely, during Company-sponsored events, and in any work-related context.</p>
+      <p><strong>Reporting:</strong> Report to your Manager or People Operations. If the complaint involves a Manager, escalate to People Operations or senior leadership.</p>
+      <p><strong>Investigation:</strong> All reports will be investigated promptly and impartially. Confidentiality maintained to the extent practicable.</p>
+      <p><strong>Retaliation is strictly prohibited.</strong></p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">1-5 Drug-Free and Alcohol-Free Workplace</h4>
+    <div class="collapsible-content">
+      <p>Employees may not use, possess, distribute, or be under the influence of illegal drugs or alcohol while performing Company work. This applies regardless of work location, including remote environments. Violations may result in disciplinary action up to and including termination.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">1-6 Workplace Violence</h4>
+    <div class="collapsible-content">
+      <p>Tiger Tracks prohibits threats, intimidation, or acts of violence in any work-related context. Report any threats or concerning behavior to management or People Operations immediately. Reports will be investigated promptly and retaliation is prohibited.</p>
+    </div>
+  </div>
+
+  <!-- Section 2 -->
+  <div class="card">
+    <h3>Section 2 — Operational Policies</h3>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-1 Employee Classifications</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li><strong>Full-Time:</strong> 40+ hours per week</li>
+        <li><strong>Part-Time:</strong> Fewer than 40 hours per week</li>
+        <li><strong>Short-Term:</strong> Specific project or temporary basis (generally not benefits-eligible)</li>
+      </ul>
+      <p>Employees are classified as exempt or non-exempt under wage and hour laws. <strong>Employment is at-will.</strong></p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-2 Introductory Period</h4>
+    <div class="collapsible-content">
+      <p>New team members enter a 90-day introductory period with regular check-ins. Completion does not change at-will status or guarantee continued employment.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-3 Working Hours & Schedule</h4>
+    <div class="collapsible-content">
+      <p>Remote-first. Standard hours: Monday–Friday, 9:00 AM – 5:00 PM Eastern. Employees must be reasonably reachable, attend required meetings, and communicate proactively regarding availability.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-4 Paid Time Off (PTO) — Operational Expectations</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Request PTO in advance when foreseeable</li>
+        <li>Obtain manager approval prior to taking PTO</li>
+        <li>Ensure appropriate coverage and communication</li>
+      </ul>
+      <p>The Company may deny or reschedule PTO based on business needs.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-5 Remote Work & Telecommuting</h4>
+    <div class="collapsible-content">
+      <p>Remote work is a condition of employment. Employees must maintain professional work environments, reliable internet, and comply with security and confidentiality requirements.</p>
+      <p><strong>Work Location:</strong> Written approval required before working from a new state or country.</p>
+      <p><strong>Video Presence:</strong> Join scheduled meetings with video enabled, particularly client-facing meetings, internal team meetings, training, and performance discussions. Maintain professional appearance and environment.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-6 Employee Safety and Workspace Safety</h4>
+    <div class="collapsible-content">
+      <p>Maintain a safe, secure workspace. Report safety concerns promptly. Keep emergency contact information current.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-7 Confidentiality and Client Data Handling</h4>
+    <div class="collapsible-content">
+      <div class="callout red">
+        <strong>Employees must:</strong> Safeguard confidential info, use only Company-approved systems, prevent unauthorized access. <strong>May not:</strong> store data on personal devices, transmit through unapproved channels, retain data beyond necessity, or access through unsecured networks. Report any suspected breach immediately.
+      </div>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-8 Information Security & Acceptable Use</h4>
+    <div class="collapsible-content">
+      <p>Use only Company-approved systems. Follow required safeguards including strong passwords and MFA. Report suspected security incidents immediately. Limited personal use permitted if it doesn't interfere with work or expose the Company to risk.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-9 Company Equipment & Return of Property</h4>
+    <div class="collapsible-content">
+      <p>Company equipment must be used exclusively for Company work. All equipment remains Company property. Upon separation, return all Company property per instructions.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-10 Business Expense Reimbursement</h4>
+    <div class="collapsible-content">
+      <p>Preapproved business expenses will be reimbursed with proper documentation. Regular household utilities are not reimbursable unless required by law.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-11 Pay Administration & Direct Deposit</h4>
+    <div class="collapsible-content">
+      <p>Paid bi-weekly. Report suspected payroll errors to People Operations promptly. Direct deposit strongly encouraged.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-12 Safe Harbor for Exempt Employees</h4>
+    <div class="collapsible-content">
+      <p>Exempt employees are paid on salary basis and generally will not have pay reduced due to variations in work quantity or quality. Report suspected improper deductions to People Operations.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-13 Performance Management & Professional Standards</h4>
+    <div class="collapsible-content">
+      <p>Performance reviews may be conducted periodically. A positive review does not guarantee a raise, promotion, or continued employment.</p>
+      <p><strong>Professionalism expectations:</strong> Clear communication, ownership, meeting deadlines, accurate work, representing Company values.</p>
+      <p><strong>PIPs:</strong> May be used at Company discretion. A PIP does not change at-will status, guarantee employment, or guarantee completion of the full PIP period. PIPs typically identify concerns, set improvement timeframes (often 4–6 weeks), provide guidance and measurable goals, and document progress.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-14 Incentive Eligibility & Good Standing</h4>
+    <div class="collapsible-content">
+      <p>Bonuses, commissions, and incentives require good standing: actively employed, not under notice, not subject to active disciplinary action, and complying with policies. Incentive compensation is discretionary and not guaranteed.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-15 Conflicts of Interest & Outside Work</h4>
+    <div class="collapsible-content">
+      <p>Disclose outside employment or interests that may conflict. May not work for competitors or clients, use Company resources for outside work, or allow outside commitments to interfere. May not share confidential info publicly, discuss client strategies, or represent yourself as Company spokesperson without authorization.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-16 AI & Automation Use Policy</h4>
+    <div class="collapsible-content">
+      <div class="callout blue">
+        <strong>Use Company-approved AI tools.</strong> Do not enter confidential or client-identifiable info unless expressly approved. All AI-assisted work must be human-reviewed before distribution. May not fabricate results, rely on AI without verification, or present AI output as final without review. AI-assisted work is Company property.
+      </div>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-17 Employment Records & Internal Opportunities</h4>
+    <div class="collapsible-content">
+      <p>Keep personnel file up to date. Internal job posting eligibility: 6+ months in current position, satisfactory performance, not on probation, meet qualifications, and notify current manager before applying.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-18 Open Door Policy</h4>
+    <div class="collapsible-content">
+      <p>All employees may express ideas and opinions directly to management. Contact People Operations for any issue not covered by a separate reporting procedure.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">2-19 Operating Standards, Roles & Management Structure</h4>
+    <div class="collapsible-content">
+      <p><strong>Client Service:</strong> Communicate proactively, maintain accurate documentation, follow required processes, report errors promptly.</p>
+      <p><strong>Management Authority:</strong> Managers may assign work, provide feedback, document concerns, and escalate issues. Final decisions on discipline, compensation, PIPs, or termination remain with senior leadership and/or People Operations.</p>
+    </div>
+  </div>
+
+  <!-- Section 3 -->
+  <div class="card">
+    <h3>Section 3 — Benefits & Time Off</h3>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-1 Benefits Overview</h4>
+    <div class="collapsible-content">
+      <p>Tiger Tracks provides competitive pay and supplemental benefits including time-off, salary matching programs, technology stipends, insurance options, and other plan benefits. Contact People Operations with questions.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-2 Paid Time Off</h4>
+    <div class="collapsible-content">
+      <p>Flexible PTO program. Benchmark: 10–15 days off per year. Must be employed 60+ days before taking PTO (unless required by law). PTO is not accrued wages and unused PTO is not paid out upon separation unless required by law.</p>
+      <p>Request in advance, obtain manager approval, ensure coverage. For unforeseeable absences, notify manager ASAP.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-3 Parental & Family Leave</h4>
+    <div class="collapsible-content">
+      <div class="callout green">
+        <strong>Up to 12 weeks</strong> of Company-paid parental leave after 9 months of employment, for birth, adoption, or foster placement. Must be taken within 12 months. Runs concurrently with FMLA and state paid family leave.
+      </div>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-4 Workers' Compensation</h4>
+    <div class="collapsible-content">
+      <p>Work-related injuries/illnesses covered by Workers' Comp insurance. Report any injury to your manager ASAP regardless of severity.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-5 Jury Duty</h4>
+    <div class="collapsible-content">
+      <p>Time off provided for jury duty. Provide proper notice and verification. Report to work if excused for the major portion of the day. Exempt employees paid full salary for any week with jury duty if work is also performed.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-6 Voting Leave</h4>
+    <div class="collapsible-content">
+      <p>Provided as required by law. Provide advance notice and coordinate timing to minimize disruption.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-7 Bereavement Leave</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li><strong>Up to 14 days paid</strong> for immediate family (spouse/partner, child, parent, sibling, grandparent, grandchild)</li>
+        <li><strong>Up to 7 days paid</strong> for other significant relationships (with People Ops approval)</li>
+      </ul>
+      <p>Notify manager ASAP. Additional unpaid time may be available.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">3-8 Employee Referral Awards</h4>
+    <div class="collapsible-content">
+      <p><strong>$3,000 total</strong> per qualifying referral hire: $1,500 after start date + $1,500 after 90 days. Must be actively employed and in good standing at time of each payment. Referral bonuses are taxable.</p>
+      <p>Not eligible if candidate is already in recruiting database, previously applied, referred by multiple employees, or sourced through an agency.</p>
+    </div>
+  </div>
+
+  <!-- Section 4 -->
+  <div class="card">
+    <h3>Section 4 — Leaves of Absence</h3>
+
+    <h4 class="collapsible" onclick="toggle(this)">4-1 Personal Leave</h4>
+    <div class="collapsible-content">
+      <p>Unpaid personal leave may be approved at Company discretion, generally up to 8 weeks. Submit requests 2+ weeks in advance. PTO does not accrue during unpaid leave. Reinstatement is not guaranteed. Failure to return as scheduled may be treated as voluntary resignation.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">4-2 Military Leave</h4>
+    <div class="collapsible-content">
+      <p>Leave provided per USERRA and applicable state law. Provide advance notice when practicable. Reemployment rights, seniority, and benefits as required by law.</p>
+    </div>
+  </div>
+
+  <!-- Section 5 -->
+  <div class="card">
+    <h3>Section 5 — General Standards of Conduct</h3>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-1 Code of Conduct & Ethical Standards</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Act honestly and ethically</li>
+        <li>Communicate respectfully and professionally</li>
+        <li>Take ownership of responsibilities, outcomes, and mistakes</li>
+        <li>Follow lawful manager direction and Company procedures</li>
+        <li>Escalate risks, issues, or errors promptly</li>
+        <li>Protect client trust, confidentiality, and Company reputation</li>
+      </ul>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-2 Client-Facing Standards</h4>
+    <div class="collapsible-content">
+      <ul>
+        <li>Be prepared, punctual, and fully engaged</li>
+        <li>Communicate accurately — avoid speculation or misrepresentation</li>
+        <li>Proactively disclose risks, delays, or errors internally</li>
+        <li>Maintain calm, professional demeanor during high-pressure situations</li>
+      </ul>
+      <p><em>Conduct that jeopardizes client trust may result in immediate corrective action.</em></p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-3 Workplace Conduct & Prohibited Behavior</h4>
+    <div class="collapsible-content">
+      <p>Unacceptable conduct includes:</p>
+      <ul>
+        <li>Obtaining employment through false information</li>
+        <li>Falsifying time records</li>
+        <li>Theft, misuse, or intentional damage to property</li>
+        <li>Unauthorized disclosure of confidential information</li>
+        <li>Violations of safety, security, or technology requirements</li>
+        <li>Threatening, intimidating, or disruptive conduct</li>
+        <li>Failure to follow lawful manager direction</li>
+        <li>Repeated unresponsiveness undermining team effectiveness</li>
+        <li>Unlawful, unethical, or harassing activity</li>
+      </ul>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-4 Confidential Company Information</h4>
+    <div class="collapsible-content">
+      <p>Protect all confidential information (finances, pricing, strategies, client data). Do not disclose to competitors. Improper copying, removal, use, or disclosure may result in termination.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-5 Conflict of Interest & Business Ethics</h4>
+    <div class="collapsible-content">
+      <p>Avoid actual or perceived conflicts. Disclose potential conflicts promptly to People Operations. Do not use Company time or resources for unauthorized outside work.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-6 Health & Safety</h4>
+    <div class="collapsible-content">
+      <p>Work safely, maintain safe workspace, report hazards/injuries promptly.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-7 Publicity / Statements to Media</h4>
+    <div class="collapsible-content">
+      <p>All media inquiries must be referred to the CEO. Only the CEO or authorized designee may make public statements on behalf of Tiger Tracks.</p>
+    </div>
+
+    <h4 class="collapsible" onclick="toggle(this)">5-8 Separation / If You Must Leave Us</h4>
+    <div class="collapsible-content">
+      <p>At least 2 weeks' advance notice requested when practicable. Return all Company property and confidential information upon separation.</p>
+    </div>
+  </div>
+
+  <div class="callout" style="margin-top:1rem;">
+    <strong>Disclaimer:</strong> This handbook does not create a contract of employment. Employment is at-will. The Company reserves the right to modify any policies at any time. Where other Company documents or benefit plans address the same subject, those documents govern.
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div style="text-align:center; padding:2rem 0; color:var(--text-light); font-size:.8rem; border-top:1px solid var(--border);">
+  <p>Tiger Tracks Team Resources &nbsp;•&nbsp; Internal Use Only &nbsp;•&nbsp; 2026</p>
+  <button class="print-btn" onclick="window.print()" style="margin-top:.75rem;">🖨️ Print / Save as PDF</button>
+</div>
+
+</div><!-- /container -->
+
+<!-- BACK TO TOP -->
+<button class="back-top" id="backTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Collapsible sections
+function toggle(el) {
+  el.classList.toggle('open');
+  const content = el.nextElementSibling;
+  content.classList.toggle('show');
+}
+
+// Back to top
+window.addEventListener('scroll', () => {
+  document.getElementById('backTop').classList.toggle('show', window.scrollY > 400);
+});
+
+// Search
+document.getElementById('search').addEventListener('input', function() {
+  const q = this.value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const match = card.textContent.toLowerCase().includes(q);
+    card.style.display = match || !q ? '' : 'none';
+  });
+});
+</script>
+
+</body>
+</html>

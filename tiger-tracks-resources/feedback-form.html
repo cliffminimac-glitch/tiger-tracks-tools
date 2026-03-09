@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiger Tracks Monthly Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root { --accent:#229FA1; --accent-light:#e0f7f7; --text:#1a1a2e; --text-light:#6b7280; --border:#e5e7eb; --bg:#f9fafb; --panel:#fff; --success:#10b981; }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+.header { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); color:#fff; padding:1.5rem 2rem; display:flex; align-items:center; gap:1rem; }
+.header img { height:44px; }
+.header h1 { font-size:1.15rem; font-weight:700; }
+.header .sub { font-size:.8rem; color:#94a3b8; margin-top:.15rem; }
+.container { max-width:720px; margin:2rem auto; padding:0 1.5rem; }
+.card { background:var(--panel); border-radius:12px; border:1px solid var(--border); padding:1.5rem; margin-bottom:1.25rem; }
+.card h2 { font-size:1rem; color:var(--accent); margin-bottom:.75rem; }
+.card h3 { font-size:.88rem; color:var(--text); margin-bottom:.5rem; margin-top:.75rem; }
+label { font-size:.82rem; font-weight:600; display:block; margin-bottom:.3rem; color:var(--text); }
+.hint { font-size:.75rem; color:var(--text-light); margin-bottom:.4rem; font-style:italic; }
+textarea { width:100%; padding:.6rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:.85rem; resize:vertical; min-height:70px; }
+textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(34,159,161,.15); }
+select { width:100%; padding:.5rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:.85rem; }
+.rating-row { display:flex; gap:.5rem; margin:.4rem 0 .75rem; }
+.rating-btn { padding:.4rem .75rem; border:2px solid var(--border); border-radius:8px; background:#fff; cursor:pointer; font-size:.82rem; font-weight:600; transition:all .15s; }
+.rating-btn:hover { border-color:var(--accent); }
+.rating-btn.active { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
+.btn { display:inline-block; padding:.7rem 1.5rem; background:var(--accent); color:#fff; border:none; border-radius:8px; font-weight:700; font-size:.9rem; cursor:pointer; font-family:inherit; }
+.btn:hover { opacity:.9; }
+.btn:disabled { opacity:.5; cursor:not-allowed; }
+.success-msg { display:none; padding:1.25rem; background:#dcfce7; border:1px solid #86efac; border-radius:10px; text-align:center; }
+.success-msg h2 { color:#059669; margin-bottom:.3rem; }
+.meta-bar { display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:.5rem; font-size:.85rem; }
+.meta-bar strong { color:var(--accent); }
+.divider { height:1px; background:var(--border); margin:1rem 0; }
+.item { margin-bottom:.75rem; }
+.item-label { font-size:.82rem; font-weight:600; margin-bottom:.25rem; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <img src="/logo.png" alt="Tiger Tracks">
+  <div>
+    <h1>Monthly Feedback Review</h1>
+    <div class="sub" id="headerSub">Loading...</div>
+  </div>
+</div>
+
+<div class="container">
+  <!-- EMAIL GATE -->
+  <div id="emailGate" class="card" style="max-width:440px;margin:3rem auto;padding:2rem;text-align:center;">
+    <h2 style="font-size:1.1rem;color:var(--accent);margin-bottom:.5rem;">🔒 Verify Your Identity</h2>
+    <p style="font-size:.85rem;color:var(--text-light);margin-bottom:1rem;">Enter your Tiger Tracks email to access this feedback form.</p>
+    <input type="email" id="gateEmail" placeholder="you@tigertracks.ai" onkeydown="if(event.key==='Enter')verifyEmail()" style="width:100%;padding:.6rem;border:1px solid var(--border);border-radius:8px;font-size:.9rem;font-family:inherit;margin-bottom:.75rem;">
+    <button class="btn" onclick="verifyEmail()" style="width:100%;">Continue</button>
+    <div id="gateError" style="display:none;margin-top:.6rem;color:#dc2626;font-size:.82rem;font-weight:600;">Access denied. This form is only accessible to authorized team members.</div>
+  </div>
+
+  <div id="alreadyDone" class="success-msg" style="display:none;">
+    <h2>Already Submitted</h2>
+    <p>You have already submitted this month's feedback. Thank you!</p>
+  </div>
+
+  <div id="formArea" style="display:none;">
+    <div class="card">
+      <div class="meta-bar">
+        <div><strong>Employee:</strong> <span id="metaEmployee">--</span></div>
+        <div><strong>Role:</strong> <span id="metaRole">--</span></div>
+        <div><strong>Manager:</strong> <span id="metaManager">--</span></div>
+        <div><strong>Month:</strong> <span id="metaMonth">--</span></div>
+      </div>
+    </div>
+
+    <!-- SECTION 1: Reflection -->
+    <div class="card" id="sec-reflection">
+      <h2>1. Reflection</h2>
+      <p class="hint" id="reflectionPurpose"></p>
+      <div id="reflectionQuestions"></div>
+    </div>
+
+    <!-- SECTION 2: What Support Would Help -->
+    <div class="card" id="sec-support">
+      <h2>2. What Support Would Help?</h2>
+      <p class="hint">Select all that apply, then add details below.</p>
+      <div id="supportOptions"></div>
+      <div style="margin-top:.5rem;">
+        <label>Additional details</label>
+        <textarea id="supportDetails" rows="3" placeholder="Anything specific you'd like from your manager..."></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 3: What's Working -->
+    <div class="card" id="sec-working">
+      <h2>3. What's Working Well</h2>
+      <p class="hint">Rate each area and add optional notes.</p>
+      <div id="workingItems"></div>
+    </div>
+
+    <!-- SECTION 4: Area to Strengthen -->
+    <div class="card" id="sec-strengthen">
+      <h2>4. One Area to Strengthen</h2>
+      <p class="hint" id="strengthenNote"></p>
+      <div id="strengthenItems"></div>
+      <div style="margin-top:.75rem;">
+        <label>Specific action plan for next 30 days</label>
+        <textarea id="actionPlan" rows="3" placeholder="What will you focus on improving?"></textarea>
+      </div>
+    </div>
+
+    <!-- SECTION 5: Skill Focus -->
+    <div class="card" id="sec-skill" style="display:none;">
+      <h2>5. Skill Focus</h2>
+      <div id="skillItems"></div>
+    </div>
+
+    <!-- SECTION 6: Additional -->
+    <div class="card">
+      <h2>Additional Comments</h2>
+      <textarea id="additionalComments" rows="4" placeholder="Any other feedback, concerns, or things you'd like to discuss..."></textarea>
+    </div>
+
+    <div style="text-align:center;margin:1.5rem 0;">
+      <button class="btn" id="submitBtn" onclick="submitFeedback()">Submit Monthly Feedback</button>
+    </div>
+  </div>
+
+  <div id="successMsg" class="success-msg">
+    <h2>Feedback Submitted!</h2>
+    <p>Thank you for completing your monthly feedback. Your manager will review it shortly.</p>
+  </div>
+</div>
+
+<script>
+// ===== ACCESS CONTROL =====
+// Email map: name -> email
+var EMAIL_MAP = {
+  "Riley Abercrombie":"riley@tigertracks.ai",
+  "Hannah Price":"hannah@tigertracks.ai",
+  "Charlotte Pohl":"charlotte@tigertracks.ai",
+  "Allison Long":"allison@tigertracks.ai",
+  "Rachel Scharett":"rachael@tigertracks.ai",
+  "Shelby Nations":"shelby@tigertracks.ai",
+  "Owen Phipps":"owen@tigertracks.ai",
+  "Megan Brenneke":"meganb@tigertracks.ai",
+  "Seth McDaniel":"seth@tigertracks.ai",
+  "Mary McCambridge":"mary@tigertracks.ai",
+  "Will Sokol":"will@tigertracks.ai",
+  "Gretchen Hess":"gretchen@tigertracks.ai",
+  "Megan Klein":"megank@tigertracks.ai",
+  "Daren Kalkoffen":"daren@tigertracks.ai",
+  "Evin Leclerc":"evin@tigertracks.ai",
+  "Yana Markova":"yana@tigertracks.ai",
+  "Kiyana Saidi-Nejad":"kiyana@tigertracks.ai",
+  "Bruno Milalaf":"bruno@tigertracks.ai",
+  "Billy Bevevino":"billy@tigertracks.ai",
+  "Tate Dewey":"tate@tigertracks.ai",
+  "Sanad Shuman":"sanad@tigertracks.ai",
+  "Alex Blumberg":"alex@tigertracks.ai",
+  "Steven Jatich":"steven@tigertracks.ai",
+  "Kersten Kruse":"kersten@tigertracks.ai",
+  "Anirudh Venkat":"anirudh@tigertracks.ai",
+  "Ashley Kaika":"ashley@tigertracks.ai"
+};
+
+// Org chart for manager lookup
+var ORG = {
+  "Riley Abercrombie":{manager:"Rachel Scharett",practice:"am"},
+  "Hannah Price":{manager:"Rachel Scharett",practice:"am"},
+  "Charlotte Pohl":{manager:"Rachel Scharett",practice:"am"},
+  "Allison Long":{manager:"Rachel Scharett",practice:"am"},
+  "Rachel Scharett":{manager:"",practice:"am"},
+  "Shelby Nations":{manager:"Riley Abercrombie",practice:"am"},
+  "Owen Phipps":{manager:"Riley Abercrombie",practice:"am"},
+  "Megan Brenneke":{manager:"Shelby Nations",practice:"am"},
+  "Seth McDaniel":{manager:"Shelby Nations",practice:"am"},
+  "Mary McCambridge":{manager:"Hannah Price",practice:"am"},
+  "Will Sokol":{manager:"Hannah Price",practice:"am"},
+  "Gretchen Hess":{manager:"Mary McCambridge",practice:"am"},
+  "Megan Klein":{manager:"Will Sokol",practice:"am"},
+  "Daren Kalkoffen":{manager:"Gretchen Hess",practice:"am"},
+  "Evin Leclerc":{manager:"Daren Kalkoffen",practice:"am"},
+  "Yana Markova":{manager:"Megan Klein",practice:"am"},
+  "Kiyana Saidi-Nejad":{manager:"Charlotte Pohl",practice:"am"},
+  "Bruno Milalaf":{manager:"Charlotte Pohl",practice:"am"},
+  "Billy Bevevino":{manager:"Bruno Milalaf",practice:"am"},
+  "Tate Dewey":{manager:"Kiyana Saidi-Nejad",practice:"am"},
+  "Sanad Shuman":{manager:"Billy Bevevino",practice:"am"},
+  "Alex Blumberg":{manager:"Ashley Kaika",practice:"part"},
+  "Steven Jatich":{manager:"Ashley Kaika",practice:"part"},
+  "Kersten Kruse":{manager:"Ashley Kaika",practice:"mkt"},
+  "Anirudh Venkat":{manager:"Kersten Kruse",practice:"mkt"},
+  "Ashley Kaika":{manager:"",practice:"part"}
+};
+
+// Global admins who can access ALL forms
+var GLOBAL_ADMINS = ["cliff@tigertracks.ai","elizabeth@tigertracks.ai"];
+
+function buildAllowedEmails(employeeName){
+  var allowed = GLOBAL_ADMINS.slice(); // cliff + elizabeth always
+  // The employee themselves
+  if(EMAIL_MAP[employeeName]) allowed.push(EMAIL_MAP[employeeName]);
+  // Their manager
+  var person = ORG[employeeName];
+  if(person && person.manager && EMAIL_MAP[person.manager]){
+    allowed.push(EMAIL_MAP[person.manager]);
+  }
+  // Rachael gets access to all AM practice area
+  if(person && person.practice === 'am'){
+    allowed.push("rachael@tigertracks.ai");
+  }
+  return allowed.map(function(e){return e.toLowerCase();});
+}
+
+function verifyEmail(){
+  var input = document.getElementById('gateEmail').value.trim().toLowerCase();
+  if(!input){document.getElementById('gateError').style.display='block';return;}
+
+  var empName = new URLSearchParams(window.location.search).get('employee')||'';
+  var allowed = buildAllowedEmails(empName);
+
+  if(allowed.indexOf(input) >= 0){
+    // Passed - show form
+    document.getElementById('emailGate').style.display='none';
+    sessionStorage.setItem('tt_mfr_verified', input);
+    showForm();
+  } else {
+    document.getElementById('gateError').style.display='block';
+  }
+}
+
+function showForm(){
+  var token = new URLSearchParams(window.location.search).get('t')||'';
+  var submitKey = 'tt_mfr_'+token;
+  if(token && localStorage.getItem(submitKey)){
+    document.getElementById('alreadyDone').style.display='block';
+  } else {
+    document.getElementById('formArea').style.display='';
+  }
+}
+
+// Auto-bypass if already verified this session
+(function(){
+  var verified = sessionStorage.getItem('tt_mfr_verified');
+  if(verified){
+    var empName = new URLSearchParams(window.location.search).get('employee')||'';
+    var allowed = buildAllowedEmails(empName);
+    if(allowed.indexOf(verified) >= 0){
+      document.getElementById('emailGate').style.display='none';
+      showForm();
+    }
+  }
+})();
+
+// Parse URL params
+var params = new URLSearchParams(window.location.search);
+var employee = params.get('employee') || '';
+var manager = params.get('manager') || '';
+var role = params.get('role') || '';
+var month = params.get('month') || new Date().toLocaleString('en-US',{month:'long',year:'numeric'});
+var token = params.get('t') || '';
+
+// Role mapping for template lookup
+var roleTemplateMap = {
+  "Account Coordinator":"Account Coordinator",
+  "Account Strategist":"Account Strategist",
+  "Account Manager":"Account Manager",
+  "Senior Account Manager":"Senior Account Manager",
+  "Associate Director":"Associate Director",
+  "Director of Partnerships":"Partnerships Director",
+  "Partnerships Director":"Partnerships Director",
+  "Head of Partnerships":"Head of Partnerships",
+  "Director of Marketing":"Director",
+  "VP of Partnerships":"Senior Director",
+  "Senior Director":"Senior Director"
+};
+
+var monthlyTemplates = {
+"Account Coordinator": {
+  purpose: "Build execution reliability, confidence, and readiness for AS-level ownership across multiple accounts.",
+  reflection: ["What execution work are you most confident in right now?","Where did you learn a new platform, process, or best practice this month?","What skill would you like more exposure to next month?"],
+  supportExamples: ["Clearer task context or success criteria","More examples/templates","Shadowing builds, QA, or reporting","Fewer priorities / clearer focus windows"],
+  working: ["In-platform builds for Tier 3-4 clients","Change logs, UTMs, and documentation accuracy","Creative trafficking and asset handling","Responsiveness in Slack / inbox coverage","Reporting prep and slide quality"],
+  strengthen: ["QA consistency across platforms and links","Asking clarifying questions earlier","Speed + accuracy balance","Understanding how tasks connect to performance"],
+  strengthenNote: "If you improve this one skill over the next 30 days, you will feel more confident and trusted in the pod.",
+  skillFocus: null
+},
+"Account Strategist": {
+  purpose: "Strengthen execution ownership, insights, and AM-readiness.",
+  reflection: ["What channel or performance win are you most proud of this month?","Where did your analysis or insight directly influence an account decision?","What skill would most level up your impact next month?"],
+  supportExamples: ["More clarity on account goals or KPIs","Better prioritization across accounts","Feedback on analysis or insights","Stronger partnership with AM or Sr AM"],
+  working: ["Daily pacing, spend, and performance monitoring","Quality of optimizations and testing plans","Change logs and platform hygiene","Proactive insights (not just reactive answers)","QA of AC builds and tracking"],
+  strengthen: ["Translating metrics into clear recommendations","Flagging risks earlier","Hypothesis-driven testing","Balancing speed with rigor across accounts"],
+  strengthenNote: null,
+  skillFocus: null
+},
+"Account Manager": {
+  purpose: "Develop leadership, client ownership, and consistency across accounts.",
+  reflection: ["What client or delivery win are you most proud of this month?","Where did your systems (reporting, Asana, communication) work especially well?","What leadership skill would most improve your effectiveness next month?"],
+  supportExamples: ["Prioritization or workload calibration","Call or communication coaching","Support handling difficult client dynamics","Clearer escalation boundaries"],
+  working: ["Client communication quality & trust","Timelines, agendas, recaps, follow-ups","Reporting accuracy and readiness","Delegation to AS / AC","Issue flagging and escalation judgment"],
+  strengthen: ["Proactive risk and timeline management","QA before things leave the pod","Stronger presence on Tier 2-3 calls","Managing multiple accounts calmly"],
+  strengthenNote: null,
+  skillFocus: ["Running cleaner meetings","Coaching ASs more intentionally","Anticipating client concerns","Managing multiple priorities calmly"]
+},
+"Senior Account Manager": {
+  purpose: "Strengthen manager effectiveness, strategic thinking, and pod consistency.",
+  reflection: ["Where did your leadership have the biggest positive impact on clients or AMs?","What decisions helped your accounts or team run more smoothly?","What leadership capability would most increase your leverage next month?"],
+  supportExamples: ["Strategic alignment or roadmap guidance","Support in difficult people conversations","Capacity or resourcing adjustments"],
+  working: ["Client stewardship & trust","Strategic roadmaps and narratives","Coaching AMs","Consistency across accounts","Escalation handling"],
+  strengthen: ["Letting go of AM execution","Coaching vs fixing","Anticipating issues earlier","Developing AM bench strength"],
+  strengthenNote: null,
+  skillFocus: ["Managing managers (not tasks)","Strategy storytelling","Raising standards without friction","Developing AM bench strength"]
+},
+"Associate Director": {
+  purpose: "Assess strategic leadership, pod health, and business impact.",
+  reflection: ["What outcomes are you most proud of across revenue, clients, and team this month?","Where did your leadership create clarity or stability for the pod?","What strategic capability would most increase your impact next month?"],
+  supportExamples: ["Executive alignment or decision support","Resource or capacity trade-offs","Hiring or role mix decisions","Forecasting or margin guidance"],
+  working: ["Executive-level client trust (Tier 1-2)","Strategic roadmaps and QBR quality","Revenue protection and growth leadership","Sr AM effectiveness and accountability"],
+  strengthen: ["Earlier identification of churn or performance risk","Stronger long-term planning vs short-term fixes","Developing Sr AMs as independent leaders","Reducing AD-level involvement in execution","Stronger forecasting or margin ownership"],
+  strengthenNote: null,
+  skillFocus: ["Revenue protection & expansion","Talent development & bench strength","Executive relationship depth","Operational leverage & process improvement"]
+},
+"Director": {
+  purpose: "Performance, leadership, and trajectory.",
+  reflection: ["What is working exceptionally well?","Where is impact strongest (revenue, clients, team)?","Any drift from expectations?"],
+  supportExamples: [],
+  working: [],
+  strengthen: [],
+  strengthenNote: null,
+  skillFocus: null
+},
+"Senior Director": {
+  purpose: "Assess strategic leadership, org health, and business impact at the highest level.",
+  reflection: ["What outcomes are you most proud of across revenue, clients, and team this month?","Where did your leadership create clarity or stability?","What strategic capability would most increase your impact next month?"],
+  supportExamples: ["Executive alignment or decision support","Resource or capacity trade-offs","Hiring or role mix decisions","Forecasting or margin guidance"],
+  working: ["Org-wide client satisfaction and retention","Revenue and margin target progress","Leadership team development","Cross-functional alignment"],
+  strengthen: ["Earlier identification of systemic risks","Long-term planning vs short-term fixes","Developing Director bench strength"],
+  strengthenNote: null,
+  skillFocus: null
+},
+"Partnerships Director": {
+  purpose: "Remove execution failures that break trust. Strengthen reliability, rigor, and consistency across sub-$30K deal cycle.",
+  reflection: ["Which deals moved forward this month and what drove that movement?","Where did responsiveness or follow-through create friction?","What one execution habit would most improve your reliability next month?"],
+  supportExamples: ["Call reviews and coaching","Async help on audit builds","Clearer deal prioritization","Outbound strategy calibration"],
+  working: ["Responsiveness (same-day / 24h max)","Deal ownership and follow-through","HubSpot hygiene and pipeline accuracy","Audit accuracy and presentation quality","Kickoff readiness and AM handoff","Post-audit follow-up discipline","Outbound consistency and volume"],
+  strengthen: ["Zero >7-day deal inactivity","100% HubSpot hygiene","All kickoffs initiated within 48 hours","PTO logged consistently","Audit materials organized and submitted on time","DTR tasks scheduled 30-90 days out","All reactivation touches logged"],
+  strengthenNote: "These are SOP non-negotiables. Patterns that persist will follow the escalation path: performance plan, probation, replacement.",
+  skillFocus: ["Outbound volume and consistency","Discovery-to-audit conversion (goal 70%)","Audit-to-close conversion (goal 70%)","Clean communication with clients and prospects"]
+},
+"Head of Partnerships": {
+  purpose: "Reinforce autonomy, correct leadership drift, hold to SOP, level up accountability across enterprise pipeline and partner ecosystem.",
+  reflection: ["Which enterprise deals moved forward without CEO involvement this month?","What leadership decisions did you make independently that improved the system?","Where is the partner ecosystem producing consistent introductions?"],
+  supportExamples: ["Calibration on enterprise deal strategy","Async help on partner relationship management","Reviews of leadership and coaching approach","Support for difficult people conversations"],
+  working: ["Enterprise pipeline discipline (>$30K deals)","Partner ecosystem health and conversion","Autonomous deal progression without CEO dependency","Leadership and accountability of direct reports","HubSpot hygiene across owned deals","SWAT channel readiness and audit coordination","Routing discipline and deal handoff quality"],
+  strengthen: ["Drive all >$30K deals end-to-end without escalation","Immediate correction of direct report gaps with documentation","100% referral-to-BD conversion done correctly","SWAT channel created within 24 hours of audit scheduling","Discovery recording + intake sheet pinned same-day","No avoidance of administrative BD components"],
+  strengthenNote: "Autonomy is the standard. The goal is leadership ownership, not activity volume.",
+  skillFocus: ["Enterprise deal progression without CEO","People management and downline accountability","Operational discipline and routing integrity","Calm, decisive leadership under pressure"]
+}
+};
+
+// submitKey used by showForm() and submitFeedback()
+var submitKey = 'tt_mfr_'+token;
+
+// Set meta
+document.getElementById('metaEmployee').textContent = employee;
+document.getElementById('metaRole').textContent = role;
+document.getElementById('metaManager').textContent = manager;
+document.getElementById('metaMonth').textContent = month;
+document.getElementById('headerSub').textContent = employee + ' | ' + month;
+
+// Load template
+var tmplKey = roleTemplateMap[role] || role;
+var tmpl = monthlyTemplates[tmplKey];
+
+if(tmpl){
+  document.getElementById('reflectionPurpose').textContent = tmpl.purpose;
+
+  // Reflection questions
+  var rhtml='';
+  tmpl.reflection.forEach(function(q,i){
+    rhtml+='<div class="item"><label>'+q+'</label><textarea id="refl'+i+'" rows="3"></textarea></div>';
+  });
+  document.getElementById('reflectionQuestions').innerHTML=rhtml;
+
+  // Support options
+  if(tmpl.supportExamples.length){
+    var shtml='';
+    tmpl.supportExamples.forEach(function(s,i){
+      shtml+='<label style="font-weight:400;display:flex;align-items:center;gap:.5rem;margin-bottom:.3rem;cursor:pointer;"><input type="checkbox" class="support-check" value="'+s+'"> '+s+'</label>';
+    });
+    document.getElementById('supportOptions').innerHTML=shtml;
+  } else {
+    document.getElementById('sec-support').style.display='none';
+  }
+
+  // Working well
+  if(tmpl.working.length){
+    var whtml='';
+    tmpl.working.forEach(function(w,i){
+      whtml+='<div class="item"><div class="item-label">'+w+'</div>';
+      whtml+='<div class="rating-row">';
+      [1,2,3,4,5].forEach(function(n){
+        whtml+='<button type="button" class="rating-btn" data-group="work'+i+'" data-val="'+n+'" onclick="rateItem(this)">'+n+'</button>';
+      });
+      whtml+='</div>';
+      whtml+='<textarea id="workNote'+i+'" rows="2" placeholder="Optional notes..."></textarea></div>';
+    });
+    document.getElementById('workingItems').innerHTML=whtml;
+  } else {
+    document.getElementById('sec-working').style.display='none';
+  }
+
+  // Strengthen
+  if(tmpl.strengthen.length){
+    var sthtml='<div style="margin-bottom:.5rem;"><label>Select the area to focus on:</label><select id="strengthenPick">';
+    sthtml+='<option value="">-- Choose one --</option>';
+    tmpl.strengthen.forEach(function(s){sthtml+='<option value="'+s+'">'+s+'</option>';});
+    sthtml+='</select></div>';
+    sthtml+='<label>Why this area? What will change?</label>';
+    sthtml+='<textarea id="strengthenWhy" rows="3"></textarea>';
+    document.getElementById('strengthenItems').innerHTML=sthtml;
+    if(tmpl.strengthenNote) document.getElementById('strengthenNote').textContent=tmpl.strengthenNote;
+  } else {
+    document.getElementById('sec-strengthen').style.display='none';
+  }
+
+  // Skill focus
+  if(tmpl.skillFocus && tmpl.skillFocus.length){
+    document.getElementById('sec-skill').style.display='';
+    var skhtml='';
+    tmpl.skillFocus.forEach(function(s,i){
+      skhtml+='<div class="item"><div class="item-label">'+s+'</div>';
+      skhtml+='<div class="rating-row">';
+      [1,2,3,4,5].forEach(function(n){
+        skhtml+='<button type="button" class="rating-btn" data-group="skill'+i+'" data-val="'+n+'" onclick="rateItem(this)">'+n+'</button>';
+      });
+      skhtml+='</div></div>';
+    });
+    document.getElementById('skillItems').innerHTML=skhtml;
+  }
+}
+
+function rateItem(btn){
+  var grp=btn.getAttribute('data-group');
+  document.querySelectorAll('[data-group="'+grp+'"]').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+}
+
+function submitFeedback(){
+  var btn=document.getElementById('submitBtn');
+  btn.disabled=true;btn.textContent='Submitting...';
+
+  // Gather data
+  var data={employee:employee,manager:manager,role:role,month:month,token:token,submitted:new Date().toISOString()};
+
+  // Reflections
+  data.reflections=[];
+  if(tmpl) tmpl.reflection.forEach(function(q,i){
+    var el=document.getElementById('refl'+i);
+    data.reflections.push({question:q,answer:el?el.value:''});
+  });
+
+  // Support
+  data.support=[];
+  document.querySelectorAll('.support-check:checked').forEach(function(c){data.support.push(c.value);});
+  data.supportDetails=document.getElementById('supportDetails').value;
+
+  // Working ratings
+  data.working=[];
+  if(tmpl) tmpl.working.forEach(function(w,i){
+    var active=document.querySelector('[data-group="work'+i+'"].active');
+    var note=document.getElementById('workNote'+i);
+    data.working.push({area:w,rating:active?parseInt(active.getAttribute('data-val')):null,notes:note?note.value:''});
+  });
+
+  // Strengthen
+  var sp=document.getElementById('strengthenPick');
+  var sw=document.getElementById('strengthenWhy');
+  var ap=document.getElementById('actionPlan');
+  data.strengthen={area:sp?sp.value:'',why:sw?sw.value:'',actionPlan:ap?ap.value:''};
+
+  // Skills
+  data.skills=[];
+  if(tmpl&&tmpl.skillFocus) tmpl.skillFocus.forEach(function(s,i){
+    var active=document.querySelector('[data-group="skill'+i+'"].active');
+    data.skills.push({skill:s,rating:active?parseInt(active.getAttribute('data-val')):null});
+  });
+
+  data.additionalComments=document.getElementById('additionalComments').value;
+
+  // Save to localStorage (syncs to main site)
+  var store=JSON.parse(localStorage.getItem('tt_monthly_feedback')||'[]');
+  store.push(data);
+  localStorage.setItem('tt_monthly_feedback',JSON.stringify(store));
+
+  // Mark as submitted
+  if(token) localStorage.setItem(submitKey,'1');
+
+  // Also POST to server for central storage
+  fetch('/api/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)}).catch(function(){});
+
+  document.getElementById('formArea').style.display='none';
+  document.getElementById('successMsg').style.display='block';
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Treehouse Venue Finder</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --card: #1a1a1a;
+  --card-hover: #222;
+  --accent: #4ade80;
+  --accent2: #22d3ee;
+  --text: #e5e5e5;
+  --text-dim: #888;
+  --border: #2a2a2a;
+  --gold: #fbbf24;
+  --red: #f87171;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.5; }
+
+/* HEADER */
+.header { padding: 2rem; text-align: center; border-bottom: 1px solid var(--border); }
+.header h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; font-weight: 800; }
+.header h1 span { color: var(--accent); }
+.header p { color: var(--text-dim); font-size: .9rem; margin-top: .5rem; }
+.event-dates { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+.event-dates .date-badge { background: linear-gradient(135deg, #4ade8033, #22d3ee33); border: 1px solid var(--accent); padding: .5rem 1.5rem; border-radius: 8px; font-weight: 700; font-size: .9rem; }
+
+/* FILTERS */
+.filters { display: flex; flex-wrap: wrap; gap: .5rem; padding: 1.5rem 2rem; justify-content: center; border-bottom: 1px solid var(--border); }
+.filter-btn { background: var(--card); border: 1px solid var(--border); color: var(--text-dim); padding: .4rem .8rem; border-radius: 6px; font-size: .8rem; cursor: pointer; transition: all .2s; }
+.filter-btn:hover, .filter-btn.active { background: var(--accent); color: #000; border-color: var(--accent); font-weight: 600; }
+.search-box { background: var(--card); border: 1px solid var(--border); color: var(--text); padding: .5rem 1rem; border-radius: 8px; font-size: .85rem; width: 250px; }
+.search-box::placeholder { color: var(--text-dim); }
+
+/* STATS */
+.stats { display: flex; justify-content: center; gap: 2rem; padding: 1rem 2rem; }
+.stat { text-align: center; }
+.stat .num { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
+.stat .label { font-size: .7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+
+/* GRID */
+.venue-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1rem; padding: 1.5rem 2rem; max-width: 1400px; margin: 0 auto; }
+.venue-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: all .2s; cursor: pointer; }
+.venue-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74,222,128,.1); }
+.venue-img { height: 180px; background: linear-gradient(135deg, #1a2a1a, #0a1a2a); display: flex; align-items: center; justify-content: center; font-size: 2rem; position: relative; }
+.venue-img .source-tag { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,.7); padding: 2px 8px; border-radius: 4px; font-size: .65rem; color: var(--text-dim); }
+.venue-img .match-score { position: absolute; top: 8px; left: 8px; background: var(--accent); color: #000; padding: 2px 8px; border-radius: 4px; font-size: .7rem; font-weight: 700; }
+.byo-badge { position: absolute; bottom: 8px; left: 8px; padding: 3px 10px; border-radius: 4px; font-size: .7rem; font-weight: 700; }
+.byo-badge.yes { background: #4ade80; color: #000; }
+.byo-badge.no { background: #f8717166; color: #f87171; border: 1px solid #f87171; }
+.cap-badge { position: absolute; bottom: 8px; right: 8px; background: #fbbf24; color: #000; padding: 3px 10px; border-radius: 4px; font-size: .7rem; font-weight: 700; }
+.music-badge { position: absolute; bottom: 32px; left: 8px; padding: 3px 10px; border-radius: 4px; font-size: .7rem; font-weight: 700; }
+.music-badge.yes { background: #a78bfa; color: #000; }
+.music-badge.no { background: #a78bfa33; color: #a78bfa; border: 1px solid #a78bfa; }
+.venue-card.no-music { opacity: 0.4; }
+.venue-card.no-music:hover { opacity: 0.8; }
+.venue-card.no-byo { opacity: 0.5; }
+.venue-card.no-byo:hover { opacity: 0.85; }
+.venue-body { padding: 1rem; }
+.venue-body h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; margin-bottom: .25rem; }
+.venue-body .neighborhood { color: var(--accent2); font-size: .8rem; font-weight: 600; }
+.venue-meta { display: flex; flex-wrap: wrap; gap: .5rem; margin: .75rem 0; }
+.venue-meta .tag { background: var(--bg); padding: .2rem .5rem; border-radius: 4px; font-size: .7rem; color: var(--text-dim); border: 1px solid var(--border); }
+.venue-meta .tag.green { border-color: var(--accent); color: var(--accent); }
+.venue-meta .tag.gold { border-color: var(--gold); color: var(--gold); }
+.venue-details { display: flex; justify-content: space-between; align-items: center; margin-top: .75rem; padding-top: .75rem; border-top: 1px solid var(--border); }
+.venue-price { font-weight: 700; color: var(--gold); font-size: .9rem; }
+.venue-capacity { font-size: .85rem; color: var(--accent2); font-weight: 700; }
+.venue-capacity-bar { background: var(--bg); border: 1px solid var(--border); border-radius: 6px; padding: .4rem .6rem; margin-top: .5rem; display: flex; align-items: center; gap: .5rem; }
+.venue-capacity-bar .cap-num { font-size: 1.1rem; font-weight: 800; color: var(--accent); }
+.venue-capacity-bar .cap-label { font-size: .7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; }
+.venue-capacity-bar .cap-divider { width: 1px; height: 24px; background: var(--border); }
+.cap-meter { flex: 1; height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+.cap-meter-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
+.venue-link { display: inline-block; background: var(--accent); color: #000; padding: .35rem .75rem; border-radius: 6px; font-size: .75rem; font-weight: 700; text-decoration: none; transition: all .2s; }
+.venue-link:hover { background: #22d3ee; }
+
+/* TRACKER */
+.tracker-section { max-width: 1400px; margin: 2rem auto; padding: 0 2rem; }
+.tracker-section h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; margin-bottom: 1rem; }
+.tracker-table { width: 100%; border-collapse: collapse; }
+.tracker-table th { background: var(--card); color: var(--accent); padding: .6rem; font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; text-align: left; border-bottom: 1px solid var(--border); }
+.tracker-table td { padding: .5rem .6rem; border-bottom: 1px solid var(--border); font-size: .8rem; }
+.tracker-table tr:hover { background: var(--card); }
+#noShortlist { color: var(--text-dim); font-size: .85rem; padding: 1rem 0; }
+
+/* FOOTER */
+.footer { text-align: center; padding: 2rem; color: var(--text-dim); font-size: .75rem; border-top: 1px solid var(--border); margin-top: 2rem; }
+
+@media(max-width:768px) {
+  .venue-grid { grid-template-columns: 1fr; padding: 1rem; }
+  .header h1 { font-size: 1.75rem; }
+  .filters { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🌳 <span>Treehouse</span> Venue Finder</h1>
+  <p>NYC venues for 150+ guests / BYO alcohol / loud music / Sorted by distance from West Village</p>
+  <div class="event-dates">
+    <div class="date-badge">📅 Thursday, April 17</div>
+    <div class="date-badge">📅 Thursday, April 24</div>
+  </div>
+</div>
+
+<div class="filters">
+  <input type="text" class="search-box" id="venueSearch" placeholder="🔍 Search venues..." oninput="filterVenues()">
+  <button class="filter-btn active" data-f="all" onclick="setFilter('all',this)">All</button>
+  <button class="filter-btn" data-f="loft" onclick="setFilter('loft',this)">Lofts</button>
+  <button class="filter-btn" data-f="warehouse" onclick="setFilter('warehouse',this)">Warehouses</button>
+  <button class="filter-btn" data-f="rooftop" onclick="setFilter('rooftop',this)">Rooftops</button>
+  <button class="filter-btn" data-f="bar" onclick="setFilter('bar',this)">Bars/Clubs</button>
+  <button class="filter-btn" data-f="gallery" onclick="setFilter('gallery',this)">Galleries</button>
+  <button class="filter-btn" data-f="restaurant" onclick="setFilter('restaurant',this)">Restaurants</button>
+  <button class="filter-btn" data-f="event" onclick="setFilter('event',this)">Event Spaces</button>
+  <button class="filter-btn" data-f="lower" onclick="setFilter('lower',this)">Lower Manhattan</button>
+  <button class="filter-btn" data-f="ready" onclick="setFilter('ready',this)">✅ Event Ready (BYO + Music)</button>
+  <button class="filter-btn" data-f="byo" onclick="setFilter('byo',this)">🍾 BYO Alcohol</button>
+  <button class="filter-btn" data-f="music" onclick="setFilter('music',this)">🎵 Loud Music</button>
+  <button class="filter-btn" data-f="cap250" onclick="setFilter('cap250',this)">🔥 250+ Capacity</button>
+  <button class="filter-btn" data-f="shortlisted" onclick="setFilter('shortlisted',this)">⭐ Shortlisted</button>
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="num" id="totalCount">0</div><div class="label">Venues Found</div></div>
+  <div class="stat"><div class="num" id="lowerCount">0</div><div class="label">Lower Manhattan</div></div>
+  <div class="stat"><div class="num" id="byoCount">0</div><div class="label">BYO Alcohol ✓</div></div>
+  <div class="stat"><div class="num" id="shortCount">0</div><div class="label">Shortlisted</div></div>
+</div>
+
+<div class="venue-grid" id="venueGrid"></div>
+
+<div class="tracker-section">
+  <h2>⭐ Shortlisted Venues</h2>
+  <p id="noShortlist">Click the ⭐ on any venue card to add it to your shortlist.</p>
+  <table class="tracker-table" id="shortlistTable" style="display:none;">
+    <thead><tr><th>Venue</th><th>Neighborhood</th><th>Capacity</th><th>Price</th><th>Distance</th><th>Link</th><th></th></tr></thead>
+    <tbody id="shortlistBody"></tbody>
+  </table>
+</div>
+
+<div class="footer">
+  🌳 Treehouse Venue Finder / Data sourced from TagVenue, Peerspace, Splacer, EventUp / Last updated: March 3, 2026
+</div>
+
+<script>
+var venues = [
+  // LOWER MANHATTAN / DOWNTOWN
+  // WEST VILLAGE & IMMEDIATE NEIGHBORS (0-0.5 mi)
+  { name: "Cooper Classics Collection", neighborhood: "West Village", type: "gallery", capacity: 150, capacitySit: 150, price: "From $15,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/68619/cooper-classics-collection/main-gallery", source: "TagVenue", features: ["BYO alcohol","Play your own music","Gallery","Private space"], desc: "West Village gallery. Premium price point but stunning visual identity. 150 cap.", match: 75, lower: true, emoji: "🖼️", dist: 0.0 },
+  { name: "DRAIS SUPPER CLUB", neighborhood: "West Village", type: "bar", capacity: 500, capacitySit: 172, price: "From $1,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/103709/drais-supper-club/main-floor", source: "TagVenue", features: ["Private space","Restaurant","Dance Floor"], desc: "West Village supper club. Main floor 500 standing, lounge 250 standing. High energy nightlife venue.", match: 90, lower: true, emoji: "🍾", dist: 0.1 },
+  { name: "Ideal Glass Studios", neighborhood: "Greenwich Village", type: "event", capacity: 150, capacitySit: 150, price: "From $500/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/51449/ideal-glass-studios/mansion", source: "TagVenue", features: ["Private space","Event Venue"], desc: "Greenwich Village mansion event venue. 150 cap. Elegant, unique character.", match: 85, lower: true, emoji: "🏛️", dist: 0.2 },
+  { name: "Josie Woods Pub", neighborhood: "Greenwich Village", type: "bar", capacity: 160, capacitySit: 100, price: "From $8,890/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/38849/josie-woods-pub/entire-venue", source: "TagVenue", features: ["Whole venue","Pub"], desc: "Greenwich Village pub, full buyout. 160 standing. Classic Village vibes.", match: 78, lower: true, emoji: "🍺", dist: 0.2 },
+  { name: "Folly NYC", neighborhood: "South Village", type: "bar", capacity: 175, capacitySit: 80, price: "From $6,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/38248/folly-nyc/entire-space-buyout", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Bar"], desc: "South Village pub, full buyout. 175 standing. Steps from West Village.", match: 78, lower: true, emoji: "🍻", dist: 0.3 },
+  { name: "Houston Hall", neighborhood: "South Village", type: "bar", capacity: 400, capacitySit: 220, price: "From $12,000 min spend", priceNote: "per day", url: "https://www.tagvenue.com/us/rooms/new-york/98129/houston-hall/entire-hall", source: "TagVenue", features: ["Whole venue","Bar"], desc: "Massive beer hall in South Village. 400 standing. Perfect for high-energy events.", match: 88, lower: true, emoji: "🍺", dist: 0.3 },
+  { name: "Pera SoHo", neighborhood: "South Village", type: "restaurant", capacity: 250, capacitySit: 220, price: "From $10,890 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/32601/pera-soho/entire-restaurant", source: "TagVenue", features: ["Whole venue","Restaurant"], desc: "Full restaurant buyout in South Village. 250 standing. Upscale Mediterranean.", match: 75, lower: true, emoji: "🍽️", dist: 0.3 },
+  { name: "Triangle Loft (Connect-South)", neighborhood: "Meatpacking District", type: "loft", capacity: 225, capacitySit: 225, price: "From $3,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/38458/triangle-loft/triangle-loft-connect-south", source: "TagVenue", features: ["Private space","Loft"], desc: "Meatpacking loft. 225 cap. Multiple configurations available (Create, 4S, Full Floor). Premium.", match: 92, lower: true, emoji: "🔺", dist: 0.3 },
+  { name: "Triangle Loft (Full Floor)", neighborhood: "Meatpacking District", type: "loft", capacity: 300, capacitySit: 245, price: "From $7,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/38459/triangle-loft/full-floor-buyout", source: "TagVenue", features: ["Private space","Loft"], desc: "Full floor buyout at Triangle Loft. 300 standing. Meatpacking views.", match: 92, lower: true, emoji: "🔺", dist: 0.3 },
+  { name: "Common Ground Bar", neighborhood: "Meatpacking District", type: "bar", capacity: 160, capacitySit: 100, price: "From $5,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/104430/common-ground-bar/full-venue-buyout", source: "TagVenue", features: ["Whole venue","Bar"], desc: "Meatpacking bar, full buyout. 160 standing. Trendy neighborhood.", match: 82, lower: true, emoji: "🍸", dist: 0.4 },
+  { name: "La Victoria", neighborhood: "Chelsea", type: "bar", capacity: 150, capacitySit: 142, price: "From $5,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/51211/la-victoria/full-venue", source: "TagVenue", features: ["Whole venue","Nightclub"], desc: "Chelsea nightclub. 150 cap. Full venue buyout. Party-ready.", match: 85, lower: false, emoji: "🎵", dist: 0.5 },
+  { name: "Rumi Event Space", neighborhood: "Chelsea", type: "event", capacity: 650, capacitySit: 250, price: "From $15,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/47278/rumi-event-space/entire-venue", source: "TagVenue", features: ["Whole venue","Event Venue"], desc: "Massive Chelsea event space. 650 standing. For when Treehouse goes HUGE.", match: 78, lower: false, emoji: "🏛️", dist: 0.6 },
+
+  // SOHO / TRIBECA / NOLITA (0.5-1.2 mi)
+  { name: "W Broadway ART X POPUP", neighborhood: "SoHo", type: "warehouse", capacity: 300, capacitySit: 185, price: "From $9,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/95679/w-broadway-art-x-popup-space/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "SoHo warehouse/popup space. 300 standing. Raw creative canvas, perfect for themed production.", match: 96, lower: true, emoji: "🏗️", dist: 0.5 },
+  { name: "YveYang Gallery", neighborhood: "SoHo", type: "gallery", capacity: 150, capacitySit: 150, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/81438/yveyang-gallery/private-event-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Gallery"], desc: "SoHo gallery space. 150 capacity. Visually stunning backdrop for branded events.", match: 85, lower: true, emoji: "🖼️", dist: 0.6 },
+  { name: "LOCAL 92 Mixology Bar", neighborhood: "Nolita", type: "bar", capacity: 150, capacitySit: 90, price: "From $500 min spend", priceNote: "per morning", url: "https://www.tagvenue.com/us/rooms/new-york/91821/local-92-mixology-bar-40-200cap/soho-mixology-bar-event", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Bar"], desc: "SoHo mixology bar, full buyout. Intimate but fits 150 standing.", match: 82, lower: true, emoji: "🍸", dist: 0.8 },
+  { name: "218 Events", neighborhood: "Nolita", type: "event", capacity: 200, capacitySit: 120, price: "From $7,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/91673/218-events/218-nolita-event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Nolita event space, 200 standing. Clean canvas for themed production.", match: 90, lower: true, emoji: "🎨", dist: 0.9 },
+  { name: "Little More", neighborhood: "TriBeCa", type: "bar", capacity: 175, capacitySit: 75, price: "From $55/person", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/89118/little-more/back-room-at-little-more", source: "TagVenue", features: ["Bar","Semi-private"], desc: "TriBeCa bar with back room, 175 standing.", match: 85, lower: true, emoji: "🍹", dist: 0.7 },
+  { name: "Gran Morsi (Private Space)", neighborhood: "TriBeCa", type: "restaurant", capacity: 175, capacitySit: 125, price: "From $90/person", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/28237/gran-morsi/private-event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "TriBeCa private event space inside a restaurant. 175 standing.", match: 80, lower: true, emoji: "🍽️", dist: 0.8 },
+  { name: "Gran Morsi (Full Buyout)", neighborhood: "TriBeCa", type: "restaurant", capacity: 300, capacitySit: 205, price: "From $90/person", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/28234/gran-morsi/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Full venue buyout of TriBeCa restaurant. 300 standing, 205 seated.", match: 88, lower: true, emoji: "🍽️", dist: 0.8 },
+  { name: "AG Studios (The Loft)", neighborhood: "TriBeCa", type: "loft", capacity: 350, capacitySit: 350, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/45355/ag-studios/the-loft", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "TriBeCa loft space. 350 capacity. Premium but massive.", match: 92, lower: true, emoji: "🏢", dist: 1.0 },
+
+  // MEATPACKING (0.3-0.5 mi)
+  { name: "Meatpacking POPUP/ART Space", neighborhood: "Meatpacking District", type: "event", capacity: 300, capacitySit: 300, price: "From $11,500/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/100379/meat-packing-district-popupart-space/versatile-event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Versatile Meatpacking event space. 300 standing. Popup/art space perfect for themed events.", match: 92, lower: true, emoji: "🎨", dist: 0.4 },
+  { name: "Cafe Wha? (Groove)", neighborhood: "South Village", type: "bar", capacity: 150, capacitySit: 120, price: "From $75/person", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/90935/cafe-wha/groove", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space","Live Music"], desc: "Legendary live music venue. 150 cap. Music is literally the DNA. South Village.", match: 88, lower: true, emoji: "🎸", dist: 0.2 },
+
+  // SOHO / BOWERY (0.5-0.9 mi)
+  { name: "The Kubricks Plan", neighborhood: "Lower East Side", type: "event", capacity: 1000, capacitySit: 300, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/87169/the-kubricks-plan/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Theatre"], desc: "MASSIVE 1000-person theatre on the LES. Full buyout. Insane scale for a mega Treehouse event.", match: 85, lower: true, emoji: "🎭", dist: 1.2 },
+  { name: "Shapira's Urban Lounge", neighborhood: "Bowery", type: "bar", capacity: 250, capacitySit: 100, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/87146/shapiras-urban-lounge/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Bar"], desc: "Bowery bar/lounge. 250 standing. Full buyout. Great for high-energy nights.", match: 88, lower: true, emoji: "🍸", dist: 0.9 },
+  { name: "Shapira's Cozy Lounge", neighborhood: "Little Italy", type: "bar", capacity: 248, capacitySit: 40, price: "From $650/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/87785/shapiras-cozy-lounge/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Little Italy lounge. 248 standing. Surprisingly big for 'cozy'. BYO confirmed.", match: 86, lower: true, emoji: "🛋️", dist: 0.8 },
+  { name: "Soho Gallery", neighborhood: "Bowery", type: "gallery", capacity: 150, capacitySit: 150, price: "From $600/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/84576/soho-gallery/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Gallery"], desc: "Bowery gallery space. 150 cap. Clean, modern, art-forward.", match: 82, lower: true, emoji: "🖼️", dist: 0.9 },
+  { name: "107 Grand Street", neighborhood: "SoHo", type: "event", capacity: 150, capacitySit: 100, price: "From $12,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/96192/107-grand-street/corner-retail", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "SoHo corner retail event space. 150 cap. Great street-level visibility.", match: 80, lower: true, emoji: "🏪", dist: 0.7 },
+  { name: "Cubico SoHo Rooftop", neighborhood: "SoHo", type: "rooftop", capacity: 150, capacitySit: 50, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/36203/cubico-offices/rooftop-in-the-heart-of-soho", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space","Rooftop"], desc: "SoHo rooftop. 150 cap. Outdoor vibes in the heart of SoHo. Perfect for spring.", match: 86, lower: true, emoji: "🌃", dist: 0.6 },
+  { name: "100 Avenue of the Americas", neighborhood: "SoHo", type: "event", capacity: 400, capacitySit: 250, price: "From $13,500/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/70678/100-avenue-of-the-americas/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Major SoHo event venue. 400 standing. Massive production-ready space.", match: 90, lower: true, emoji: "🏢", dist: 0.5 },
+  { name: "122 Fifth Ave", neighborhood: "Flatiron District", type: "warehouse", capacity: 200, capacitySit: 200, price: "From $15,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/86702/122-fifth-ave/122-fifth-ave", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Warehouse"], desc: "Flatiron warehouse. 200 cap. Raw industrial aesthetic.", match: 86, lower: false, emoji: "🏗️", dist: 1.2 },
+  { name: "Casa Estrella", neighborhood: "East Village", type: "event", capacity: 150, capacitySit: 150, price: "From $555/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/49285/casa-estrella/unique-historic-townhouse", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Unique historic East Village townhouse. 150 cap. One-of-a-kind character.", match: 84, lower: true, emoji: "⭐", dist: 0.9 },
+  { name: "LUNCH at NADA", neighborhood: "Lower East Side", type: "gallery", capacity: 175, capacitySit: 50, price: "From $2,500/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/107120/lunch-at-nada/white-box-in-lower-east-side", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Gallery"], desc: "LES white box gallery. 175 standing. Affordable blank canvas.", match: 82, lower: true, emoji: "🖼️", dist: 1.3 },
+  { name: "Orensanz Events", neighborhood: "Lower East Side", type: "event", capacity: 300, capacitySit: 300, price: "From $23,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/55447/orensanz-events/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Historic LES building. 300 cap. Iconic NYC venue - stunning architecture.", match: 85, lower: true, emoji: "🏛️", dist: 1.4 },
+  { name: "The Greene Space", neighborhood: "South Village", type: "event", capacity: 200, capacitySit: 130, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/98668/the-greene-space/event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "South Village event venue. 200 standing. Production-ready performance space.", match: 84, lower: true, emoji: "🎤", dist: 0.3 },
+  { name: "Anita Rogers Gallery", neighborhood: "Lower Manhattan", type: "gallery", capacity: 150, capacitySit: 140, price: "From $5,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/51474/anita-rogers-gallery/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Gallery"], desc: "Lower Manhattan gallery. 150 cap. Established art space.", match: 80, lower: true, emoji: "🖼️", dist: 1.0 },
+  { name: "Avalon Yacht NYC", neighborhood: "Kips Bay", type: "event", capacity: 250, capacitySit: 156, price: "From $8,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/100893/avalon-yacht-nyc/full-yacht-buyout", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Yacht"], desc: "Full yacht buyout! 250 standing. Unique floating venue. BYO + music confirmed.", match: 88, lower: false, emoji: "🛥️", dist: 1.8 },
+  { name: "Cabana Yacht NYC", neighborhood: "Kips Bay", type: "event", capacity: 350, capacitySit: 150, price: "From $6,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/100897/cabana-yacht-nyc/full-yacht", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Yacht"], desc: "Cabana yacht. 350 standing. Even bigger yacht option. BYO + loud music.", match: 86, lower: false, emoji: "🛥️", dist: 1.8 },
+  { name: "Tribeca Synagogue (Sanctuary)", neighborhood: "TriBeCa", type: "event", capacity: 350, capacitySit: 270, price: "From $500/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/94397/tribeca-synagogue/sanctuary", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "TriBeCa synagogue sanctuary. 350 cap. Stunning architectural space. Very affordable.", match: 82, lower: true, emoji: "🕍", dist: 0.9 },
+  { name: "East 23rd St Sky Port Marina", neighborhood: "Kips Bay", type: "event", capacity: 300, capacitySit: 270, price: "From $5,500/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/55994/east-23rd-street-sky-port-marina/cabana", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Boat"], desc: "Marina cabana boat. 300 standing. Waterfront BYO venue.", match: 82, lower: false, emoji: "⛵", dist: 2.0 },
+
+  // NOHO / BOWERY / EAST VILLAGE (0.8-1.2 mi)
+  { name: "419 Lafayette Loft + Rooftop", neighborhood: "NoHo", type: "loft", capacity: 325, capacitySit: 300, price: "From $14,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/83676/419-lafayette-loft-rooftop/loft-7", source: "TagVenue", features: ["Whole venue","Loft","Rooftop"], desc: "NoHo loft with rooftop. 325 standing. Indoor/outdoor combo. Premium.", match: 90, lower: true, emoji: "🏢", dist: 0.8 },
+  { name: "Ainslie Bowery", neighborhood: "Bowery", type: "restaurant", capacity: 225, capacitySit: 220, price: "From $10,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/57249/ainslie-bowery/underground", source: "TagVenue", features: ["Private space","Restaurant"], desc: "Underground space at Bowery restaurant. 225 standing. Dark, moody vibes.", match: 85, lower: true, emoji: "🕯️", dist: 0.9 },
+  { name: "Tucci NYC", neighborhood: "NoHo", type: "restaurant", capacity: 200, capacitySit: 90, price: "From $8,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/99443/tucci-new-york-city/lower-level-wine-cellar", source: "TagVenue", features: ["Private space","Restaurant","Wine Cellar"], desc: "NoHo wine cellar. 200 standing. Intimate underground feel.", match: 80, lower: true, emoji: "🍷", dist: 0.9 },
+  { name: "Contra Studios (Chelsea Loft)", neighborhood: "NoMad", type: "loft", capacity: 200, capacitySit: 100, price: "From $550/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/88529/contra-studios/chelsea-loft-event-space", source: "TagVenue", features: ["Private space","Loft"], desc: "Loft event space. 200 standing. Clean modern aesthetic.", match: 84, lower: false, emoji: "🏢", dist: 1.5 },
+  { name: "Somewhere Nowhere", neighborhood: "NoMad", type: "rooftop", capacity: 400, capacitySit: 150, price: "From $19,600 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/45393/somewhere-nowhere/38th-floor-lounge", source: "TagVenue", features: ["Private space","Nightclub","Rooftop"], desc: "38th floor rooftop lounge/nightclub in NoMad. 400 standing. Insane views. Premium price.", match: 82, lower: false, emoji: "🌃", dist: 1.5 },
+  { name: "Grandma's Home", neighborhood: "Flatiron District", type: "restaurant", capacity: 180, capacitySit: 135, price: "From $6,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/79489/grandmas-home/entire-venue", source: "TagVenue", features: ["Whole venue","Restaurant"], desc: "Full restaurant buyout in Flatiron. 180 standing. Cozy, unique concept.", match: 76, lower: false, emoji: "🏠", dist: 1.4 },
+  { name: "Lulla at Motto by Hilton", neighborhood: "NoMad", type: "restaurant", capacity: 150, capacitySit: 50, price: "From $3,000 min spend", priceNote: "per day", url: "https://www.tagvenue.com/us/rooms/new-york/91859/lulla-at-motto-by-hilton/the-lounge-at-lulla", source: "TagVenue", features: ["Private space","Restaurant","Lounge"], desc: "NoMad hotel lounge. 150 standing. Boutique vibe.", match: 72, lower: false, emoji: "🏨", dist: 1.6 },
+
+  // LOWER EAST SIDE (1.0-1.5 mi)
+  { name: "Casa Duende", neighborhood: "Lower East Side", type: "loft", capacity: 200, capacitySit: 75, price: "From $460/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/41870/casa-duende/mediterranean-townhouse", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Mediterranean townhouse with loft vibes. Full venue buyout.", match: 95, lower: true, emoji: "🏠", dist: 1.2 },
+  { name: "Mehanata Bulgarian Bar", neighborhood: "Lower East Side", type: "bar", capacity: 400, capacitySit: 300, price: "From $30/person", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/78193/mehanata-bulgarian-bar/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Nightclub","Whole venue","Dance Floor"], desc: "Full nightclub buyout. 400 standing. Known for wild, high-energy events. Perfect Treehouse energy.", match: 98, lower: true, emoji: "🎵", dist: 1.3 },
+
+  // CHELSEA (0.5-1.0 mi)
+  { name: "The Chelsea Space", neighborhood: "Chelsea", type: "gallery", capacity: 150, capacitySit: 100, price: "From $950/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/88670/the-chelsea-space/entire-gallery", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Gallery"], desc: "Chelsea gallery. 150 cap. Premium art space for elevated brand events.", match: 80, lower: false, emoji: "🖼️", dist: 0.6 },
+  { name: "Ground Floor Chelsea Gallery", neighborhood: "Chelsea", type: "gallery", capacity: 200, capacitySit: 200, price: "From $6,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/67880/ground-floor-spacious-chelsea-gallery-space/ground-floor-spacious-gallery", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Gallery"], desc: "Spacious ground floor Chelsea gallery. 200 standing. Great street-level access.", match: 84, lower: false, emoji: "🖼️", dist: 0.7 },
+
+  // FLATIRON / NOMAD (1.2-1.8 mi)
+  { name: "Home Studios Inc.", neighborhood: "Flatiron District", type: "event", capacity: 175, capacitySit: 200, price: "From $600/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/38778/home-studios-inc/studio-1", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Flatiron event venue. Great production capabilities.", match: 86, lower: false, emoji: "🎤", dist: 1.3 },
+  { name: "The Sixth Floor Loft (Studio 1)", neighborhood: "Flatiron District", type: "loft", capacity: 200, capacitySit: 120, price: "From $500/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/86285/the-sixth-floor-loft/spacious-studios-1", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Flatiron loft, 200 standing. Modern, clean aesthetic.", match: 90, lower: false, emoji: "🏢", dist: 1.3 },
+  { name: "The Sixth Floor Loft (Combined)", neighborhood: "Flatiron District", type: "loft", capacity: 300, capacitySit: 190, price: "From $900/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/86314/the-sixth-floor-loft/spacious-studio-12-combined", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Combined Flatiron loft spaces. 300 standing. Massive canvas for production.", match: 92, lower: false, emoji: "🏢", dist: 1.3 },
+  { name: "The Sixth Floor Loft (Annex)", neighborhood: "Flatiron District", type: "loft", capacity: 150, capacitySit: 120, price: "From $600/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/40404/the-sixth-floor-loft/the-annex", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Flatiron annex space. 150 standing.", match: 82, lower: false, emoji: "🏢", dist: 1.3 },
+  { name: "SPACS Gallery", neighborhood: "NoMad", type: "gallery", capacity: 150, capacitySit: 80, price: "From $330/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/102955/spacs/event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Gallery","Private space"], desc: "NoMad gallery. 150 standing. Art-forward space.", match: 84, lower: false, emoji: "🖼️", dist: 1.6 },
+
+  // GARMENT DISTRICT / MIDTOWN (2.0-3.0 mi)
+  { name: "Event Loft 1505", neighborhood: "Garment District", type: "loft", capacity: 200, capacitySit: 175, price: "From $300/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/77196/event-loft-1505/studio-1505", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Garment District loft. 200 standing. Affordable rate for the size.", match: 88, lower: false, emoji: "🏢", dist: 2.2 },
+  { name: "CINEPLAY (The Club)", neighborhood: "Garment District", type: "event", capacity: 225, capacitySit: 150, price: "From $375/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/51662/cineplay/cineplay-the-club", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Garment District venue with club setup. 225 standing.", match: 90, lower: false, emoji: "🎬", dist: 2.2 },
+  { name: "Shift Midtown", neighborhood: "Garment District", type: "event", capacity: 150, capacitySit: 125, price: "From $1/person", priceNote: "per day", url: "https://www.tagvenue.com/us/rooms/new-york/71844/shift-midtown/immersive-event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Immersive event space. 150 capacity. Built for experiential activations.", match: 86, lower: false, emoji: "✨", dist: 2.3 },
+  { name: "Nexo (Top Level Lounge)", neighborhood: "Garment District", type: "restaurant", capacity: 600, capacitySit: 300, price: "From $4,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/96943/nexo/top-level-lounge", source: "TagVenue", features: ["Private space","Restaurant"], desc: "Massive venue. 600 standing. For when Treehouse goes big.", match: 70, lower: false, emoji: "🍽️", dist: 2.3 },
+  { name: "Blender Space (Event Suite)", neighborhood: "Midtown", type: "event", capacity: 200, capacitySit: 50, price: "From $500/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/40272/blender-space/the-event-suite", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Midtown event suite. 200 standing capacity.", match: 80, lower: false, emoji: "🎪", dist: 2.8 },
+  { name: "13th Storey", neighborhood: "Midtown", type: "rooftop", capacity: 150, capacitySit: 150, price: "From $500/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/105682/13th-storey/rooftop-speakeasy-lounge", source: "TagVenue", features: ["BYO alcohol","Play your own music","Rooftop","Whole venue"], desc: "Midtown rooftop speakeasy lounge. 150 cap.", match: 85, lower: false, emoji: "🌃", dist: 2.8 },
+
+  // HELL'S KITCHEN (2.5-3.0 mi)
+  { name: "Harbor Rooftop & Event Space", neighborhood: "Hell's Kitchen", type: "event", capacity: 350, capacitySit: 150, price: "From $3,500 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/98316/harbor-rooftop-event-space/stafford-room-event-space", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Hell's Kitchen venue. 350 standing. Major capacity with rooftop option.", match: 82, lower: false, emoji: "⚓", dist: 2.8 },
+  { name: "The Penthouse", neighborhood: "Hell's Kitchen", type: "event", capacity: 450, capacitySit: 200, price: "From $30/person", priceNote: "per day", url: "https://www.tagvenue.com/us/rooms/new-york/56696/the-penthouse/event-space", source: "TagVenue", features: ["Private space","Penthouse"], desc: "Massive penthouse. 450 standing. Premium views and scale.", match: 78, lower: false, emoji: "🏙️", dist: 2.9 },
+
+  // BROOKLYN (3.0-6.0 mi)
+  { name: "H I D D E N", neighborhood: "Bed-Stuy", type: "event", capacity: 150, capacitySit: 60, price: "From $250/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/29779/h-i-d-d-e-n/full-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Hidden Bed-Stuy venue. 150 cap. Underground, curated feel.", match: 88, lower: false, emoji: "🔮", dist: 4.5 },
+  { name: "Box of Moonlight", neighborhood: "Bed-Stuy", type: "warehouse", capacity: 150, capacitySit: 150, price: "From $95/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/103316/box-of-moonlight/industrial-warehouse", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Warehouse"], desc: "Industrial warehouse in a historic building. 150 cap. Very affordable.", match: 90, lower: false, emoji: "🏗️", dist: 4.5 },
+  { name: "Brooklyn Peace Center", neighborhood: "Bed-Stuy", type: "event", capacity: 200, capacitySit: 200, price: "From $200/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/brooklyn/93741/brooklyn-peace-center/sanctuary", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Sanctuary space, 200 cap. Church-converted venue.", match: 82, lower: false, emoji: "⛪", dist: 4.6 },
+  { name: "The Brooklyn Monarch (Wood Shop)", neighborhood: "Williamsburg", type: "event", capacity: 250, capacitySit: 100, price: "From $2,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/92769/the-brooklyn-monarch/the-wood-shop", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "Williamsburg venue. 250 standing. Music-forward space.", match: 86, lower: false, emoji: "🪵", dist: 3.5 },
+  { name: "The Brooklyn Monarch (Meadows)", neighborhood: "Williamsburg", type: "event", capacity: 450, capacitySit: 150, price: "From $3,000/session", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/102442/the-brooklyn-monarch/the-meadows", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "The Meadows at Brooklyn Monarch. 450 standing. Massive.", match: 80, lower: false, emoji: "🌳", dist: 3.5 },
+  { name: "Garden House NYC", neighborhood: "Crown Heights", type: "event", capacity: 175, capacitySit: 150, price: "From $1,995/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/57750/garden-house-nyc/entire-venue", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue","Hall"], desc: "Crown Heights hall with garden. 175 standing.", match: 80, lower: false, emoji: "🌿", dist: 5.0 },
+  { name: "KAI Studio", neighborhood: "Crown Heights", type: "event", capacity: 350, capacitySit: 225, price: "From $850/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/101152/kai-studio/kai-studio", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Crown Heights studio. 350 standing.", match: 78, lower: false, emoji: "🎤", dist: 5.2 },
+  { name: "The Rohe", neighborhood: "Greenpoint", type: "event", capacity: 150, capacitySit: 150, price: "From $473/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/brooklyn/99299/the-rohe/the-rohe", source: "TagVenue", features: ["BYO alcohol","Play your own music","Whole venue"], desc: "Greenpoint event venue. 150 cap. Modern, clean.", match: 78, lower: false, emoji: "✨", dist: 4.0 },
+  { name: "Bogart House (Main Floor)", neighborhood: "Williamsburg", type: "event", capacity: 300, capacitySit: 200, price: "From $2,000/day", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/59991/bogart-house/bogart-house-main-floor", source: "TagVenue", features: ["Private space","Penthouse"], desc: "Williamsburg penthouse venue. 300 standing. Industrial chic.", match: 82, lower: false, emoji: "🏗️", dist: 3.8 },
+  { name: "Bogart House (Penthouse)", neighborhood: "Williamsburg", type: "event", capacity: 300, capacitySit: 100, price: "From $2,000 min spend", priceNote: "per session", url: "https://www.tagvenue.com/us/rooms/new-york/59990/bogart-house/bogart-house-penthouse", source: "TagVenue", features: ["Penthouse","Whole venue"], desc: "Penthouse level at Bogart House. 300 standing. Skyline views.", match: 80, lower: false, emoji: "🏙️", dist: 3.8 },
+  { name: "House of Yes (Onyx Room)", neighborhood: "Bushwick", type: "event", capacity: 200, capacitySit: 80, price: "From $1,000/hr", priceNote: "hire fee", url: "https://www.tagvenue.com/us/rooms/new-york/46526/house-of-yes/the-onyx-room", source: "TagVenue", features: ["BYO alcohol","Play your own music","Private space"], desc: "The legendary House of Yes. Onyx Room holds 200. Perfect nightlife/experiential DNA.", match: 94, lower: false, emoji: "🎭", dist: 4.2 },
+
+  // NYC Event Spaces + Nightlife Venues
+  { name: "Webster Hall", neighborhood: "East Village", type: "club", capacity: 1500, capacitySit: 400, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.websterhall.com", source: "NYC Event Spaces", features: ["Multiple rooms","DJ booth","Full bar","Historic venue"], desc: "Legendary East Village nightclub. Multiple rooms, grand ballroom, lounge spaces. Iconic for nightlife events.", match: 92, lower: false, emoji: "🎶", dist: 0.8 },
+  { name: "The Hammerstein Ballroom", neighborhood: "Midtown", type: "event", capacity: 3500, capacitySit: 1000, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.nyceventspaces.com/venues", source: "NYC Event Spaces", features: ["Historic","Grand ballroom","Opera boxes","75ft ceilings"], desc: "Oscar Hammerstein's 1906 masterpiece. 3,500 standing, 12,000 sq ft, 75ft ceilings. For when you go massive.", match: 65, lower: false, emoji: "🏛️", dist: 2.5 },
+  { name: "The Grand (Manhattan Center)", neighborhood: "Midtown", type: "event", capacity: 1200, capacitySit: 600, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.nyceventspaces.com/venues", source: "NYC Event Spaces", features: ["10,000 sq ft","40ft ceilings","Salon space"], desc: "Stunning acoustics. 1,200 standing, 10,000 sq ft with 40ft ceilings and attached salon.", match: 70, lower: false, emoji: "🎵", dist: 2.5 },
+  { name: "National Sawdust", neighborhood: "Williamsburg", type: "event", capacity: 300, capacitySit: 200, price: "Contact for pricing", priceNote: "hire fee", url: "https://nationalsawdust.org", source: "NYC Event Spaces", features: ["Contemporary design","Performance venue","Private space"], desc: "Modern Williamsburg performance venue. Contemporary architecture, unique and memorable.", match: 82, lower: false, emoji: "🪚", dist: 3.5 },
+  { name: "Brooklyn Steel", neighborhood: "Williamsburg", type: "club", capacity: 1800, capacitySit: 400, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.bowerypresents.com/venues/brooklyn-steel", source: "NYC Event Spaces", features: ["Industrial","Former steel factory","Multiple configurations"], desc: "Converted steel factory in Williamsburg. 1,800 cap. Industrial look, versatile for corporate and parties.", match: 75, lower: false, emoji: "🏗️", dist: 3.6 },
+  { name: "4W43", neighborhood: "Midtown", type: "event", capacity: 400, capacitySit: 250, price: "Contact for pricing", priceNote: "hire fee", url: "https://www.nyceventspaces.com/venues", source: "NYC Event Spaces", features: ["Bryant Park adjacent","Conferences","Banquets"], desc: "Heart of Midtown by Bryant Park, 2 blocks from Times Square. Conferences, receptions, banquets.", match: 72, lower: false, emoji: "🏢", dist: 2.3 },
+  { name: "Garment 39", neighborhood: "Garment District", type: "event", capacity: 300, capacitySit: 150, price: "Contact for pricing", priceNote: "hire fee", url: "https://www.nyceventspaces.com/venues", source: "NYC Event Spaces", features: ["Catering kitchen","Team building","Cooking demos"], desc: "Midtown W 39th St with on-site catering kitchen. Corporate gatherings and experiential cooking events.", match: 74, lower: false, emoji: "🧑‍🍳", dist: 2.2 },
+  { name: "Union Square Studio", neighborhood: "Union Square", type: "loft", capacity: 150, capacitySit: 80, price: "Contact for pricing", priceNote: "hire fee", url: "https://www.nyceventspaces.com/venues", source: "NYC Event Spaces", features: ["Chic loft","Meetings","Press launches","Film screenings"], desc: "Chic Union Square loft for offsites, press launches, workshops, film screenings.", match: 80, lower: false, emoji: "🎬", dist: 1.0 },
+  { name: "Library Way", neighborhood: "Midtown", type: "event", capacity: 300, capacitySit: 200, price: "Contact for pricing", priceNote: "hire fee", url: "https://www.nyceventspaces.com/venues", source: "NYC Event Spaces", features: ["Near NY Public Library","Conferences","Training"], desc: "Steps from the NY Public Library. Adaptable for conferences, lectures, and training sessions.", match: 72, lower: false, emoji: "📚", dist: 2.4 },
+  { name: "Le Bain (The Standard)", neighborhood: "Meatpacking", type: "rooftop", capacity: 250, capacitySit: 100, price: "Min spend varies", priceNote: "per session", url: "https://www.standardhotels.com/new-york/features/le-bain-nyc", source: "Direct", features: ["Rooftop","Plunge pool","DJ booth","Panoramic views"], desc: "Rooftop club at The Standard. Plunge pool, panoramic views, legendary nightlife spot.", match: 94, lower: false, emoji: "🌅", dist: 0.3 },
+  { name: "PHD Terrace at Dream Downtown", neighborhood: "Chelsea", type: "rooftop", capacity: 200, capacitySit: 120, price: "Min spend $10K-25K", priceNote: "per session", url: "https://www.phdterrace.com", source: "Direct", features: ["Rooftop","Skyline views","VIP areas","Full bar"], desc: "Chic Chelsea rooftop with Hudson Yards views. Nightlife-forward, VIP sections.", match: 88, lower: false, emoji: "🍾", dist: 0.8 },
+  { name: "Marquee New York", neighborhood: "Chelsea", type: "club", capacity: 500, capacitySit: 150, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.marqueeny.com", source: "Direct", features: ["Nightclub","DJ booth","VIP tables","LED walls"], desc: "Premier Chelsea nightclub. 500 capacity, LED walls, world-class DJs, VIP bottle service.", match: 90, lower: false, emoji: "🪩", dist: 0.9 },
+  { name: "LAVO NYC", neighborhood: "Midtown East", type: "club", capacity: 400, capacitySit: 200, price: "Min spend $15K-50K", priceNote: "per session", url: "https://lavony.com", source: "Direct", features: ["Restaurant/nightclub","Italian restaurant","Nightlife transition","VIP"], desc: "Restaurant by day, nightclub after hours. Italian dining + late-night party. Midtown East.", match: 82, lower: false, emoji: "🍝", dist: 2.2 },
+  { name: "Nebula NYC", neighborhood: "Midtown", type: "club", capacity: 300, capacitySit: 100, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.nebulanyc.com", source: "Direct", features: ["Nightclub","LED immersive","VIP areas","DJ booth"], desc: "Immersive Midtown nightclub. LED installations, VIP areas, state-of-the-art sound.", match: 88, lower: false, emoji: "🌌", dist: 2.5 },
+  { name: "The Fleur Room", neighborhood: "Chelsea", type: "rooftop", capacity: 200, capacitySit: 80, price: "Min spend varies", priceNote: "per session", url: "https://thefleurroom.com", source: "Direct", features: ["Rooftop","35th floor","Panoramic views","DJ booth"], desc: "35th-floor rooftop lounge above Moxy Chelsea. Panoramic views, DJ sets, bottle service.", match: 90, lower: false, emoji: "🌸", dist: 0.9 },
+  { name: "Electric Room at Dream Downtown", neighborhood: "Chelsea", type: "club", capacity: 150, capacitySit: 80, price: "Min spend varies", priceNote: "per session", url: "https://www.dreamhotels.com/downtown", source: "Direct", features: ["Basement club","Intimate","DJ booth","Full bar"], desc: "Intimate underground club at Dream Downtown. 150 cap. Celebrity hangout, curated DJ sets.", match: 92, lower: false, emoji: "⚡", dist: 0.8 },
+  { name: "Cielo", neighborhood: "Meatpacking", type: "club", capacity: 350, capacitySit: 100, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.cielonewyork.com", source: "Direct", features: ["Nightclub","Funktion-One sound","Intimate dance floor","VIP"], desc: "Legendary Meatpacking dance club. Funktion-One sound system, intimate dance floor, top DJs.", match: 94, lower: false, emoji: "🎧", dist: 0.2 },
+  { name: "Joyface", neighborhood: "Lower East Side", type: "club", capacity: 200, capacitySit: 80, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.joyfacenyc.com", source: "Direct", features: ["Nightclub","Multiple rooms","DJ booth","Late night"], desc: "LES nightclub with multiple rooms. 200 cap. Eclectic nightlife programming.", match: 90, lower: false, emoji: "😊", dist: 0.9 },
+  { name: "Basement NYC", neighborhood: "West Village", type: "club", capacity: 150, capacitySit: 60, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.basementnyc.com", source: "Direct", features: ["Underground","Intimate","DJ-focused","Late night"], desc: "Underground West Village club. 150 cap. Intimate, DJ-focused, late-night culture.", match: 96, lower: false, emoji: "🔊", dist: 0.1 },
+  { name: "Public Arts at Public Hotel", neighborhood: "Lower East Side", type: "event", capacity: 400, capacitySit: 200, price: "Min spend varies", priceNote: "per session", url: "https://www.publichotels.com/publicarts", source: "Direct", features: ["Performance venue","Multiple spaces","Ian Schrager hotel","DJ booth"], desc: "Ian Schrager's multi-use performance space at Public Hotel. Versatile, cultural, nightlife-ready.", match: 88, lower: false, emoji: "🎭", dist: 1.0 },
+  { name: "The Box", neighborhood: "Lower East Side", type: "club", capacity: 200, capacitySit: 120, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.theboxnyc.com", source: "Direct", features: ["Burlesque","Performance","Nightclub","Exclusive"], desc: "Legendary LES burlesque/nightclub. 200 cap. Wild performances, exclusive vibe.", match: 86, lower: false, emoji: "🎪", dist: 0.9 },
+  { name: "Sei Less", neighborhood: "Meatpacking", type: "restaurant", capacity: 200, capacitySit: 150, price: "Min spend $15K-40K", priceNote: "per session", url: "https://www.seiless.com", source: "Direct", features: ["Asian restaurant","Late-night lounge","DJ","Meatpacking"], desc: "Trendy Meatpacking Asian restaurant that turns into a lounge at night. DJ, dancing, bottle service.", match: 88, lower: false, emoji: "🍱", dist: 0.3 },
+  { name: "Loosie's (Full Venue)", neighborhood: "Williamsburg", type: "bar", capacity: 250, capacitySit: 100, price: "From $3,000 min spend", priceNote: "per session", url: "https://www.loosiesclub.com", source: "Direct", features: ["BYO-friendly","Dance floor","DJ booth","Late night"], desc: "Williamsburg bar/club. 250 cap, great dance floor. Affordable buyout for nightlife events.", match: 84, lower: false, emoji: "🍻", dist: 3.5 },
+  { name: "Good Room", neighborhood: "Greenpoint", type: "club", capacity: 450, capacitySit: 100, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.goodroombk.com", source: "Direct", features: ["Nightclub","Two rooms","DJ booth","Sound system"], desc: "Greenpoint nightclub with two rooms. 450 cap. Top-tier sound system, dance music focused.", match: 86, lower: false, emoji: "🎶", dist: 3.8 },
+  { name: "Avant Gardner (Great Hall)", neighborhood: "East Williamsburg", type: "club", capacity: 3000, capacitySit: 500, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.avantgardner.com", source: "Direct", features: ["Mega venue","Multiple rooms","World-class production","Outdoor space"], desc: "NYC's premier mega-venue. Great Hall holds 3,000. World-class production, sound, and lighting.", match: 70, lower: false, emoji: "🏟️", dist: 4.0 },
+  { name: "Avant Gardner (Kings Hall)", neighborhood: "East Williamsburg", type: "club", capacity: 1500, capacitySit: 300, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.avantgardner.com", source: "Direct", features: ["Indoor venue","Production","DJ booth","VIP areas"], desc: "Kings Hall at Avant Gardner. 1,500 cap. Indoor, immersive, top production.", match: 72, lower: false, emoji: "👑", dist: 4.0 },
+  { name: "Baby's All Right", neighborhood: "Williamsburg", type: "bar", capacity: 300, capacitySit: 150, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.babysallright.com", source: "Direct", features: ["Bar/venue","Live music","DJ nights","Restaurant"], desc: "Beloved Williamsburg bar/venue. 300 cap. Live music, DJ nights, restaurant. Neighborhood staple.", match: 84, lower: false, emoji: "👶", dist: 3.4 },
+  { name: "Jupiter Disco", neighborhood: "Williamsburg", type: "club", capacity: 200, capacitySit: 60, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.jupiterdisco.com", source: "Direct", features: ["Nightclub","DJ-focused","Intimate","Sound system"], desc: "Intimate Williamsburg dance club. 200 cap. Serious sound system, dance music community.", match: 88, lower: false, emoji: "🪐", dist: 3.6 },
+  { name: "Nowadays", neighborhood: "Ridgewood", type: "club", capacity: 500, capacitySit: 150, price: "Contact for pricing", priceNote: "full buyout", url: "https://nowadays.nyc", source: "Direct", features: ["Indoor/outdoor","Garden","DJ booth","Community space"], desc: "Indoor/outdoor club in Ridgewood. 500 cap. Beautiful garden, community-focused, world-class DJs.", match: 82, lower: false, emoji: "🌳", dist: 5.0 },
+  { name: "Paloma Rocabar", neighborhood: "East Village", type: "bar", capacity: 175, capacitySit: 100, price: "Min spend varies", priceNote: "per session", url: "https://www.palomarocabar.com", source: "Direct", features: ["Mezcal bar","DJ nights","Private events","Dance floor"], desc: "East Village mezcal bar with events. 175 cap. DJ nights, private event buyouts.", match: 86, lower: false, emoji: "🌮", dist: 0.7 },
+  { name: "Superior Ingredients", neighborhood: "Lower East Side", type: "club", capacity: 200, capacitySit: 80, price: "Contact for pricing", priceNote: "full buyout", url: "https://www.superioringredients.com", source: "Direct", features: ["Underground club","DJ booth","Late night","Sound system"], desc: "Underground LES club. 200 cap. Late-night dance culture, quality sound.", match: 90, lower: false, emoji: "🔉", dist: 1.0 },
+];
+
+var currentFilter = 'all';
+var shortlist = JSON.parse(localStorage.getItem('th_shortlist') || '[]');
+
+function renderVenues() {
+  var q = document.getElementById('venueSearch').value.toLowerCase();
+  var grid = document.getElementById('venueGrid');
+  var html = '';
+  var shown = 0;
+  var lowerCount = 0;
+
+  venues.sort(function(a,b) { return a.dist - b.dist; });
+
+  venues.forEach(function(v, i) {
+    if (v.lower) lowerCount++;
+
+    // Filter
+    if (currentFilter === 'shortlisted' && shortlist.indexOf(v.name) === -1) return;
+    if (currentFilter === 'lower' && !v.lower) return;
+    if (currentFilter === 'byo' && v.features.indexOf('BYO alcohol') === -1) return;
+    if (currentFilter === 'music' && v.features.indexOf('Play your own music') === -1) return;
+    if (currentFilter === 'ready' && (v.features.indexOf('BYO alcohol') === -1 || v.features.indexOf('Play your own music') === -1)) return;
+    if (currentFilter === 'cap250' && v.capacity < 250) return;
+    if (['all','shortlisted','lower','byo','music','ready','cap250'].indexOf(currentFilter) === -1 && v.type !== currentFilter) return;
+    if (q && v.name.toLowerCase().indexOf(q) === -1 && v.neighborhood.toLowerCase().indexOf(q) === -1 && v.desc.toLowerCase().indexOf(q) === -1) return;
+
+    var starred = shortlist.indexOf(v.name) !== -1;
+    var hasBYO = v.features.indexOf('BYO alcohol') !== -1;
+    var hasMusic = v.features.indexOf('Play your own music') !== -1;
+    var dimClass = (!hasBYO && !hasMusic) ? ' no-byo' : (!hasBYO || !hasMusic) ? '' : '';
+    shown++;
+
+    html += '<div class="venue-card' + dimClass + '" id="vc_' + i + '">';
+    html += '<div class="venue-img">' + v.emoji;
+    html += '<span class="source-tag">' + v.source + '</span>';
+    html += '<span class="match-score">📍 ' + v.dist + ' mi</span>';
+    html += '<span class="music-badge ' + (hasMusic ? 'yes' : 'no') + '">' + (hasMusic ? '🎵 Loud Music ✓' : '🔇 Music Not Confirmed') + '</span>';
+    html += '<span class="byo-badge ' + (hasBYO ? 'yes' : 'no') + '">' + (hasBYO ? '🍾 BYO Alcohol ✓' : '⚠️ BYO Not Confirmed') + '</span>';
+    if (v.capacity >= 250) html += '<span class="cap-badge">🔥 250+ Capacity</span>';
+    html += '</div>';
+    html += '<div class="venue-body">';
+    html += '<div style="display:flex;justify-content:space-between;align-items:start;">';
+    html += '<div><h3>' + v.name + '</h3>';
+    html += '<div class="neighborhood">' + v.neighborhood + ' - ' + v.dist + ' mi from West Village</div></div>';
+    html += '<span style="cursor:pointer;font-size:1.25rem;" onclick="toggleShortlist(\'' + v.name.replace(/'/g,"\\'") + '\')">' + (starred ? '⭐' : '☆') + '</span>';
+    html += '</div>';
+    html += '<p style="font-size:.8rem;color:var(--text-dim);margin:.5rem 0;">' + v.desc + '</p>';
+    html += '<div class="venue-meta">';
+    v.features.forEach(function(f) {
+      var cls = (f === 'BYO alcohol' || f === 'Play your own music') ? 'green' : '';
+      html += '<span class="tag ' + cls + '">' + f + '</span>';
+    });
+    html += '</div>';
+    var pct = Math.min(100, Math.round((v.capacity / 500) * 100));
+    html += '<div class="venue-capacity-bar">';
+    html += '<div><div class="cap-num">' + v.capacity + '</div><div class="cap-label">standing</div></div>';
+    if (v.capacitySit) {
+      html += '<div class="cap-divider"></div>';
+      html += '<div><div class="cap-num">' + v.capacitySit + '</div><div class="cap-label">seated</div></div>';
+    }
+    html += '<div class="cap-divider"></div>';
+    html += '<div class="cap-meter"><div class="cap-meter-fill" style="width:' + pct + '%"></div></div>';
+    html += '</div>';
+    html += '<div class="venue-details">';
+    html += '<div class="venue-price">' + v.price + '</div>';
+    html += '<a href="' + v.url + '" target="_blank" class="venue-link">View on ' + v.source + ' →</a>';
+    html += '</div></div></div>';
+  });
+
+  grid.innerHTML = html || '<p style="text-align:center;color:var(--text-dim);padding:2rem;">No venues match your filters.</p>';
+  var byoCount = venues.filter(function(v) { return v.features.indexOf('BYO alcohol') !== -1; }).length;
+  document.getElementById('totalCount').textContent = venues.length;
+  document.getElementById('lowerCount').textContent = lowerCount;
+  document.getElementById('byoCount').textContent = byoCount;
+  document.getElementById('shortCount').textContent = shortlist.length;
+  renderShortlist();
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+  btn.classList.add('active');
+  renderVenues();
+}
+
+function filterVenues() { renderVenues(); }
+
+function toggleShortlist(name) {
+  var idx = shortlist.indexOf(name);
+  if (idx === -1) shortlist.push(name);
+  else shortlist.splice(idx, 1);
+  localStorage.setItem('th_shortlist', JSON.stringify(shortlist));
+  renderVenues();
+}
+
+function renderShortlist() {
+  var table = document.getElementById('shortlistTable');
+  var body = document.getElementById('shortlistBody');
+  var msg = document.getElementById('noShortlist');
+  if (!shortlist.length) { table.style.display = 'none'; msg.style.display = ''; return; }
+  table.style.display = ''; msg.style.display = 'none';
+  var html = '';
+  shortlist.forEach(function(name) {
+    var v = venues.find(function(x) { return x.name === name; });
+    if (!v) return;
+    html += '<tr>';
+    html += '<td style="font-weight:600;">' + v.emoji + ' ' + v.name + '</td>';
+    html += '<td>' + v.neighborhood + '</td>';
+    html += '<td>👥 ' + v.capacity + '</td>';
+    html += '<td style="color:var(--gold);">' + v.price + '</td>';
+    html += '<td><span style="color:var(--accent);font-weight:700;">📍 ' + v.dist + ' mi</span></td>';
+    html += '<td><a href="' + v.url + '" target="_blank" class="venue-link" style="font-size:.7rem;">View →</a></td>';
+    html += '<td><span style="cursor:pointer;" onclick="toggleShortlist(\'' + name.replace(/'/g,"\\'") + '\')">🗑</span></td>';
+    html += '</tr>';
+  });
+  body.innerHTML = html;
+}
+
+renderVenues();
+</script>
+</body>
+</html>
