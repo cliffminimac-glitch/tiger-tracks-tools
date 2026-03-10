@@ -6,7 +6,6 @@
 <title>Tiger Tracks - Compensation Analysis & Promotion Planning</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root { --accent:#229FA1; --accent-light:#e0f7f7; --text:#1a1a2e; --text-light:#6b7280; --border:#e5e7eb; --bg:#f9fafb; --panel:#fff; }
 * { margin:0; padding:0; box-sizing:border-box; }
@@ -69,25 +68,19 @@ th { background:var(--bg); font-weight:700; font-size:.75rem; text-transform:upp
 
 <!-- LOGIN GATE -->
 <div id="loginGate" style="position:fixed;inset:0;background:linear-gradient(135deg,#1a1a2e,#16213e);display:flex;align-items:center;justify-content:center;z-index:9999;">
-  <div style="background:#fff;padding:2.5rem;border-radius:16px;text-align:center;max-width:400px;width:90%;">
+  <div style="background:#fff;padding:2.5rem;border-radius:16px;text-align:center;max-width:380px;width:90%;">
     <img src="/logo.png" alt="Tiger Tracks" style="height:50px;margin-bottom:1rem;">
     <h2 style="font-size:1.1rem;margin-bottom:.25rem;font-family:Montserrat,sans-serif;">🔒 Compensation Analysis</h2>
-    <p style="font-size:.82rem;color:#6b7280;margin-bottom:1.25rem;font-family:Montserrat,sans-serif;">Restricted access. Sign in with your authorized Tiger Tracks Google account.</p>
-    <div id="g_id_onload"
-      data-client_id="1010698547754-h3pfeegsn3tkemksjjtjlcgccoqtqbt6.apps.googleusercontent.com"
-      data-callback="handleCompLogin"
-      data-auto_prompt="false">
-    </div>
-    <div class="g_id_signin"
-      data-type="standard"
-      data-shape="rectangular"
-      data-theme="outline"
-      data-text="sign_in_with"
-      data-size="large"
-      data-logo_alignment="left"
-      data-width="360">
-    </div>
-    <div id="loginError" style="display:none;margin-top:.6rem;color:#dc2626;font-size:.82rem;font-weight:600;font-family:Montserrat,sans-serif;"></div>
+    <p style="font-size:.82rem;color:#6b7280;margin-bottom:1.5rem;font-family:Montserrat,sans-serif;">Restricted access. Sign in with your Tiger Tracks account.</p>
+    <input id="loginEmail" type="email" placeholder="your@tigertracks.ai" autocomplete="email"
+      style="width:100%;padding:.65rem .85rem;border:1px solid #e5e7eb;border-radius:8px;font-size:.9rem;font-family:Montserrat,sans-serif;margin-bottom:.65rem;outline:none;box-sizing:border-box;">
+    <input id="loginPass" type="password" placeholder="Password" autocomplete="current-password"
+      style="width:100%;padding:.65rem .85rem;border:1px solid #e5e7eb;border-radius:8px;font-size:.9rem;font-family:Montserrat,sans-serif;margin-bottom:1rem;outline:none;box-sizing:border-box;">
+    <button onclick="handleCompLogin()"
+      style="width:100%;padding:.75rem;background:#229FA1;color:#fff;border:none;border-radius:8px;font-size:.95rem;font-weight:700;font-family:Montserrat,sans-serif;cursor:pointer;">
+      Sign In
+    </button>
+    <div id="loginError" style="display:none;margin-top:.75rem;color:#dc2626;font-size:.82rem;font-weight:600;font-family:Montserrat,sans-serif;"></div>
   </div>
 </div>
 
@@ -765,24 +758,24 @@ th { background:var(--bg); font-weight:700; font-size:.75rem; text-transform:upp
 
 <script>
 // ===== AUTH =====
-var ALLOWED_EMAILS=['cliff@tigertracks.ai','elizabeth@tigertracks.ai','henry@tigertracks.ai'];
+var CREDENTIALS={
+  'cliff@tigertracks.ai':'TigerTracks2026!',
+  'elizabeth@tigertracks.ai':'TigerTracks2026!',
+  'henry@tigertracks.ai':'TigerTracks2026!'
+};
 
-function handleCompLogin(response){
+function handleCompLogin(){
   var errEl=document.getElementById('loginError');
   errEl.style.display='none';
-  try {
-    var payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-    var email=(payload.email||'').toLowerCase();
-    if(ALLOWED_EMAILS.indexOf(email)<0){
-      errEl.textContent='Access denied. This page is restricted to authorized leadership only.';
-      errEl.style.display='block';return;
-    }
-    localStorage.setItem('tt_comp_email',email);
-    localStorage.setItem('tt_comp_exp',String(Date.now()+30*24*60*60*1000));
-    enterComp();
-  } catch(e){
-    errEl.textContent='Sign-in error. Please try again.';errEl.style.display='block';
+  var email=(document.getElementById('loginEmail').value||'').trim().toLowerCase();
+  var pass=document.getElementById('loginPass').value||'';
+  if(!CREDENTIALS[email]||CREDENTIALS[email]!==pass){
+    errEl.textContent='Access denied. Invalid email or password.';
+    errEl.style.display='block';return;
   }
+  localStorage.setItem('tt_comp_email',email);
+  localStorage.setItem('tt_comp_exp',String(Date.now()+30*24*60*60*1000));
+  enterComp();
 }
 
 function enterComp(){
@@ -790,11 +783,19 @@ function enterComp(){
   document.getElementById('appContent').style.display='';
 }
 
+// Enter on keypress
+document.addEventListener('DOMContentLoaded',function(){
+  ['loginEmail','loginPass'].forEach(function(id){
+    var el=document.getElementById(id);
+    if(el) el.addEventListener('keydown',function(e){if(e.key==='Enter')handleCompLogin();});
+  });
+});
+
 // Auto-login
 (function(){
   var email=localStorage.getItem('tt_comp_email');
   var exp=parseInt(localStorage.getItem('tt_comp_exp')||'0');
-  if(email&&exp>Date.now()&&ALLOWED_EMAILS.indexOf(email)>=0){
+  if(email&&exp>Date.now()&&CREDENTIALS[email]){
     enterComp();
   }
 })();
