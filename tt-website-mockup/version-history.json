@@ -1,0 +1,62 @@
+{
+  "current_version": 1,
+  "authorized_editors": ["Eliz", "Ashley"],
+  "site_url": "https://tt-website-mockup.vercel.app/",
+  "repo": "tt-website-mockup",
+  "pending_changes": [],
+  "history": [
+    {
+      "version": 1,
+      "label": "v1.0 — Baseline",
+      "date": "2026-03-16",
+      "author": "System",
+      "note": "Initial baseline captured. Authorized editors: Eliz, Ashley.",
+      "full_hash": "0d290a43df503bae708aa528666a5019",
+      "file_size": 188688,
+      "sections": {
+        "hero": {
+          "id": "hero",
+          "label": "Hero / Header",
+          "hash": "f64237172394964f8e156fad1cf66767",
+          "char_count": 6015,
+          "summary": "Inc. 5000, Performance marketing proven at scale, ex-Google stats"
+        },
+        "why_tt": {
+          "id": "why",
+          "label": "Why TT",
+          "hash": "57e22794735a9be9984a6cb5d21e9837",
+          "char_count": 122785,
+          "summary": "Signal Engineering, LTV/CAC, AI-Native + competitor comparison table"
+        },
+        "team": {
+          "id": "team",
+          "label": "The Team",
+          "hash": "52966ac674955a05baf30c9b890cf702",
+          "char_count": 4757,
+          "summary": "Cliff Simmons + Henry Kittle bios with Google pedigree"
+        },
+        "stack": {
+          "id": "services",
+          "label": "The Stack (Services)",
+          "hash": "8a506cd33839dd45bdf0603598f192ef",
+          "char_count": 112780,
+          "summary": "9 service blocks: Paid Search, Social, CTV, Retail Media, Creative, Web/CRO, SEO/GEO, Lifecycle, Analytics/MMM"
+        },
+        "growth_os": {
+          "id": "os-section",
+          "label": "Growth OS",
+          "hash": "baseline",
+          "char_count": 0,
+          "summary": "Python/AI infrastructure section (Tier 1-2)"
+        },
+        "results": {
+          "id": "results",
+          "label": "Results / Case Studies",
+          "hash": "1d73a362347e624ef0cc43ca1efd3db2",
+          "char_count": 33482,
+          "summary": "20 case studies, brand logos: AG1, Monarch Money, Paravel, Anastasia Beverly Hills, etc."
+        }
+      }
+    }
+  ]
+}
