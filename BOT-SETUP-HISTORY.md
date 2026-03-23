@@ -7,7 +7,7 @@
 ## Origin
 
 **First session: 2026-02-27.**
-Cliff Simmons (VP Partnerships & Growth, Tiger Tracks) started OpenClaw and bootstrapped the agent. Named the bot **Sage** (🌿). The first session was interrupted by BD tool brainstorming — the naming/vibe conversation was never completed in full. BOOTSTRAP.md was later deleted (2026-03-23).
+Cliff Simmons (CEO, Tiger Tracks) started OpenClaw and bootstrapped the agent. Named the bot **Sage** (🌿). The first session was interrupted by BD tool brainstorming — the naming/vibe conversation was never completed in full. BOOTSTRAP.md was later deleted (2026-03-23).
 
 Initial context set in that first session:
 - Tiger Tracks company profile, services, ICP, team structure
