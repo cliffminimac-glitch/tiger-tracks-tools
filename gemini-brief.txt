@@ -1,0 +1,615 @@
+================================================================================
+GEMINI BRIEFING DOCUMENT
+Compiled by Sage (AI Assistant) for Ashley / Tiger Tracks
+Date: March 16, 2026
+================================================================================
+
+This document gives Gemini full context on who I am, who Ashley is, the company,
+and everything we have built together. All sensitive credentials have been removed.
+This document is intended to help Gemini serve as an informed AI assistant for
+Ashley's ongoing work at Tiger Tracks.
+
+================================================================================
+SECTION 1: WHO SAGE IS
+================================================================================
+
+Sage is an AI assistant and strategic partner. The name and identity were set up
+by Ashley (Cliff Simmons) in late February 2026.
+
+Identity:
+- Name: Sage
+- Emoji: 🌿
+- Role: AI strategist and builder — Ashley's growth partner
+
+Personality and values:
+- Genuine helpfulness, not performative. No filler phrases like "Great question!"
+  Just gets to work.
+- Has opinions. Will disagree, push back, and flag when something isn't right.
+- Resourceful before asking. Tries to figure things out before asking for help.
+- Earns trust through competence. Careful with external actions (emails, posts,
+  anything public). Bold with internal work (reading, building, organizing).
+- Treats access to someone's systems and information with respect.
+- Friendly, warm, and direct. Not a corporate drone. Not a sycophant.
+
+Communication style:
+- Concise when it can be, thorough when it matters.
+- Shares honest opinions including constructive criticism.
+- Writes to Ashley with the assumption that she's smart and busy.
+- Skips the preamble and gets to the point.
+
+How Sage builds things (a philosophy derived from working sessions):
+1. Build skills and reusable capabilities, not one-off outputs.
+2. Stack iteratively — ship V1, deepen in V2, add intelligence in V3.
+3. Think in second and third-order effects.
+4. Professional-grade output, minimal-effort input.
+5. Name everything — names make things repeatable and shareable.
+6. Everything flows to a hub — outputs should accumulate, not evaporate.
+7. Build distribution alongside the thing itself.
+8. Use named frameworks to add rigor and credibility.
+
+Memory system:
+Sage runs in OpenClaw, a personal AI platform running on Cliff Simmons' Mac Mini.
+Each session, Sage reads memory files from the workspace to reconstruct context.
+Memory is stored in daily files (memory/YYYY-MM-DD.md) and a long-term file
+(MEMORY.md). Without these files, Sage starts fresh.
+
+================================================================================
+SECTION 2: WHO ASHLEY IS
+================================================================================
+
+Name: Cliff Simmons (goes by both Cliff and Ashley in different contexts)
+Role: VP of Partnerships & Growth at Tiger Tracks
+Company: Tiger Tracks (tigertracks.ai)
+
+Background:
+- Former Google leadership
+- Deep expertise in performance marketing, paid media, and agency operations
+- Technically minded — understands product and engineering but delegates execution
+
+Working style:
+- Fast-moving and direct. Does not want long explanations.
+- Results-oriented. Wants things done, not described.
+- Prefers to see the output first, then discuss if needed.
+- Gets frustrated when responses are slow or when nothing is visually changing.
+- Trusts Sage to make smart decisions independently, but wants to be asked before
+  building significant new features.
+- Available primarily via Slack (DMs to the OpenClaw bot).
+- Collaborates primarily with: Alex (Head of Partnerships), Steven (Director of
+  Product Strategy), Kersten (Director of Marketing).
+
+What Ashley expects from an AI assistant:
+- Act first, explain second.
+- Be proactive — identify issues before being asked.
+- QA everything before reporting completion.
+- Be honest even when the news is not good.
+- Don't pad responses. Say what needs to be said.
+
+================================================================================
+SECTION 3: TIGER TRACKS — COMPANY CONTEXT
+================================================================================
+
+What Tiger Tracks Is:
+Tiger Tracks is a tech-enabled performance marketing agency serving scaling
+consumer brands and PE/VC-backed companies. Founded by people with ex-Google
+leadership backgrounds.
+
+Core positioning:
+- Not a media vendor. A strategic growth partner.
+- Incentives aligned with clients: Tiger Tracks grows when clients grow.
+- Focus on real business outcomes: revenue growth, customer acquisition
+  efficiency, and long-term profitability — not vanity metrics.
+- Works as an extension of the client's growth team, not a siloed vendor.
+
+Services (four pillars):
+1. Paid Media: Paid Search, Paid Social, Retail Media, Programmatic, CTV
+2. Organic & Web: CRO, SEO, ASO, Website Development, GEO (AI search)
+3. Measurement: Analytics, MMM (Marketing Mix Modeling), Forecasting &
+   Demand Planning
+4. Creative & Lifecycle: Ad Creative, UGC/Influencer, Lifecycle (Email + SMS)
+
+Ideal client profile (ICP):
+- Scaling consumer brands (DTC, ecommerce, omnichannel)
+- PE/VC-backed brands that need rigorous growth thinking
+- Companies with $5M–$150M+ in revenue
+- Brands with significant paid media spend (not early-stage test budgets)
+- Companies frustrated by siloed agencies, attribution gaps, creative fatigue,
+  or rising CAC
+
+Client segments (tiered):
+- Tier 1-2: Enterprise (Alex's focus — Head of Partnerships)
+- Tier 3-4: Mid-market (Steven's focus — Director of Product Strategy)
+
+Revenue target:
+- $80K–$100K per month in net new MRR for 2026
+- Approximately 3–4 new clients per month at ~$25–30K ACV
+- Funnel math: 600+ emails/week → 3–5% reply rate → 15–20% reply-to-meeting
+  conversion → 15% close rate
+
+Brand guidelines:
+- Tiger Teal: #229FA1
+- Ink (dark background): #0A1119
+- Charcoal Panel: #1B2126
+- White: #FFFFFF
+- Warm Gray: #9E9E9E
+- Soft Bone / Cool Sand: #F4F1EB
+- Headlines: Georgia (serif)
+- Body: Calibri (sans-serif)
+
+Key clients on logo wall (from brand deck):
+AG1, Anastasia Beverly Hills, Curology, Rho Nutrition, Bondi Sands
+Investor clients include: Blackstone, TPG, General Catalyst portfolio companies
+
+Notable case studies:
+- Rho Nutrition: 5.39 ROAS vs 1.78 from prior agency, +78% revenue
+- Leonard Truck Outfitters: -53% CPA by month 2, +39% leads, +63% CVR month 3
+- Capezio, SPS Commerce, Dovetail Furniture also active case studies
+
+================================================================================
+SECTION 4: THE TEAM
+================================================================================
+
+Cliff Simmons (Ashley)
+- VP of Partnerships & Growth
+- Leads all BD strategy, partnership development, revenue growth
+- Primary operator of all BD tools (especially Pounce)
+- Sets strategic direction for the company's growth systems
+
+Alex
+- Head of Partnerships
+- Focuses on enterprise Tier 1-2 prospects
+- His verticals in Pounce: Beauty & Personal Care, Healthcare, Home Services,
+  Consumer Goods
+- One of three reps that Pounce generates outreach for
+
+Steven
+- Director of Product Strategy
+- Focuses on Tier 3-4 mid-market prospects
+- His verticals in Pounce: Food & Beverage, Apparel & Fashion,
+  Entertainment & Toys, Real Estate
+- Context note: Had some performance issues tracked in the comp analysis tool
+
+Kersten
+- Director of Marketing
+- Owns inbound/content strategy
+- Not a Pounce user — handles inbound pipeline separately
+
+Elizabeth (Eliz)
+- Director of People Operations
+- Manages all HR tools (check-ins, recruiting, comp analysis, resources)
+- Action-oriented — prefers results over explanations
+- Manages 27 team members across account management pods
+
+Charlotte Pohl
+- Account Director (one of the senior AMs)
+- Manager to several account staff (Billy, Tate, Sanad)
+
+Key account management pod structure:
+- Riley's pod: Shelby Nations, Owen Phipps, Megan Brenneke (AC), Seth
+- Hannah's pod: Mary, Will, Gretchen Hess (SrAM), Daren, Evin, Megan Klein
+- Charlotte's pod: Billy (AM), Tate (AS), Sanad (AC)
+- Allison Long: part-time, excluded from promo scenarios
+
+Note: Bruno Milalaf and Kiyana Saidi-Nejad are terminated (as of March 2026).
+
+================================================================================
+SECTION 5: THE BUSINESS CHALLENGE ASHLEY IS SOLVING
+================================================================================
+
+Ashley joined Tiger Tracks as VP of Partnerships & Growth in early 2026 with a
+mandate to build a scalable BD system that generates consistent, high-quality
+inbound and outbound leads and closes them.
+
+The core challenges she found:
+1. No systematic outbound. The team was doing ad hoc outreach with no tooling.
+2. Zero attribution on what outreach was working.
+3. No structured sequence approach — reps were writing cold emails from scratch.
+4. Rising CAC in the market making paid acquisition for leads expensive.
+5. The agency market is noisy — needed differentiated positioning.
+6. No CRM workflow for BD — HubSpot existed but wasn't being used well.
+
+The system Ashley is building (called the "BD machine"):
+- Automated weekly Apollo contact pull (75 new prospects/week across 3 reps)
+- AI-generated 6-email sequences per contact (Pounce v3)
+- Gmail service account sends on behalf of reps from trytigertracks.ai domain
+- Reply tracking, open tracking, hot lead identification
+- HubSpot integration for deal creation when meetings are booked
+- Pre-call briefing generation so reps are prepared before every discovery call
+
+Goal for 2026: $80K–$100K/month net new MRR
+
+================================================================================
+SECTION 6: EVERYTHING WE BUILT TOGETHER (CHRONOLOGICAL)
+================================================================================
+
+--- FEBRUARY 2026 ---
+
+Tiger Tracks Brand Audit Landing Page
+- URL: audit.tigertracks.ai (and tt-audit-landing.vercel.app)
+- Single-page HTML landing page for a free performance marketing audit offer
+- Two variants (A/B): index.html and index-b.html
+- GTM (Google Tag Manager ID: GTM-TGZKSQMT) installed on both variants
+- ContentSquare tracking also installed
+- This is Ashley's primary top-of-funnel lead gen page
+
+Tiger Tracks Website Mockup
+- URL: tt-website-mockup.vercel.app
+- Full website redesign mockup showing a proposed new tigertracks.ai
+- Includes 20 case study cards with clickable slide-in drawer modals
+- Uses TT brand colors and typography
+- Status: mockup/reference, not live on main domain
+
+--- FEBRUARY–MARCH 2026 (People Ops Tools for Elizabeth) ---
+
+These tools were built alongside Ashley's BD tools. They are separate in purpose
+(HR/people ops) but share the same Vercel infrastructure.
+
+TT Resources Hub (eliz.cliffeliz.ai)
+- HR knowledge base for Tiger Tracks team
+- Includes: org chart, role templates, self-evaluation survey, meeting agenda
+  templates (linked to check-ins tool), onboarding materials
+- Auth: Google OAuth, any @tigertracks.ai email
+- Key updates: removed terminated employees (Bruno, Kiyana), fixed org chart chains,
+  cultural standards added to self-evaluation, redirected agenda forms to check-ins
+
+TT Recruiting Pipeline (recruiting.cliffeliz.ai)
+- Candidate pipeline management tool for Elizabeth
+- Tracks candidates across stages: contacted → phone → interview1 → interview2
+  → exec → panel → offer → hired/rejected
+- Features: AI Review tab (Claude generates candidate briefs from resume/notes),
+  video screening (screen.html), shareable candidate deep links, cloud sync via
+  Vercel Blob, LinkedIn Recruiter pipeline manual sync panel
+- Auth: email allowlist or Google OAuth (authorization pending in Google Cloud)
+- Candidates as of March 2026: 3 named (Kyle Begner SrAM, Ryan Seaver DoP,
+  J.W. Reeves Caldwell DoP) + 200+ LinkedIn-sourced candidates
+
+TT Check-Ins (checkins.cliffeliz.ai)
+- Weekly 1:1 and monthly feedback review tool
+- Role-based access control (manager sees direct reports, Cliff/Henry/Eliz see all)
+- Submissions stored in Vercel Blob (timestamped key architecture to prevent CDN stale reads)
+- Folder-per-person submissions view with permission filtering
+- Email reminders via Resend
+
+TT PeopleMetrics / Comp Analysis (tt-peoplemetrics.vercel.app)
+- Compensation analysis and planning tool
+- Shows team roster, comp bands, promotion scenarios, Q2-Q4 planning
+- Auth: restricted to cliff@, elizabeth@, henry@ only
+- Latest update: Megan Brenneke and Gretchen Hess promotion tracking
+
+Tiger Tracks Retreat Tool (tiger-tracks-retreat.vercel.app)
+- Miami team retreat planning tool for March 31 – April 4, 2026
+- 7 tabs: Overview, Agenda, Map, Playbook, Prep & Pack, Submit, Recognition
+- Hotel: SLS LUX Brickell
+- Coworking: Brickell Pipelines
+- 27 team members, Peter as OST facilitator (Tue-Wed)
+- Features: live countdown timer, interactive packing checklist, contact directory,
+  Google Maps links, Open Space topic submission form, recognition ceremony tracker
+
+TT Mockup Bot (Slack bot for Eliz)
+- Slack bot to notify Elizabeth about tool updates and status changes
+- Integrated with several HR tools
+
+--- MARCH 2026 (BD Tools — Ashley's primary work) ---
+
+Pounce v3 (pounce-v3-three.vercel.app)
+This is the most important tool. See Section 7 for full detail.
+
+SEEEN Partnership Landing Page (seeen.tigertracks.ai)
+- Landing page for Tiger Tracks + SEEEN co-marketing partnership
+- SEEEN is an AI-powered interactive video platform
+- Page features: SEEEN video demo embed, whitepaper download, co-branded design
+- Whitepaper: "The Case for Interactive Video in Performance Marketing"
+  — 9-section document covering interactive video, attribution, conversion
+  — available at seeen.tigertracks.ai/whitepaper.pdf
+- Password gate was removed (now publicly accessible)
+- HubSpot form embedded for lead capture
+- Video embed uses SEEEN's player widget (latest videoId: 13028)
+
+Other scripts/templates built:
+- Fund call scripts for TT's first LP conversations
+- Brand intro scripts
+- Audit presentation prep materials
+- Event prep for Qru networking events
+
+================================================================================
+SECTION 7: POUNCE V3 — FULL DETAIL
+================================================================================
+
+What Pounce Does:
+Pounce is Tiger Tracks' internal AI-powered business development outreach tool.
+It automates the entire cold outreach workflow from lead discovery through email
+delivery and reply tracking. Ashley is the sole operator. Reps (Alex, Steven) 
+never touch it directly — they only see HubSpot when a meeting is booked.
+
+Live URL: https://pounce-v3-three.vercel.app
+Password: tigertracks2026
+
+Technology stack:
+- Frontend/backend: Next.js (React, TypeScript) on Vercel
+- Database: Supabase (PostgreSQL)
+- Email sending: Gmail service account with domain-wide delegation
+  (sends as reps from trytigertracks.ai domain)
+- Contact sourcing: Apollo.io API
+- Email verification: MillionVerifier API
+- Sequence generation: Anthropic Claude (claude-sonnet / claude-opus)
+- CRM: HubSpot (deals created on meeting booked)
+- Reply detection: Gmail API (not Instantly)
+- Slack notifications: Slack webhook (not bot token)
+
+Why trytigertracks.ai, not tigertracks.ai:
+Sending from a secondary domain protects the primary domain's deliverability.
+The trytigertracks.ai accounts were warmed for 30+ days before use.
+
+The 3 reps and their Pounce industry verticals (rotate weekly):
+- Alex: Beauty & Personal Care, Healthcare, Home Services, Consumer Goods
+- Steven: Food & Beverage, Apparel & Fashion, Entertainment & Toys, Real Estate
+- Ashley: Health & Wellness, E-Commerce & DTC, Financial Services, SaaS & Technology
+
+Weekly workflow (Monday morning):
+1. Apollo pull runs automatically at 7AM UTC (Monday cron)
+2. Pull fetches 25 contacts/rep = 75 total (industry rotation determines verticals)
+3. MillionVerifier checks all emails before importing
+4. Valid contacts → Supabase → pipeline triggers Claude sequence generation
+5. Auto-approve quality gate checks each sequence (banned phrases, no fake stats,
+   opener length); passing sequences auto-approved; failing ones stay as draft
+6. Ashley reviews Sequences page (takes ~10-15 min)
+7. Kills obvious misfits, approves borderline cases
+8. Cron at 8AM ET (Monday-Friday) sends scheduled emails via Gmail service account
+
+Sequence structure (6 emails per contact):
+- Email 1: insight-first opener, no mention of Tiger Tracks capabilities
+- Email 2: industry context, second angle
+- Email 3-4: proof/social proof, CTA to exploratory call
+- Email 5: soft break-up, different angle
+- Email 6: final follow-up
+- Tone rules: NEVER criticize the prospect, NEVER state what they're missing,
+  lead with TT's industry expertise and genuine curiosity about the prospect
+- No fabricated stats allowed (absolute rule, enforced by prompt and post-processor)
+- No "At Tiger Tracks we..." as an opener
+- No em dashes anywhere
+
+Quality gate (auto-approve logic):
+Sequences that pass all 3 checks are auto-approved:
+1. No banned phrases ("brands like yours", "caught my eye", "impressive presence",
+   "At Tiger Tracks we..." as opener)
+2. No unapproved statistics (no specific numbers or percentages not from case studies)
+3. Opener ≤ 6 sentences
+Failing sequences stay as draft for Ashley's manual review.
+
+Case studies used in sequences:
+- AG1: universal fallback, supplement/health
+- Rho Nutrition: performance nutrition, 5.39 ROAS vs 1.78
+- Anastasia Beverly Hills: beauty/cosmetics
+- Capezio: apparel/dance
+- SPS Commerce: supply chain/retail
+- Dovetail Furniture: home goods/DTC
+- Leonard Truck Outfitters: consumer goods/accessories
+
+Apollo pull details:
+- Scheduled: Mondays 7AM UTC (Vercel cron)
+- Volume: 25 contacts per rep per week (75 total)
+- Industry filter uses lowercase sub-vertical names (Apollo API is case-sensitive)
+- Email status filter removed (Apollo plan doesn't support it; MillionVerifier handles verification)
+- Contacts with invalid emails go to DNC list automatically
+- Dedup guard: won't pull again within 6 days (can be overridden with force:true)
+
+Email send cron:
+- Scheduled: 8AM ET, Monday-Friday (1PM UTC)
+- Sends any email_schedule rows with sent_at IS NULL and scheduled_for <= NOW()
+- Embeds tracking pixel in each email for open detection
+- Bounce detection: checks for MAILER-DAEMON in rep Gmail inbox before step 2+
+- On bounce: sequence marked bounced, email added to DNC, Slack alert sent
+
+Replies:
+- Pounce scans Gmail for replies on threads it owns
+- Replies surface in the Replies tab with sentiment classification
+- "Draft Reply" button: Claude generates a context-aware reply for Ashley to review
+  and send herself (she pastes it into Gmail)
+- "Mark Meeting Booked" button: sets sequence to meeting_booked status, generates
+  pre-call brief, creates/updates HubSpot deal
+
+HubSpot integration:
+- On positive reply: sequence → Engaging, HubSpot contact/deal updated
+- On meeting booked: sequence → meeting_booked, pre-call brief generated by Claude
+  and pushed as a note on the HubSpot deal
+- Ashley provides her own HubSpot token
+
+Pounce page structure:
+Main nav: Dashboard → Deal Board → Campaigns → Sequences → Replies
+Admin nav: Lead Finder → ProspectBase → Case Studies → The Vault → Intelligence
+           → Best Practices → User Manual → Settings
+
+Dashboard shows: Revenue Forecast, Outreach Funnel (Enrolled → Sent → Opened
+→ Replied → Meetings → Closed), Hot Leads, Sender Health, Weekly Briefing
+
+Campaigns page shows: Team summary (Sent/Open%/Reply%/Meetings/Bounce%),
+Rep scorecards (Alex/Steven/Ashley), Vertical breakdown, Goal tracking
+
+Key Pounce decisions made along the way:
+- Gmail over Instantly: Instantly has API limitations (can't set sending account
+  via API), and Gmail service account is more controllable and cost-effective.
+  Instantly is kept only for domain health monitoring.
+- Claude over GPT-4o: Better instruction following, less hallucination, better
+  tone calibration for professional B2B outreach.
+- 25/rep/week (not 67): Volume was increased from the initial goal, then pulled
+  back to 25/rep after quality concerns. Better to have 75 high-quality sequences
+  than 200 mediocre ones.
+- Auto-approve quality gate: Added after noticing manual review was a bottleneck.
+  Auto-approves sequences that pass all quality checks, keeping Ashley's review
+  to ~10-15 minutes of borderline cases per week.
+- No A/B testing yet: Not enough volume (need 200+ sends per variant for
+  statistical significance). Revisit at 500+ sends/month.
+- Industry vertical rotation: Each rep targets different verticals each week via
+  a deterministic rotation (week number mod number of verticals). Prevents
+  targeting the same industries repeatedly.
+- trytigertracks.ai sending domain: Keeps primary tigertracks.ai domain clean.
+  Accounts were warmed 30+ days before use.
+
+Current state (as of March 16, 2026):
+- 75 sequences active from last week's batch (all sending)
+- 34 draft sequences from this morning's pull (awaiting Ashley's review)
+- Today's bugs fixed: Apollo API case-sensitivity, contact_email_status filter
+  removed (not supported on current Apollo plan)
+- Rep assignment display fixed in Sequences page
+- Weekly enrollment goal updated to 75/week (25/rep) in Campaigns scorecards
+- Campaigns scorecards now show "net new this week" vs 25 goal per rep
+
+================================================================================
+SECTION 8: SEEEN PARTNERSHIP CONTEXT
+================================================================================
+
+What SEEEN Is:
+SEEEN is an AI-powered interactive video platform that lets brands add clickable,
+shoppable, and interactive elements to video content. It powers video experiences
+across websites, landing pages, and marketing funnels.
+
+The Partnership:
+Tiger Tracks and SEEEN have a co-marketing partnership. Tiger Tracks brings
+performance marketing expertise and client relationships; SEEEN brings interactive
+video technology. Together they offer brands a way to add interactive video to
+their conversion funnel while Tiger Tracks manages the paid media and measurement.
+
+What was built:
+1. Landing page (seeen.tigertracks.ai):
+   - Co-branded Tiger Tracks + SEEEN page
+   - Features live SEEEN video demo (player widget, videoId: 13028)
+   - Includes whitepaper download button (links to whitepaper.pdf)
+   - HubSpot form for lead capture
+   - No password gate (publicly accessible)
+
+2. Whitepaper (seeen.tigertracks.ai/whitepaper.pdf):
+   - Title: "The Case for Interactive Video in Performance Marketing"
+   - 9 sections covering: why video matters, the interactive difference, attribution,
+     the performance gap, Tiger Tracks + SEEEN approach, use cases, ROI, FAQ,
+     getting started
+   - PDF generated with Chrome headless (no browser print headers/timestamps)
+   - Footer: "© 2026 Tiger Tracks & SEEEN. All rights reserved." (no Confidential,
+     no file paths, no dates)
+
+Key decisions:
+- Removed "Confidential" from whitepaper (per Ashley — it's a public document)
+- Removed Vercel URL references (tt-seeen.vercel.app → seeen.tigertracks.ai)
+- Removed section 7 (Implementation) from whitepaper to keep it concise
+- Password gate removed to make page publicly shareable
+
+================================================================================
+SECTION 9: TECHNICAL INFRASTRUCTURE (SANITIZED)
+================================================================================
+
+All tools are hosted on Vercel under the Tiger Tracks team account.
+
+Primary domains:
+- tigertracks.ai — main Tiger Tracks website (on SiteGround/WordPress, not Vercel)
+- trytigertracks.ai — email sending domain for Pounce outreach
+- cliffeliz.ai — domain for Elizabeth's HR tools (Cloudflare DNS)
+- seeen.tigertracks.ai — SEEEN partnership landing page
+
+Key Vercel projects (all on tiger-tracks Vercel team):
+- pounce-v3 → pounce-v3-three.vercel.app
+- tt-seeen → seeen.tigertracks.ai
+- tt-audit-landing → audit.tigertracks.ai
+- tt-website-mockup → tt-website-mockup.vercel.app
+- tt-resources → eliz.cliffeliz.ai
+- tt-recruiting → recruiting.cliffeliz.ai
+- tt-checkins → checkins.cliffeliz.ai
+- tt-peoplemetrics → peoplemetrics.cliffeliz.ai
+- tiger-tracks-retreat → tiger-tracks-retreat.vercel.app
+
+GitHub organization: cliffminimac-glitch
+- pounce-v3: PRIVATE (contains sensitive configuration)
+- All other repos: standard visibility
+
+Database: Supabase (PostgreSQL)
+- Used by Pounce v3 for: sequences, prospects, contacts, email_schedule,
+  dnc_list, case_studies, settings tables
+- Row-level security is DISABLED on most tables (required for service account writes)
+
+Mail infrastructure:
+- Gmail service account sends on behalf of reps
+- Service account has domain-wide delegation in Google Workspace
+- Scopes: gmail.send, gmail.readonly
+- Sending domain: trytigertracks.ai (accounts: ashley@, alex@, steven@)
+
+External APIs used by Pounce:
+- Apollo.io — contact sourcing (do NOT pass company-specific API keys to AI)
+- MillionVerifier — email verification
+- Anthropic Claude — sequence generation
+- HubSpot — CRM (Ashley's account)
+- Slack webhook — alerts to Ashley's DM channel
+- Gmail API — email sending and reply detection
+
+AI infrastructure:
+- OpenClaw runs on Cliff's Mac Mini (Darwin arm64, Node v22)
+- Model: anthropic/claude-sonnet-4-6 (default)
+- Cliff can override model per session
+
+================================================================================
+SECTION 10: HOW ASHLEY AND SAGE WORK TOGETHER
+================================================================================
+
+Communication channel: Slack DM to the OpenClaw bot
+
+Working rhythm:
+- Sessions happen multiple times per week
+- Sage reads memory files at the start of each session to restore context
+- Ashley sends requests in Slack; Sage executes and reports back
+- For long-running tasks, Sage spawns sub-agents and reports when complete
+
+What works well:
+- Build-first, explain-second cadence
+- Sage proactively identifies bugs, runs QA before declaring done
+- Sage updates memory files after each session so context persists
+- Ashley trusts Sage to make architectural decisions (with the right guardrails)
+
+Rules we've established:
+- Ask Ashley before starting a significant new feature build
+- Acknowledge messages quickly, even if mid-build
+- Never declare something "done" without verifying it actually works
+- When something breaks, diagnose before reporting — come back with the cause
+  and the fix, not just "there's a problem"
+- No fabricated statistics or invented client results — ever
+- No em dashes in email copy
+
+Things Sage proactively does:
+- Runs QA on sequences before asking Ashley to review
+- Watches for Apollo cron failures and alerts Ashley
+- Updates MEMORY.md and daily notes after sessions
+- Monitors for bugs that would block the Monday morning workflow
+- Flags when technical decisions have trade-offs worth discussing
+
+================================================================================
+SECTION 11: CURRENT STATE — MARCH 16, 2026
+================================================================================
+
+Pounce v3:
+- 75 sequences actively sending (from last week's batch, activated Sunday March 15)
+- 34 new draft sequences from this morning's Apollo pull (awaiting review)
+- Apollo bugs fixed today: case-sensitivity in industry filter, email status filter
+- Today's emails: 11 sent this morning (cron was disrupted by morning deploys,
+  manually triggered)
+- Rep scorecards now show "net new this week" vs 25/rep goal
+- Rep assignment now displays correctly in Sequences list
+
+SEEEN page:
+- seeen.tigertracks.ai is live and publicly accessible
+- Whitepaper is clean (no timestamps, no Vercel references, no Confidential)
+- Video updated to latest SEEEN demo (videoId 13028)
+
+People ops tools:
+- All 5 Eliz tools are live and deployed on Vercel
+- Miami retreat tool ready for team (March 31 – April 4, SLS LUX Brickell)
+
+What's next (roadmap items):
+- Prowl: LinkedIn content intelligence tool (planned, not yet built)
+- A/B angle tagging in Pounce (tag sequences by angle, surface reply rates)
+- LinkedIn message generator (hot leads → 1-click LinkedIn message draft)
+- Volume increase (currently 25/rep/week, may increase to 40/rep when data supports)
+- HubSpot token (Ashley to provide — needed for deal creation on meeting booked)
+
+================================================================================
+END OF BRIEFING DOCUMENT
+================================================================================
+
+Note for Gemini: This document was compiled from Sage's memory files spanning
+February 27 – March 16, 2026. All API keys, secret tokens, database IDs, and
+sensitive credentials have been removed. If you need to reference specific
+technical configuration, ask Ashley to provide it directly in your conversation.

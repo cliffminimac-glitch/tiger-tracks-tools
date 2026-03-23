@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trusted by Our Partners</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0A1119;
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .slide {
+      width: 1280px;
+      height: 720px;
+      background: #0A1119;
+      padding: 60px 80px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .slide::before {
+      content: '';
+      position: absolute;
+      top: -100px;
+      right: -100px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(34,159,161,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #229FA1;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 28px;
+      height: 2px;
+      background: #229FA1;
+    }
+    .tt-mark {
+      font-family: Georgia, serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.25);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    h1 {
+      font-family: Georgia, serif;
+      font-size: 40px;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 12px;
+    }
+    h1 .teal { color: #229FA1; }
+    .subtitle {
+      font-size: 15px;
+      color: rgba(255,255,255,0.45);
+      margin-bottom: 56px;
+      max-width: 600px;
+      line-height: 1.6;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      margin-bottom: 20px;
+    }
+
+    .logos-section {
+      display: flex;
+      flex-direction: column;
+      gap: 36px;
+      flex: 1;
+    }
+
+    .logo-row-container {
+      display: flex;
+      gap: 60px;
+    }
+
+    .logo-group {
+      flex: 1;
+    }
+
+    .logo-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 32px;
+      align-items: center;
+    }
+
+    .logo-item {
+      font-family: Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.55);
+      padding: 12px 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 8px;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .logo-item.highlight {
+      color: rgba(255,255,255,0.7);
+      border-color: rgba(34,159,161,0.2);
+      background: rgba(34,159,161,0.05);
+    }
+
+    .divider {
+      width: 1px;
+      background: rgba(255,255,255,0.08);
+      align-self: stretch;
+    }
+
+    .bottom-line {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, transparent, #229FA1, transparent);
+    }
+  </style>
+</head>
+<body>
+  <div class="slide">
+    <div class="top-bar">
+      <div class="eyebrow">Our Partners</div>
+      <div class="tt-mark">Tiger Tracks</div>
+    </div>
+
+    <h1>Trusted by Leading <span class="teal">Funds &amp; Brands</span></h1>
+    <p class="subtitle">We partner directly with the world's top investment firms and their portfolio companies to drive measurable growth and EBITDA uplift.</p>
+
+    <div class="logos-section">
+      <div class="logo-row-container">
+        <div class="logo-group">
+          <div class="section-label">Fund Partners</div>
+          <div class="logo-grid">
+            <div class="logo-item highlight">TPG</div>
+            <div class="logo-item highlight">General Catalyst</div>
+            <div class="logo-item highlight">Blackstone</div>
+            <div class="logo-item">10X Capital</div>
+            <div class="logo-item">Sentinel Capital</div>
+            <div class="logo-item">Kinderhook</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="logo-group">
+          <div class="section-label">Brand Partners</div>
+          <div class="logo-grid">
+            <div class="logo-item highlight">AG1</div>
+            <div class="logo-item highlight">Anastasia Beverly Hills</div>
+            <div class="logo-item highlight">Astound</div>
+            <div class="logo-item">Rho Nutrition</div>
+            <div class="logo-item">Happy Head</div>
+            <div class="logo-item">HomeRiver</div>
+            <div class="logo-item">Curology</div>
+            <div class="logo-item">Monarch Money</div>
+            <div class="logo-item">Aura Health</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bottom-line"></div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Coachella 2026 Lookbooks</title>
+<style>
+:root{
+  --bg:#f6f2eb;--surface:#ffffff;--dark:#1a1612;--warm:#c9a96e;--border:#e5dcd0;
+  --girl:#7b5ea7;--guy1:#b5541e;--guy2:#5a8a6a;
+  --radius:16px;--shadow:0 2px 12px rgba(0,0,0,.07);--shadow-hover:0 6px 24px rgba(0,0,0,.12);
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--dark);min-height:100vh}
+
+/* ── HEADER ── */
+.site-header{background:var(--dark);color:#fff;padding:28px 20px 22px;text-align:center}
+.site-header h1{font-size:clamp(22px,5vw,48px);font-weight:900;letter-spacing:-1.5px;line-height:1.1}
+.site-header h1 em{color:var(--warm);font-style:normal}
+.site-header p{margin-top:6px;font-size:11px;opacity:.35;letter-spacing:3px;text-transform:uppercase}
+
+/* ── TAB NAV ── */
+.tab-nav{position:sticky;top:0;z-index:200;background:var(--dark);display:flex;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid rgba(255,255,255,.08)}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:14px 18px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:rgba(255,255,255,.35);border:none;background:transparent;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;transition:all .2s;flex-shrink:0}
+.tab-btn:hover{color:rgba(255,255,255,.7)}
+.tab-btn.active{color:var(--warm);border-bottom-color:var(--warm)}
+.tab-btn[data-tab="girl"].active{color:#c9a6e8;border-bottom-color:#c9a6e8}
+.tab-btn[data-tab="guy1"].active{color:#e8916a;border-bottom-color:#e8916a}
+.tab-btn[data-tab="guy2"].active{color:#8ec9a0;border-bottom-color:#8ec9a0}
+.tab-btn[data-tab="packing"].active{color:#90d4a8;border-bottom-color:#90d4a8}
+
+/* ── SECTIONS ── */
+.section{display:none;animation:fadeIn .2s ease}
+.section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ── SECTION HERO ── */
+.section-hero{padding:28px 20px;display:flex;align-items:flex-start;gap:16px}
+.hero-icon{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
+.hero-icon-home{background:linear-gradient(135deg,#b5541e,#e07a35)}
+.hero-icon-girl{background:linear-gradient(135deg,var(--girl),#a07acf)}
+.hero-icon-guy1{background:linear-gradient(135deg,var(--guy1),#d47840)}
+.hero-icon-guy2{background:linear-gradient(135deg,var(--guy2),#7ab892)}
+.hero-icon-pack{background:linear-gradient(135deg,#2d6a4f,#52b788)}
+.hero-icon-gloss{background:linear-gradient(135deg,#495057,#868e96)}
+.hero-text h2{font-size:clamp(18px,4vw,32px);font-weight:900;line-height:1.15}
+.hero-text p{font-size:12px;opacity:.5;margin-top:5px;line-height:1.5;max-width:520px}
+.hero-text .hero-accent{font-size:11px;font-weight:700;margin-top:8px;display:inline-block;padding:4px 12px;border-radius:50px;background:rgba(0,0,0,.07)}
+
+/* ── INFO CARDS (home) ── */
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 20px 20px}
+@media(max-width:620px){.info-grid{grid-template-columns:1fr}}
+.info-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.info-card-header{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px}
+.info-card-header .ic-icon{font-size:20px}
+.info-card-header h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.info-card-body{padding:16px}
+/* countdown */
+.cd-nums{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap}
+.cd-unit{display:flex;flex-direction:column;align-items:center;min-width:44px}
+.cd-num{font-size:clamp(28px,6vw,48px);font-weight:900;color:var(--warm);font-variant-numeric:tabular-nums;line-height:1}
+.cd-label{font-size:9px;opacity:.4;text-transform:uppercase;letter-spacing:1.5px;margin-top:3px}
+.cd-sep{font-size:32px;font-weight:900;color:var(--warm);opacity:.3;padding-bottom:14px}
+.cd-sub{font-size:11px;opacity:.38;margin-top:10px;letter-spacing:.3px}
+/* weather */
+.wx-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.wx-icon{font-size:36px}
+.wx-temp{font-size:34px;font-weight:900;color:#1d7abc}
+.wx-desc{font-size:11px;opacity:.55;margin-top:2px}
+.wx-days{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.wx-day{background:var(--bg);border-radius:10px;padding:8px 4px;text-align:center}
+.wx-day-name{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#1d7abc}
+.wx-day-icon{font-size:16px;margin:3px 0}
+.wx-day-hi{font-size:13px;font-weight:800;color:#c0392b}
+.wx-day-lo{font-size:10px;opacity:.45}
+.wx-link{display:block;font-size:11px;color:#1d7abc;font-weight:700;text-decoration:none;margin-top:10px}
+/* heat guide */
+.heat-card{background:linear-gradient(135deg,#b5541e,#d4692a);color:#fff;border-radius:var(--radius);overflow:hidden}
+.heat-card-header{padding:14px 16px 12px;border-bottom:1px solid rgba(255,255,255,.15);display:flex;align-items:center;gap:10px}
+.heat-card-header h3{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+.heat-card-body{padding:16px}
+.heat-tips{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.heat-tip{background:rgba(255,255,255,.12);border-radius:10px;padding:10px 12px}
+.heat-tip strong{display:block;font-size:11px;font-weight:800;margin-bottom:3px}
+.heat-tip span{font-size:11px;opacity:.85;line-height:1.4}
+
+/* ── LOOKBOOK CONTROLS ── */
+.lb-controls{padding:10px 20px;background:var(--bg);border-bottom:1.5px solid var(--border);display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:47px;z-index:100;backdrop-filter:blur(10px)}
+.search-box{position:relative;flex:1;min-width:140px;max-width:240px}
+.search-box svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);opacity:.3;pointer-events:none}
+.search-box input{width:100%;padding:7px 12px 7px 30px;border:1.5px solid var(--border);border-radius:50px;background:var(--surface);font-size:12px;outline:none;transition:border-color .2s}
+.search-box input:focus{border-color:var(--warm)}
+.pill-group{display:flex;gap:4px;flex-wrap:wrap}
+.pill-label{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;opacity:.35;align-self:center;margin-right:1px}
+.pill{padding:5px 12px;border-radius:50px;border:1.5px solid var(--dark);background:transparent;font-size:11px;font-weight:700;cursor:pointer;transition:all .15s;white-space:nowrap}
+.pill:hover,.pill.active{background:var(--dark);color:#fff}
+.pill[data-time="day"].active{background:var(--warm);border-color:var(--warm);color:var(--dark)}
+.pill[data-time="night"].active{background:#2d2042;border-color:#2d2042;color:#e8d0ff}
+.rcount{font-size:11px;padding:6px 20px;opacity:.4;font-weight:600}
+
+/* ── LOOKBOOK CONTENT ── */
+.lb-body{padding:0 20px 40px}
+.day-block{margin-bottom:4px}
+.time-header{display:flex;align-items:center;gap:12px;padding:22px 0 12px}
+.time-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:50px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px}
+.badge-day{background:#fef3c7;color:#78400a}
+.badge-night{background:#1e1030;color:#d4b0f0}
+.time-meta{font-size:11px;opacity:.4;letter-spacing:.3px}
+.day-sep{border:none;border-top:2px dashed var(--border);margin:28px 0}
+.tall-tip-bar{background:#fffbf2;border-left:3px solid var(--warm);border-radius:0 10px 10px 0;padding:10px 14px;font-size:12px;line-height:1.55;margin-bottom:16px}
+
+/* ── PRODUCT CARDS ── */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(256px,1fr));gap:10px;margin-bottom:4px}
+.pcard{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;display:flex;flex-direction:column;gap:8px;transition:transform .18s,box-shadow .18s;cursor:default}
+.pcard:hover{transform:translateY(-3px);box-shadow:var(--shadow-hover)}
+.pcard[data-heat="evening"]{border-left:3px solid #f59e0b}
+.pcard.hidden{display:none!important}
+.pcard-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.retailer-badge{font-size:9px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;padding:3px 8px;border-radius:6px;flex-shrink:0}
+.rb-revolve{background:#000;color:#fff}
+.rb-amazon{background:#ff9900;color:#111}
+.rb-nordstrom{background:#1d3557;color:#fff}
+.rb-net{background:#111;color:#fff}
+.rb-bergdorf{background:#7a5c10;color:#fff}
+.rb-moda{background:#2c2c2c;color:#fff}
+.rb-uo{background:#ff6b35;color:#fff}
+.rb-fwrd{background:#333;color:#fff}
+.rb-asos{background:#1e6cb6;color:#fff}
+.rb-etsy{background:#f56400;color:#fff}
+.rb-zara{background:#111;color:#fff}
+.rb-trr{background:#b91c1c;color:#fff}
+.rb-bloom{background:#2d4059;color:#fff}
+.rb-other{background:#555;color:#fff}
+.pcard-price{text-align:right;flex-shrink:0}
+.price-main{font-size:16px;font-weight:800;display:block}
+.price-strike{font-size:11px;text-decoration:line-through;opacity:.38;display:block}
+.pcard-name{font-size:14px;font-weight:700;line-height:1.3}
+.pcard-desc{font-size:12px;opacity:.58;line-height:1.55;flex:1}
+.pcard-tags{display:flex;flex-wrap:wrap;gap:4px}
+.ptag{background:#f2ead8;color:#7a5c28;font-size:9px;font-weight:700;padding:2px 8px;border-radius:50px;text-transform:uppercase;letter-spacing:.3px}
+.pcard-actions{display:flex;gap:6px;margin-top:2px}
+.btn-primary{flex:1;padding:9px 12px;background:var(--dark);color:#fff;border-radius:50px;font-size:12px;font-weight:700;text-decoration:none;text-align:center;transition:opacity .15s}
+.btn-primary:hover{opacity:.8}
+.btn-secondary{padding:9px 11px;border:1.5px solid var(--border);border-radius:50px;font-size:11px;font-weight:600;text-decoration:none;color:var(--dark);transition:all .15s;white-space:nowrap}
+.btn-secondary:hover{border-color:var(--dark)}
+
+/* ── PACKING LIST ── */
+.pack-body{padding:0 20px 40px}
+.pack-progress-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:16px;display:flex;align-items:center;gap:14px}
+.pack-bar-wrap{flex:1;height:8px;background:#e8dfc9;border-radius:50px;overflow:hidden}
+.pack-bar{height:100%;background:var(--guy2);border-radius:50px;transition:width .3s}
+.pack-pct{font-size:18px;font-weight:900;min-width:46px;text-align:right}
+.pack-count{font-size:11px;opacity:.45;min-width:110px}
+.pack-reset{padding:6px 14px;border:1.5px solid var(--border);border-radius:50px;font-size:11px;font-weight:700;background:transparent;cursor:pointer;transition:all .15s;margin-left:auto}
+.pack-reset:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+.pack-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(268px,1fr));gap:10px}
+.pack-cat{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.pack-cat-header{padding:12px 14px;background:var(--bg);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.pack-cat-header span{font-size:13px;font-weight:800}
+.pack-cat-body{padding:6px 0}
+.pack-item{display:flex;align-items:flex-start;gap:10px;padding:9px 14px;cursor:pointer;transition:background .12s;user-select:none}
+.pack-item:hover{background:var(--bg)}
+.pack-item.checked{opacity:.4}
+.pack-item.checked .pitem-text{text-decoration:line-through}
+.pchk{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;margin-top:1px;background:#fff;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.pack-item.checked .pchk{background:var(--guy2);border-color:var(--guy2)}
+.pack-item.checked .pchk::after{content:"✓";color:#fff;font-size:11px;font-weight:900}
+.pitem-text{font-size:12px;line-height:1.35;font-weight:600}
+.pitem-note{font-size:10px;opacity:.45;display:block;font-style:italic;margin-top:2px;font-weight:400}
+
+/* ── GLOSSARY ── */
+.gloss-body{padding:0 20px 40px}
+.gloss-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.gloss-card{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px;transition:transform .15s,box-shadow .15s}
+.gloss-card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+.gloss-term{font-size:14px;font-weight:800;margin-bottom:4px}
+.gloss-brands{font-size:11px;color:var(--warm);font-weight:700;margin-bottom:6px}
+.gloss-def{font-size:11px;opacity:.55;line-height:1.5}
+
+/* ── NO RESULTS ── */
+#no-results{display:none;text-align:center;padding:60px 20px;opacity:.35}
+#no-results h3{font-size:22px;margin-bottom:8px}
+
+/* ── FOOTER ── */
+footer{background:var(--dark);color:rgba(255,255,255,.28);text-align:center;padding:16px;font-size:11px;letter-spacing:.5px}
+footer a{color:var(--warm);text-decoration:none}
+
+@media(max-width:600px){
+  .info-grid{grid-template-columns:1fr}
+  .lb-body,.pack-body,.gloss-body{padding:0 14px 36px}
+  .pgrid{grid-template-columns:1fr}
+  .pack-grid{grid-template-columns:1fr}
+  .lb-controls{top:44px;padding:8px 14px}
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+<h1>COACHELLA <em>2026</em></h1>
+<p>Palm Springs &nbsp;&middot;&nbsp; 3 Days &nbsp;&middot;&nbsp; 3 Nights &nbsp;&middot;&nbsp; 3 People</p>
+</header>
+
+<nav class="tab-nav">
+<button class="tab-btn active" data-tab="home">&#127968; Home</button>
+<button class="tab-btn" data-tab="girl">&#128081; Tall Girl</button>
+<button class="tab-btn" data-tab="guy1">&#128374;&#65039; Guy 1</button>
+<button class="tab-btn" data-tab="guy2">&#127769; Guy 2</button>
+<button class="tab-btn" data-tab="packing">&#9989; Packing</button>
+<button class="tab-btn" data-tab="glossary">&#128214; Glossary</button>
+</nav>
+
+
+
+<!-- ═══ HOME ═══ -->
+<div class="section active" id="sec-home">
+<div class="section-hero">
+<div class="hero-icon hero-icon-home">&#127774;</div>
+<div class="hero-text">
+<h2>Coachella 2026 &mdash; Palm Springs</h2>
+<p>Weekend 1 &middot; April 10&ndash;12, 2026 &middot; Empire Polo Club, Indio CA &middot; Three people, 18 looks, fully heat-approved.</p>
+</div>
+</div>
+<div class="info-grid">
+<div class="info-card">
+<div class="info-card-header"><span class="ic-icon">&#9201;</span><h3>Countdown to Coachella</h3></div>
+<div class="info-card-body">
+<div class="cd-nums">
+<div class="cd-unit"><span class="cd-num" id="cd-d">--</span><span class="cd-label">Days</span></div>
+<span class="cd-sep">:</span>
+<div class="cd-unit"><span class="cd-num" id="cd-h">--</span><span class="cd-label">Hours</span></div>
+<span class="cd-sep">:</span>
+<div class="cd-unit"><span class="cd-num" id="cd-m">--</span><span class="cd-label">Mins</span></div>
+<span class="cd-sep">:</span>
+<div class="cd-unit"><span class="cd-num" id="cd-s">--</span><span class="cd-label">Secs</span></div>
+</div>
+<p class="cd-sub">April 10, 2026 &middot; Gates open 11am PDT</p>
+</div>
+</div>
+<div class="info-card">
+<div class="info-card-header"><span class="ic-icon">&#9728;&#65039;</span><h3>Palm Springs April Weather</h3></div>
+<div class="info-card-body">
+<div class="wx-row">
+<span class="wx-icon">&#127774;</span>
+<div><div class="wx-temp">95&deg;F</div><div class="wx-desc">Sunny &middot; Dry desert heat &middot; UV Very High &middot; Humidity ~15%</div></div>
+</div>
+<div class="wx-days">
+<div class="wx-day"><div class="wx-day-name">Fri</div><div class="wx-day-icon">&#127774;</div><div class="wx-day-hi">97&deg;</div><div class="wx-day-lo">68&deg;</div></div>
+<div class="wx-day"><div class="wx-day-name">Sat</div><div class="wx-day-icon">&#127774;</div><div class="wx-day-hi">99&deg;</div><div class="wx-day-lo">70&deg;</div></div>
+<div class="wx-day"><div class="wx-day-name">Sun</div><div class="wx-day-icon">&#127774;</div><div class="wx-day-hi">96&deg;</div><div class="wx-day-lo">69&deg;</div></div>
+<div class="wx-day"><div class="wx-day-name">Avg</div><div class="wx-day-icon">&#127777;</div><div class="wx-day-hi">95&deg;</div><div class="wx-day-lo">68&deg;</div></div>
+</div>
+<a class="wx-link" href="https://forecast.weather.gov/MapClick.php?CityName=Palm+Springs&state=CA" target="_blank">&#128279; Live forecast &rarr;</a>
+</div>
+</div>
+</div>
+<div style="padding:0 20px 20px">
+<div class="heat-card">
+<div class="heat-card-header"><span class="ic-icon">&#127774;</span><h3>Palm Springs Heat Guide &mdash; April</h3></div>
+<div class="heat-card-body">
+<div class="heat-tips">
+<div class="heat-tip"><strong>Best Fabrics</strong><span>Linen, chiffon, rayon, viscose, silk, poplin. Avoid velvet, cashmere, mohair, heavy wool.</span></div>
+<div class="heat-tip"><strong>Color Logic</strong><span>Light colors reflect heat. Dark absorbs 10&ndash;15&deg;F extra. Save dark looks for night.</span></div>
+<div class="heat-tip"><strong>Silhouette = Airflow</strong><span>Wide-leg trousers create a chimney effect. Fringe creates its own breeze. Mini = minimum heat trap.</span></div>
+<div class="heat-tip"><strong>Open-Toe Only (Day)</strong><span>Closed shoes in 100&deg;F = misery. Boots are fine after 8pm when temps drop.</span></div>
+<div class="heat-tip"><strong>Hat is Non-Negotiable</strong><span>Wide-brim hat drops personal temperature by 10&deg;F. UV400 sunglasses always.</span></div>
+<div class="heat-tip"><strong>Evening Rule</strong><span>Cards with amber border = best after 6pm at 70&ndash;75&deg;F. Feathers, velvet, denim = evening only.</span></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- ═══ TALL GIRL ═══ -->
+<div class="section" id="sec-girl">
+<div class="section-hero">
+<div class="hero-icon hero-icon-girl">&#128081;</div>
+<div class="hero-text">
+<h2>Tall Girl &mdash; Quiet Luxury Desert</h2>
+<p>5&rsquo;10&rdquo; &middot; Blonde &middot; Blue eyes &middot; Narrow shoulders &middot; Boho 2.0 meets Quiet Luxury. Style icons: Sofia Richie Grainge, Romee Strijd, Alix Earle, Rosie Huntington-Whiteley, Elsa Hosk.</p>
+</div>
+</div>
+<div style="padding:0 20px 6px">
+<div style="background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 16px;display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+<span style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;opacity:.4;margin-right:4px">Style Icons</span>
+<span style="font-size:11px;padding:4px 10px;background:#f2ead8;color:#7a5c28;border-radius:50px;font-weight:700">Sofia Richie Grainge</span>
+<span style="font-size:11px;padding:4px 10px;background:#f2ead8;color:#7a5c28;border-radius:50px;font-weight:700">Romee Strijd</span>
+<span style="font-size:11px;padding:4px 10px;background:#f2ead8;color:#7a5c28;border-radius:50px;font-weight:700">Alix Earle</span>
+<span style="font-size:11px;padding:4px 10px;background:#f2ead8;color:#7a5c28;border-radius:50px;font-weight:700">Rosie Huntington-Whiteley</span>
+<span style="font-size:11px;padding:4px 10px;background:#f2ead8;color:#7a5c28;border-radius:50px;font-weight:700">Elsa Hosk</span>
+<span style="margin-left:auto;font-size:11px;opacity:.4">&#127774; Palette: olive &middot; pistachio &middot; ecru &middot; champagne</span>
+</div>
+</div>
+
+<div class="lb-controls">
+<div class="search-box">
+<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<input class="lb-search" type="text" placeholder="Search items&hellip;"/>
+</div>
+<div class="pill-group">
+<span class="pill-label">Time</span>
+<button class="pill active" data-f="time" data-time="all">All</button>
+<button class="pill" data-f="time" data-time="day">&#9728;&#65039; Day</button>
+<button class="pill" data-f="time" data-time="night">&#127769; Night</button>
+</div>
+<div class="pill-group">
+<span class="pill-label">Budget</span>
+<button class="pill active" data-f="price" data-price="all">All</button>
+<button class="pill" data-f="price" data-price="u50">&lt;$50</button>
+<button class="pill" data-f="price" data-price="u200">&lt;$200</button>
+<button class="pill" data-f="price" data-price="u500">&lt;$500</button>
+<button class="pill" data-f="price" data-price="over500">$500+</button>
+</div>
+<div class="pill-group">
+<span class="pill-label">Shop</span>
+<button class="pill active" data-f="ret" data-ret="all">All</button>
+<button class="pill" data-f="ret" data-ret="revolve">Revolve</button>
+<button class="pill" data-f="ret" data-ret="amazon">Amazon</button>
+<button class="pill" data-f="ret" data-ret="zara">Zara</button>
+<button class="pill" data-f="ret" data-ret="trr">TRR</button>
+</div>
+<span class="rcount" id="rc-girl"></span>
+</div>
+<div class="lb-body"><div id="lb-girl"></div><div id="no-results"></div></div>
+</div>
+
+<!-- ═══ GUY 1 ═══ -->
+<div class="section" id="sec-guy1">
+<div class="section-hero">
+<div class="hero-icon hero-icon-guy1">&#128374;&#65039;</div>
+<div class="hero-text">
+<h2>Guy 1 &mdash; Desert Dandy</h2>
+<p>Editorial, effortless, heat-engineered. Linen wide-leg, open silk shirts, satin at night.</p>
+</div>
+</div>
+<div class="lb-controls">
+<div class="search-box">
+<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<input class="lb-search" type="text" placeholder="Search items&hellip;"/>
+</div>
+<div class="pill-group">
+<span class="pill-label">Time</span>
+<button class="pill active" data-f="time" data-time="all">All</button>
+<button class="pill" data-f="time" data-time="day">&#9728;&#65039; Day</button>
+<button class="pill" data-f="time" data-time="night">&#127769; Night</button>
+</div>
+<div class="pill-group">
+<span class="pill-label">Budget</span>
+<button class="pill active" data-f="price" data-price="all">All</button>
+<button class="pill" data-f="price" data-price="u50">&lt;$50</button>
+<button class="pill" data-f="price" data-price="u200">&lt;$200</button>
+<button class="pill" data-f="price" data-price="u500">&lt;$500</button>
+<button class="pill" data-f="price" data-price="over500">$500+</button>
+</div>
+<div class="pill-group">
+<span class="pill-label">Shop</span>
+<button class="pill active" data-f="ret" data-ret="all">All</button>
+<button class="pill" data-f="ret" data-ret="revolve">Revolve</button>
+<button class="pill" data-f="ret" data-ret="amazon">Amazon</button>
+<button class="pill" data-f="ret" data-ret="zara">Zara</button>
+<button class="pill" data-f="ret" data-ret="trr">TRR</button>
+</div>
+<span class="rcount" id="rc-guy1"></span>
+</div>
+<div class="lb-body"><div id="lb-guy1"></div><div id="no-results-2"></div></div>
+</div>
+
+<!-- ═══ GUY 2 ═══ -->
+<div class="section" id="sec-guy2">
+<div class="section-hero">
+<div class="hero-icon hero-icon-guy2">&#127769;</div>
+<div class="hero-text">
+<h2>Guy 2 &mdash; Desert Cool Minimalist</h2>
+<p>A$AP Rocky at his most refined, desert-heat approved. Linen, prints, satin at night.</p>
+</div>
+</div>
+<div class="lb-controls">
+<div class="search-box">
+<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+<input class="lb-search" type="text" placeholder="Search items&hellip;"/>
+</div>
+<div class="pill-group">
+<span class="pill-label">Time</span>
+<button class="pill active" data-f="time" data-time="all">All</button>
+<button class="pill" data-f="time" data-time="day">&#9728;&#65039; Day</button>
+<button class="pill" data-f="time" data-time="night">&#127769; Night</button>
+</div>
+<div class="pill-group">
+<span class="pill-label">Budget</span>
+<button class="pill active" data-f="price" data-price="all">All</button>
+<button class="pill" data-f="price" data-price="u50">&lt;$50</button>
+<button class="pill" data-f="price" data-price="u200">&lt;$200</button>
+<button class="pill" data-f="price" data-price="u500">&lt;$500</button>
+<button class="pill" data-f="price" data-price="over500">$500+</button>
+</div>
+<div class="pill-group">
+<span class="pill-label">Shop</span>
+<button class="pill active" data-f="ret" data-ret="all">All</button>
+<button class="pill" data-f="ret" data-ret="revolve">Revolve</button>
+<button class="pill" data-f="ret" data-ret="amazon">Amazon</button>
+<button class="pill" data-f="ret" data-ret="zara">Zara</button>
+<button class="pill" data-f="ret" data-ret="trr">TRR</button>
+</div>
+<span class="rcount" id="rc-guy2"></span>
+</div>
+<div class="lb-body"><div id="lb-guy2"></div><div id="no-results-3"></div></div>
+</div>
+
+<!-- ═══ PACKING ═══ -->
+<div class="section" id="sec-packing">
+<div class="section-hero">
+<div class="hero-icon hero-icon-pack">&#9989;</div>
+<div class="hero-text">
+<h2>Coachella 2026 Packing List</h2>
+<p>Everything you need for 3 days + 3 nights in Palm Springs. Tap items to check them off &mdash; progress saves automatically.</p>
+</div>
+</div>
+<div class="pack-body">
+<div class="pack-progress-card">
+<span class="pack-count" id="pack-count">0 of 0 packed</span>
+<div class="pack-bar-wrap"><div class="pack-bar" id="pack-bar" style="width:0%"></div></div>
+<span class="pack-pct" id="pack-pct">0%</span>
+<button class="pack-reset" onclick="resetPack()">Reset</button>
+</div>
+<div class="pack-grid" id="pack-cats"></div>
+</div>
+</div>
+
+<!-- ═══ GLOSSARY ═══ -->
+<div class="section" id="sec-glossary">
+<div class="section-hero">
+<div class="hero-icon hero-icon-gloss">&#128214;</div>
+<div class="hero-text">
+<h2>SS26 Trend Glossary</h2>
+<p>Key trends driving the 2026 Coachella lookbook. Sources: Vogue, Harper&apos;s Bazaar, PopSugar.</p>
+</div>
+</div>
+<div class="gloss-body">
+<div class="gloss-grid">
+<div class="gloss-card"><div class="gloss-term">Fringe Everything</div><div class="gloss-brands">Loulou de Saison &middot; Isabel Marant &middot; Dries Van Noten</div><div class="gloss-def">The #1 SS26 festival trend. Fringe creates its own breeze in Palm Springs heat. Skirts, bags, scarves, boots.</div></div>
+<div class="gloss-card"><div class="gloss-term">Scarf Tops &amp; Headwraps</div><div class="gloss-brands">Vince &middot; Tory Burch &middot; Gap</div><div class="gloss-def">Silk bandanas worn as tops, hair wraps, or neck scarves. Lightweight and sun-protective.</div></div>
+<div class="gloss-card"><div class="gloss-term">Statement Skirts</div><div class="gloss-brands">Toteme &middot; Khaite &middot; 16Arlington</div><div class="gloss-def">Bold, sculptural skirts with volume. Pairs with simple tanks in the heat.</div></div>
+<div class="gloss-card"><div class="gloss-term">Sequins &amp; Feathers</div><div class="gloss-brands">Area &middot; Retrofete &middot; Calvin Klein</div><div class="gloss-def">Nighttime power moves. At 70&deg;F desert nights, feathers and sequins feel exactly right.</div></div>
+<div class="gloss-card"><div class="gloss-term">Decorated Waists</div><div class="gloss-brands">Ashlynn &middot; Diotima &middot; Brandon Maxwell</div><div class="gloss-def">Embellished belts, corsets, and waist details. Harper&apos;s Bazaar &num;1 trend.</div></div>
+<div class="gloss-card"><div class="gloss-term">Bold Red Outerwear</div><div class="gloss-brands">Ralph Lauren &middot; WARDROBE.NYC</div><div class="gloss-def">After midnight layers when desert temps finally drop. Evening/late night only in April.</div></div>
+<div class="gloss-card"><div class="gloss-term">Animal Print</div><div class="gloss-brands">Sergio Hudson &middot; Dehanche &middot; Zara</div><div class="gloss-def">Leopard print at full volume. Wear open as a layer for maximum breathability in the heat.</div></div>
+<div class="gloss-card"><div class="gloss-term">Lapis Blue + Jewel Tones</div><div class="gloss-brands">Cotton Citizen &middot; Bottega Veneta &middot; Dior</div><div class="gloss-def">The SS26 color story. Lapis, sapphire, amethyst, emerald. Light jewel tones are cooler than darks.</div></div>
+<div class="gloss-card"><div class="gloss-term">Hot Pants &amp; Micro Denim</div><div class="gloss-brands">Lioness &middot; LaQuan Smith &middot; Area</div><div class="gloss-def">Minimum fabric = maximum cool. Literally the most heat-logical festival look ever.</div></div>
+<div class="gloss-card"><div class="gloss-term">Pom-Poms</div><div class="gloss-brands">Luar &middot; Calvin Klein &middot; Area</div><div class="gloss-def">PopSugar &num;1 accessory trend. Lightweight on bags and shoes. Adds movement without warmth.</div></div>
+<div class="gloss-card"><div class="gloss-term">Linen &amp; Chiffon</div><div class="gloss-brands">Every brand worth mentioning</div><div class="gloss-def">The Palm Springs fabrics. Everything else in daytime is secondary. Linen absorbs 20% moisture without feeling wet.</div></div>
+<div class="gloss-card"><div class="gloss-term">Balloon Silhouettes</div><div class="gloss-brands">Michael Kors &middot; Ashlyn &middot; Campillo</div><div class="gloss-def">Volume dressing at night. Works when the temperature drops and you can afford extra fabric.</div></div>
+</div>
+<div style="margin-top:16px;padding:14px 16px;background:#fff;border:1.5px solid var(--border);border-radius:var(--radius);font-size:11px;opacity:.5;line-height:1.6">
+Sources: <a href="https://www.vogue.com/article/spring-2026-fashion-trends" target="_blank" style="color:var(--warm)">Vogue SS26</a> &middot;
+<a href="https://www.harpersbazaar.com/fashion/trends/a67970766/spring-2026-fashion-trends/" target="_blank" style="color:var(--warm)">Harper&apos;s Bazaar</a> &middot;
+<a href="https://www.popsugar.com/fashion/spring-summer-fashion-trends-49274556" target="_blank" style="color:var(--warm)">PopSugar</a>
+</div>
+</div>
+</div>
+
+<footer>Coachella 2026 Lookbooks &middot; Palm Springs Heat-Approved &middot; Scout &middot; Revolve &middot; TheRealReal &middot; Zara &middot; Amazon &middot; Etsy</footer>
+
+<script>
+const PRODUCTS=[{"person": "girl", "time": "day", "dayNum": 1, "price": 495, "heat": "cool", "name": "Toteme Wide-Leg Silk Trousers — Ecru", "retailer": "Toteme", "rbcls": "other", "ret": "other", "priceDisp": "$495", "url": "https://www.google.com/search?q=Toteme+Wide-Leg+Silk+Trousers+Toteme&tbm=shop", "tags": ["Quiet Luxury", "Wide-Leg", "Silk", "Ecru", "Tall Ideal"], "desc": "The Quiet Luxury Desert move. Toteme wide-leg silk trousers in ecru — Scandinavian minimalism that reads wildly expensive and keeps you cool. Elongates tall frames perfectly.", "alt": {"text": "TRR Resale ~$200", "url": "https://www.therealreal.com/shop/women/clothing/bottoms?q=toteme+wide+leg+silk&sort=price_asc"}}, {"person": "girl", "time": "day", "dayNum": 1, "price": 425, "heat": "cool", "name": "SABLYN Silk Tunic — Bone / Sand", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$285–$425", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=sablyn+silk+tunic&sortBy=featured", "tags": ["Quiet Luxury", "Silk", "Desert Neutral", "Boho 2.0"], "desc": "SABLYN via Revolve — silk tunics in bone and sand that look 10x their price. The Gemini-approved QLD piece. Hits below the hip on tall frames, creating perfect proportions."}, {"person": "girl", "time": "day", "dayNum": 1, "price": 285, "heat": "cool", "name": "KALLMEYER Billie Tie Blouse", "retailer": "KALLMEYER", "rbcls": "other", "ret": "other", "priceDisp": "$285", "url": "https://www.google.com/search?q=KALLMEYER+Billie+Tie+Blouse+KALLMEYER&tbm=shop", "tags": ["Narrow Shoulders", "Tie Detail", "Structure", "Boho 2.0"], "desc": "For narrow shoulders: the Billie tie blouse creates the illusion of shoulder structure without pads or bulk. KALLMEYER sharp tailoring for real life."}, {"person": "girl", "time": "day", "dayNum": 1, "price": 35, "heat": "cool", "name": "Barrel Leg Linen Trousers — Olive/Pistachio", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "$35–$65", "url": "https://www.zara.com/us/en/search?q=barrel%20leg%20linen%20trousers&section=woman", "tags": ["Barrel Leg", "Linen", "Olive", "2026 Trend", "Tall Ideal"], "desc": "2026 Barrel Leg trend is made for tall frames. Pair with a structured halter top to accentuate narrow shoulders. Olive/pistachio makes blue eyes pop.", "alt": {"text": "Amazon Alt", "url": "https://www.amazon.com/s?k=women+barrel+leg+linen+trousers+wide"}}, {"person": "girl", "time": "day", "dayNum": 1, "price": 35, "heat": "cool", "name": "Structured Halter Top — Ecru or Sand", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$25–$45", "url": "https://www.amazon.com/s?k=women+structured+halter+top+ecru+sand+2026", "tags": ["Narrow Shoulders", "Halter", "Structured", "Heat Smart"], "desc": "The Elsa Hosk move: halter-neck silhouette draws the eye upward, adds structure to narrow shoulders. Pair with barrel leg trousers. Backless = cool in 100°F."}, {"person": "girl", "time": "day", "dayNum": 1, "price": 175, "heat": "cool", "name": "AMANU Sculptural Handmade Sandal", "retailer": "AMANU", "rbcls": "other", "ret": "other", "priceDisp": "$175–$350", "url": "https://www.google.com/search?q=AMANU+Sculptural+Handmade+Sandal+AMANU&tbm=shop", "tags": ["Sandal", "Sculptural", "Handmade", "Open Toe", "Heat Smart"], "desc": "AMANU handmade sculptural sandals — built for 20,000 festival steps. Comfortable enough for a full day, beautiful enough for night. The Quiet Luxury footwear answer."}, {"person": "girl", "time": "day", "dayNum": 1, "price": 25, "heat": "cool", "name": "Wide-Brim Straw Hat — Oversized", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$20–$45", "url": "https://www.amazon.com/s?k=women+wide+brim+straw+hat+oversized+festival", "tags": ["Sun Protection", "Hat", "Non-Negotiable", "Essential"], "desc": "Oversized wide-brim straw hat reads effortlessly chic in the QLD aesthetic. Non-negotiable in Palm Springs 100°F heat."}, {"person": "girl", "time": "day", "dayNum": 1, "price": 60, "heat": "cool", "name": "Linen Set — Pistachio / Olive", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "$55–$80", "url": "https://www.zara.com/us/en/search?q=linen%20set%20pistachio%20olive&section=woman", "tags": ["Linen", "Set", "Pistachio", "Blue Eyes"], "desc": "Desert neutrals — olive and pistachio make blue eyes pop. Linen two-piece set is the effortless Quiet Luxury look. Zara does this better than almost anyone at this price."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 178, "heat": "cool", "name": "Sheer Lace Maxi Duster — Cream/Sand", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$145–$245", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=sheer+lace+maxi+duster+cream&sortBy=featured", "tags": ["Boho 2.0", "Sheer", "Floor-Length", "Romee Strijd Vibe"], "desc": "The Romee Strijd 'Long & Flowy' move. Floor-grazing sheer duster celebrates height. Boho 2.0 is high-texture fabrics, not hippie — this is elevated and modern."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 248, "heat": "cool", "name": "For Love & Lemons Floral Maxi", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$248", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=for+love+lemons+floral+maxi&sortBy=featured", "tags": ["Floral", "Chiffon", "Maxi", "Boho 2.0", "Cool Fabric"], "desc": "Boho 2.0 flagship piece. Chiffon floral maxi — high-texture, fluid drapery. Hits the floor on tall frames. Choose warm neutrals or earth tones to stay in the QLD palette."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 490, "heat": "cool", "name": "Zimmermann Linen/Silk Maxi (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$380–$600", "url": "https://www.therealreal.com/shop/women/clothing/dresses?q=zimmermann+linen+maxi&sort=price_asc", "tags": ["Zimmermann", "Linen/Silk", "Resale", "Quiet Luxury"], "desc": "Zimmermann is THE Quiet Luxury Desert brand. Linen/silk maxi on TRR at half price. Rosie Huntington-Whiteley energy — one hero piece that does all the work."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 180, "heat": "cool", "name": "Isabel Marant Boho Top (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$120–$280", "url": "https://www.therealreal.com/shop/women/clothing/tops?q=isabel+marant+boho&sort=price_asc", "tags": ["Boho 2.0", "Linen/Gauze", "Resale", "Isabel Marant"], "desc": "Isabel Marant IS Boho 2.0. Linen or gauze top at TRR prices. The brand that defines chic desert festival dressing."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 60, "heat": "cool", "name": "Oversized Linen Blazer — Ecru", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "$55–$90", "url": "https://www.zara.com/us/en/search?q=oversized%20linen%20blazer%20ecru&section=woman", "tags": ["Blazer", "Oversized", "Ecru", "Narrow Shoulders", "Elsa Hosk Vibe"], "desc": "Elsa Hosk's move: oversized blazer adds upper body structure, draws the eye up. On a narrow-shouldered tall frame, this is a perfect proportion play. Linen only for daytime."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 40, "heat": "cool", "name": "Sofia Richie Desert Neutral Silk Bandana", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$15–$40", "url": "https://www.amazon.com/s?k=women+silk+bandana+scarf+desert+neutral+ecru", "tags": ["Sofia Richie Vibe", "Silk", "Desert Neutral", "Tonal"], "desc": "Sofia Richie's tonal dressing signature. Silk bandana in ecru/olive/pistachio tied in hair or as a scarf-top. The single cheapest high-fashion statement on this list."}, {"person": "girl", "time": "day", "dayNum": 2, "price": 60, "heat": "cool", "name": "UO Jade Rivet Crossbody Bag", "retailer": "Urban Outfitters", "rbcls": "uo", "ret": "other", "priceDisp": "$60", "url": "https://www.google.com/search?q=UO+Jade+Rivet+Crossbody+Bag+Urban+Outfitters&tbm=shop", "tags": ["Bag", "Crossbody", "Festival", "Minimal"], "desc": "Light crossbody — carry the essentials only. Less weight = cooler in the heat."}, {"person": "girl", "time": "day", "dayNum": 3, "price": 220, "heat": "cool", "name": "ANINE BING Silk Adley Pants — Sand", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$195–$265", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=anine+bing+silk+pants&sortBy=featured", "tags": ["ANINE BING", "Silk", "Sand", "Quiet Luxury", "Tall Ideal"], "desc": "ANINE BING Adley pants in sand — Revolve Quiet Luxury edit. Silk wide-leg in desert neutrals. Looks wildly expensive, stays cool. Rosie Huntington-Whiteley's hero texture.", "alt": {"text": "TRR Resale", "url": "https://www.therealreal.com/shop/women/clothing/bottoms?q=anine+bing+pants&sort=price_asc"}}, {"person": "girl", "time": "day", "dayNum": 3, "price": 188, "heat": "cool", "name": "Lovers + Friends Wide-Leg Linen Set", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$188", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=lovers+friends+linen+set&sortBy=featured", "tags": ["Linen", "Wide-Leg", "Set", "Quiet Luxury", "Cool Fabric"], "desc": "Linen two-piece in a desert neutral — the Quiet Luxury equivalent of a matching set. Linen wide-legs create a chimney cooling effect."}, {"person": "girl", "time": "day", "dayNum": 3, "price": 65, "heat": "cool", "name": "Zara Belted Linen Wide-Leg Jumpsuit — Ecru", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$65", "url": "https://www.zara.com/us/en/search?q=belted%20linen%20wide-leg%20jumpsuit&section=woman", "tags": ["Linen", "Jumpsuit", "Ecru", "Quiet Luxury", "Perfect Fabric"], "desc": "Linen jumpsuit in ecru or oatmeal — one piece that requires zero thought and looks completely intentional. The Alix Earle effortless QLD look."}, {"person": "girl", "time": "day", "dayNum": 3, "price": 228, "heat": "cool", "name": "Camila Coelho Fringe Crop + Skirt Set", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$228", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=camila+coelho+fringe&sortBy=featured", "tags": ["Fringe", "Crop Top", "Set", "Boho 2.0"], "desc": "Boho 2.0 two-piece. Crop top exposes midriff (cooler in heat), fringe skirt creates its own breeze. More editorial than any one-piece."}, {"person": "girl", "time": "day", "dayNum": 3, "price": 45, "heat": "cool", "name": "Sheer Silk Kimono Cover-Up — Cream", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$25–$55", "url": "https://www.amazon.com/s?k=women+sheer+silk+kimono+cover+up+cream+festival", "tags": ["Cover-Up", "Sheer", "Kimono", "Sun Protection", "Boho 2.0"], "desc": "Sheer silk kimono over a minimal base — shoulder sun protection AND the Boho 2.0 drape effect. Long on tall frames."}, {"person": "girl", "time": "day", "dayNum": 3, "price": 17, "heat": "cool", "name": "JASGOOD Wide Elastic Stretch Belt", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$17", "url": "https://www.amazon.com/JASGOOD-Fashion-Vintage-Interlock-Halloween/dp/B0BGC4WM9W/", "tags": ["Belt", "Decorated Waist", "SS26 Trend"], "desc": "Cinch the linen set or jumpsuit. SS26 Decorated Waist trend. Elastic means no hot metal hardware in the sun."}, {"person": "girl", "time": "day", "dayNum": 3, "price": 30, "heat": "cool", "name": "Festival Crochet Bag (Etsy)", "retailer": "Etsy", "rbcls": "etsy", "ret": "boutique", "priceDisp": "$25–$60", "url": "https://www.etsy.com/search?q=women+crochet+festival+bag+coachella", "tags": ["Bag", "Crochet", "Lightweight", "Boho 2.0"], "desc": "Open-weave crochet bag — ventilation built in AND on-trend for Boho 2.0. The natural fiber bag completes the QLD aesthetic.", "alt": {"text": "Amazon Alt", "url": "https://www.amazon.com/s?k=women+crochet+tote+bag+festival+boho"}}, {"person": "girl", "time": "night", "dayNum": 1, "price": 228, "heat": "cool", "name": "Retrofete Nicole Sequin Mini Dress", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$228", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=retrofete+sequin+mini&sortBy=featured", "tags": ["Sequins", "Mini", "Night", "Quiet Glam"], "desc": "Quiet Luxury goes Glam at night. Retrofete sequin mini — elevated, not costume-y. The 5'10\" length is exactly right."}, {"person": "girl", "time": "night", "dayNum": 1, "price": 195, "heat": "cool", "name": "Lamarque Triana Feather Dress", "retailer": "Nordstrom", "rbcls": "nordstrom", "ret": "nordstrom", "priceDisp": "$195", "url": "https://www.nordstrom.com/sr?origin=keywordsearch&keyword=lamarque+feather+dress", "tags": ["Feathers", "Night", "Elevated", "75% Off"], "desc": "Nights in Palm Springs are 70-75°F — feather dresses come alive. Quiet Luxury festival night energy."}, {"person": "girl", "time": "night", "dayNum": 1, "price": 220, "heat": "cool", "name": "ANINE BING Satin Slip Dress — Champagne", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$195–$265", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=anine+bing+satin+slip+dress&sortBy=featured", "tags": ["Satin", "Slip", "ANINE BING", "Night", "Quiet Luxury Glam"], "desc": "ANINE BING satin slip in champagne — the Sofia Richie Grainge night look. Quiet Luxury at its purest. Looks incredible against blonde hair and blue eyes."}, {"person": "girl", "time": "night", "dayNum": 1, "price": 26, "heat": "cool", "name": "Oversized Chandelier Earrings — Gold", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$18–$35", "url": "https://www.amazon.com/s?k=oversized+chandelier+earrings+festival+gold", "tags": ["Jewelry", "Night", "Zero Fabric", "Lightweight"], "desc": "Big earrings are the zero-heat-impact statement piece. Gold drops against blonde hair = effortless QLD night glamour."}, {"person": "girl", "time": "night", "dayNum": 1, "price": 675, "heat": "evening", "name": "Dries Van Noten Embellished Fringe Scarf", "retailer": "Bergdorf Goodman", "rbcls": "bergdorf", "ret": "other", "priceDisp": "$675", "url": "https://www.bergdorfgoodman.com/p/dries-van-noten-folds-embellished-fringe-scarf-prod193570080", "tags": ["Fringe", "Accessory", "Splurge", "Evening", "SS26 Trend #1"], "desc": "Silk fringe scarf draped at 70°F desert nights — the Boho 2.0 drape moment that Vogue called SS26 trend #1.", "alt": {"text": "Amazon Alt", "url": "https://www.amazon.com/s?k=fringe+embellished+scarf+women+festival"}}, {"person": "girl", "time": "night", "dayNum": 2, "price": 258, "heat": "cool", "name": "Lovers + Friends Sequin Fringe Mini", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$258", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=lovers+friends+sequin+fringe+mini&sortBy=featured", "tags": ["Sequins", "Fringe", "Mini", "Night", "Boho 2.0 Glam"], "desc": "Sequin + fringe — the double SS26 trend. Mini = cool in lingering evening heat. Boho 2.0 at night means glamorous, not rustic."}, {"person": "girl", "time": "night", "dayNum": 2, "price": 1261, "heat": "evening", "name": "16Arlington Vada Feather Midi Skirt", "retailer": "Moda Operandi", "rbcls": "moda", "ret": "other", "priceDisp": "$1,261", "url": "https://www.modaoperandi.com/women/p/16arlington/vada-midi-skirt/610866", "tags": ["Feathers", "Splurge", "Evening", "Statement"], "desc": "Feather midi skirt + simple black tank = the editorial Quiet Luxury night moment. At 70°F evenings this is perfect."}, {"person": "girl", "time": "night", "dayNum": 2, "price": 178, "heat": "cool", "name": "The Jetset Diaries Faraway Maxi", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$178", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=jetset+diaries+faraway+maxi&sortBy=featured", "tags": ["Maxi", "Chiffon", "Boho 2.0", "Night", "Long & Flowy"], "desc": "Romee Strijd 'Long & Flowy' energy. Floaty chiffon maxi built for desert nights — the breeze through chiffon at 70°F is unbeatable."}, {"person": "girl", "time": "night", "dayNum": 2, "price": 70, "heat": "cool", "name": "Zara Embellished Strappy Satin Mini", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$70", "url": "https://www.zara.com/us/en/search?q=embellished%20strappy%20satin%20mini&section=woman", "tags": ["Satin", "Mini", "Strappy", "Night", "Quiet Glam"], "desc": "Strappy satin mini — Alix Earle Industrial Sleek meets desert night. Rhinestone detail. Minimal fabric for warm evenings."}, {"person": "girl", "time": "night", "dayNum": 2, "price": 35, "heat": "cool", "name": "Rhinestone Body Chain", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$18–$40", "url": "https://www.amazon.com/s?k=women+rhinestone+body+chain+festival", "tags": ["Jewelry", "Night", "Zero Fabric", "Statement"], "desc": "Body chain over bare skin — zero extra heat, maximum impact. The QLD night accessory that replaces a top."}, {"person": "girl", "time": "night", "dayNum": 3, "price": 158, "heat": "cool", "name": "Lulus Satin Slip Midi — Champagne", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$158", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=lulus+satin+slip+midi&sortBy=featured", "tags": ["Satin", "Slip", "Midi", "Night", "Quiet Luxury Glam"], "desc": "Satin slip midi in champagne — Toteme meets festival. Quiet Luxury finale night. Khaite/Toteme aesthetic at Revolve prices."}, {"person": "girl", "time": "night", "dayNum": 3, "price": 248, "heat": "cool", "name": "Jonathan Simkhai Strappy Bodycon Midi", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$248", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=jonathan+simkhai+strappy+bodycon&sortBy=featured", "tags": ["Bodycon", "Strappy", "Night", "Sculptural"], "desc": "Strappy bodycon midi — the 80s-inspired sculptural silhouette Gemini flagged. Structured, minimal, and very long on a 5'10\" frame."}, {"person": "girl", "time": "night", "dayNum": 3, "price": 90, "heat": "cool", "name": "Steve Madden Platform Sandal — Gold/Nude", "retailer": "Revolve", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$75–$120", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=steve+madden+platform+sandal&sortBy=featured", "tags": ["Sandal", "Platform", "Gold/Nude", "Open Toe", "Heat Smart"], "desc": "Platform sandal in gold or nude elongates without towering. Open toe = heat-smart. Gold catches the stage lights perfectly."}, {"person": "girl", "time": "night", "dayNum": 3, "price": 180, "heat": "cool", "name": "FUB Organic Cotton Rib Jumper — Ecru", "retailer": "FUB", "rbcls": "other", "ret": "other", "priceDisp": "$120–$200", "url": "https://www.google.com/search?q=FUB+Organic+Cotton+Rib+Jumper+FUB&tbm=shop", "tags": ["FUB", "Organic Cotton", "Evening Layer", "Ecru", "QLD Cozy"], "desc": "FUB Danish organic cotton rib knit for the 67°F evening drop on Night 3. The QLD cozy layer that still looks expensive. Ecru flatters blonde/blue eyes.", "alt": {"text": "Amazon Alt", "url": "https://www.amazon.com/s?k=women+ribbed+cotton+knit+sweater+ecru+cream"}}, {"person": "girl", "time": "night", "dayNum": 3, "price": 35, "heat": "cool", "name": "Metallic Clutch — Gold", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$25–$55", "url": "https://www.amazon.com/s?k=women+metallic+gold+clutch+bag+festival+evening", "tags": ["Bag", "Night", "Minimal", "Gold"], "desc": "Minimal gold clutch — carry only the essentials. Gold metallics against ecru and champagne = QLD night palette perfection."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 148, "heat": "cool", "name": "RVCA Wide-Leg Linen Pant", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$148", "url": "https://www.rvca.com/search?q=wide+leg+linen+pant&type=product", "tags": ["Wide-Leg", "Linen", "Perfect Fabric"], "desc": "Linen wide-leg is the single best trouser for Palm Springs heat. Wide legs create a chimney airflow effect."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 128, "heat": "cool", "name": "Rails Lennox Linen-Blend Shirt", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$128", "url": "https://www.rails.com/search?q=lennox+linen&type=product", "tags": ["Linen", "Shirt", "Breathable", "Perfect Fabric"], "desc": "Rails linen-blend is extremely breathable. Wear loose and unbuttoned. Linen absorbs up to 20% moisture without feeling wet."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 50, "heat": "cool", "name": "ASOS Wide-Leg Linen Trousers (Tall)", "retailer": "ASOS", "rbcls": "asos", "ret": "other", "priceDisp": "~$55", "url": "https://www.asos.com/us/men/search/?q=wide+leg+linen+trousers&refine=fit:14", "tags": ["Wide-Leg", "Linen", "Tall Fit", "Perfect Fabric"], "desc": "ASOS Tall filter = extra inseam. Budget linen wide-leg. Bring two pairs — swap at midday."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 30, "heat": "cool", "name": "Vintage Rectangle Sunglasses", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$20–$40", "url": "https://www.amazon.com/s?k=men+retro+rectangle+sunglasses+UV400+narrow+festival", "tags": ["Sunglasses", "UV Protection", "Essential"], "desc": "UV400 protection is non-negotiable in Palm Springs. Slim rectangular frames — premium-looking under $50."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 25, "heat": "cool", "name": "Men's Wide-Brim Straw Hat", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$20–$50", "url": "https://www.amazon.com/s?k=men+wide+brim+straw+hat+festival+packable", "tags": ["Sun Protection", "Hat", "Non-Negotiable", "Essential"], "desc": "Non-negotiable in 100°F heat. Wide-brim straw hats save you from heatstroke AND look great."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 50, "heat": "cool", "name": "Zara Printed Linen Overshirt", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$50", "url": "https://www.zara.com/us/en/search?q=printed+linen+overshirt&section=man", "tags": ["Linen", "Print", "Overshirt", "Perfect Fabric"], "desc": "Wear open over a tank. Linen overshirt provides shoulder sun protection while staying breathable."}, {"person": "guy1", "time": "day", "dayNum": 1, "price": 40, "heat": "cool", "name": "Lightweight Cotton-Linen Tank", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$15–$40", "url": "https://www.amazon.com/s?k=men+linen+cotton+sleeveless+tank+white+breathable", "tags": ["Tank", "Linen", "Base Layer", "Cool Tip"], "desc": "Your base layer matters most in the heat. A white linen tank under an open shirt keeps you 5-10°F cooler than a regular tee."}, {"person": "guy1", "time": "day", "dayNum": 2, "price": 168, "heat": "cool", "name": "AllSaints Riviera Floral Shirt", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$168", "url": "https://www.allsaints.com/search/?q=riviera+floral+shirt&gender=male", "tags": ["Floral", "Shirt", "Viscose", "Cool Fabric"], "desc": "AllSaints uses viscose/rayon blends — incredibly lightweight and breathable. Wear completely unbuttoned over a tank."}, {"person": "guy1", "time": "day", "dayNum": 2, "price": 178, "heat": "cool", "name": "Barney Cools Cabo Trouser — Ecru", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$178", "url": "https://barneycools.com/search?q=cabo+trouser&type=product", "tags": ["Wide-Leg", "Ecru", "Breathable", "Heat Smart"], "desc": "Ecru/light color reflects heat. Wide-leg creates airflow. Barney Cools in cotton twill or linen blend."}, {"person": "guy1", "time": "day", "dayNum": 2, "price": 265, "heat": "cool", "name": "Etro Paisley Silk Shirt (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$180–$350", "url": "https://www.therealreal.com/shop/men/clothing/tops-shirts?q=etro+paisley+silk+shirt&sort=price_asc", "tags": ["Silk", "Print", "Breathable", "Resale", "Cool Fabric"], "desc": "Silk is one of the coolest fabrics for heat — regulates temperature naturally. Etro on TRR at half price."}, {"person": "guy1", "time": "day", "dayNum": 2, "price": 17, "heat": "cool", "name": "JASGOOD Wide Elastic Stretch Belt", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$17", "url": "https://www.amazon.com/JASGOOD-Fashion-Vintage-Interlock-Halloween/dp/B0BGC4WM9W/", "tags": ["Belt", "Decorated Waist", "SS26"], "desc": "Belt the trousers. Elastic means no hot metal buckle sitting on your skin in the sun."}, {"person": "guy1", "time": "day", "dayNum": 2, "price": 65, "heat": "cool", "name": "Zara Animal Print Button-Down", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$65", "url": "https://www.zara.com/us/en/search?q=animal+print+button+down+shirt&section=man", "tags": ["Animal Print", "Shirt", "Wear Open"], "desc": "Wear completely open over a white tank. Leopard print open over white tank in palm springs heat = effortless."}, {"person": "guy1", "time": "day", "dayNum": 2, "price": 55, "heat": "cool", "name": "Woven Raffia Festival Bag (Etsy)", "retailer": "Etsy", "rbcls": "etsy", "ret": "boutique", "priceDisp": "$30–$80", "url": "https://www.etsy.com/search?q=mens+woven+raffia+shoulder+bag+festival", "tags": ["Bag", "Woven", "Ventilated"], "desc": "Open-weave raffia bag breathes — no heat trapping. Etsy makers do this best."}, {"person": "guy1", "time": "day", "dayNum": 3, "price": 138, "heat": "cool", "name": "Obey Linen Pull-On Trouser", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$138", "url": "https://obeyclothing.com/search?q=linen+pull+on+trouser&type=product", "tags": ["Linen", "Pull-On", "Perfect Fabric"], "desc": "Linen pull-on with no waistband digging into you in the heat. Maximum comfort for Day 3."}, {"person": "guy1", "time": "day", "dayNum": 3, "price": 158, "heat": "cool", "name": "Scotch & Soda Stripe Linen Shirt", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$158", "url": "https://www.scotch-soda.com/us/en/men/shirts/casual-shirts/?q=linen+stripe", "tags": ["Stripe", "Linen", "Classic", "Perfect Fabric"], "desc": "White/light stripes on linen = the most heat-efficient daywear combination."}, {"person": "guy1", "time": "day", "dayNum": 3, "price": 395, "heat": "cool", "name": "TWP Next Morning Oversized Poplin Shirt", "retailer": "NET-A-PORTER", "rbcls": "net", "ret": "other", "priceDisp": "$395", "url": "https://www.net-a-porter.com/en-us/shop/product/the-way-things-are/clothing/shirts/next-morning-oversized-cotton-shirt/27741038596546786", "tags": ["Poplin", "Oversized", "Cotton", "Cool Fabric"], "desc": "Poplin cotton is surprisingly cool — lightweight, soft, and breezy when oversized and loose."}, {"person": "guy1", "time": "day", "dayNum": 3, "price": 115, "heat": "cool", "name": "Sand Suede Loafer", "retailer": "Bloomingdale's", "rbcls": "bloom", "ret": "other", "priceDisp": "$80–$150", "url": "https://www.bloomingdales.com/shop/mens/shoes-loafers?id=10312", "tags": ["Shoes", "Loafer", "Sand", "Heat Smart"], "desc": "Sand/light color reflects heat. Suede breathes better than leather. Or swap for an open sandal."}, {"person": "guy1", "time": "day", "dayNum": 3, "price": 45, "heat": "cool", "name": "Cotton-Linen V-Neck Tied at Waist", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$30–$60", "url": "https://www.amazon.com/s?k=men+lightweight+linen+cotton+vneck+sweater+festival", "tags": ["Cotton-Linen", "Tied", "Layer", "Heat Smart"], "desc": "Cotton-linen blend tied at the waist — the runway layering move without the heat of cashmere."}, {"person": "guy1", "time": "night", "dayNum": 1, "price": 60, "heat": "cool", "name": "Lightweight Sequin Polo — Cotton Base", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$30–$80", "url": "https://www.amazon.com/s?k=men+sequin+polo+shirt+cotton+lightweight+festival", "tags": ["Sequins", "Night", "Lightweight", "Evening"], "desc": "Amazon has excellent lightweight sequin polo options — look for cotton/acrylic base (not mohair/wool) for 75°F nights."}, {"person": "guy1", "time": "night", "dayNum": 1, "price": 631, "heat": "evening", "name": "WARDROBE.NYC Red Trench Coat (58% off)", "retailer": "FWRD", "rbcls": "fwrd", "ret": "other", "priceDisp": "$631", "url": "https://www.fwrd.com/product-wardrobenyc-trench-coat-in-red/WNYF-WO75/", "tags": ["Red Outerwear", "Trench", "Late Evening"], "desc": "Late evening only — when it dips below 70°F after midnight. Harper's Bazaar SS26 trend #1."}, {"person": "guy1", "time": "night", "dayNum": 1, "price": 50, "heat": "cool", "name": "ASOS Slim Dark Trousers (Tall)", "retailer": "ASOS", "rbcls": "asos", "ret": "other", "priceDisp": "~$50", "url": "https://www.asos.com/us/men/search/?q=slim+dark+smart+trousers&refine=fit:14", "tags": ["Trousers", "Tall Fit", "Night", "Evening"], "desc": "Lightweight dark trousers for night. ASOS Tall has extra inseam. Let the top do the talking."}, {"person": "guy1", "time": "night", "dayNum": 1, "price": 550, "heat": "cool", "name": "Tom Ford Silk Button-Down (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$400–$700", "url": "https://www.therealreal.com/shop/men/clothing/tops-shirts?q=tom+ford+silk+shirt&sort=price_asc", "tags": ["Silk", "Luxe", "Night", "Resale", "Evening"], "desc": "Silk is excellent at 75°F nights — regulates temperature, drapes beautifully, catches the light."}, {"person": "guy1", "time": "night", "dayNum": 1, "price": 80, "heat": "cool", "name": "Zara Lightweight Satin Blazer", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$80–$100", "url": "https://www.zara.com/us/en/search?q=satin+blazer&section=man", "tags": ["Blazer", "Satin", "Lightweight", "Evening Smart"], "desc": "Lightweight satin blazer — NOT velvet (too warm). Satin reflects rather than absorbs heat. Worn open."}, {"person": "guy1", "time": "night", "dayNum": 2, "price": 248, "heat": "cool", "name": "Ksubi Embellished Denim Jacket", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$248", "url": "https://ksubi.com/search?q=denim+jacket&type=product", "tags": ["Denim", "Jacket", "Late Evening"], "desc": "Best after 10pm when it dips toward 68°F. Carry it until needed."}, {"person": "guy1", "time": "night", "dayNum": 2, "price": 178, "heat": "cool", "name": "John Varvatos Silk-Blend Burnout Shirt", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$178", "url": "https://www.johnvarvatos.com/search?q=silk+burnout+shirt", "tags": ["Silk", "Burnout", "Night", "Evening"], "desc": "Burnout technique = sheer sections = extra ventilation. Perfect for warm desert nights."}, {"person": "guy1", "time": "night", "dayNum": 2, "price": 55, "heat": "cool", "name": "ASOS Satin Wide-Leg Trousers (Tall)", "retailer": "ASOS", "rbcls": "asos", "ret": "other", "priceDisp": "~$55", "url": "https://www.asos.com/us/men/search/?q=satin+wide+leg+trousers&refine=fit:14", "tags": ["Satin", "Wide-Leg", "Night", "Evening"], "desc": "Satin wide-leg — breathable, cool, and the leg volume looks incredible at night. ASOS Tall for inseam."}, {"person": "guy1", "time": "night", "dayNum": 2, "price": 200, "heat": "cool", "name": "Chelsea Boot — Platform Leather", "retailer": "Nordstrom", "rbcls": "nordstrom", "ret": "nordstrom", "priceDisp": "$100–$300", "url": "https://www.nordstrom.com/sr?origin=keywordsearch&keyword=mens+chelsea+boot+platform", "tags": ["Boots", "Night", "Platform", "Evening"], "desc": "Boots make sense at night when it's 70°F. 1-1.5 inch heel elongates tall silhouette."}, {"person": "guy1", "time": "night", "dayNum": 3, "price": 188, "heat": "cool", "name": "Linen or Satin Blazer — Evening", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$188", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=mens+satin+linen+blazer+evening&sortBy=featured", "tags": ["Linen/Satin", "Blazer", "Night", "Evening Smart"], "desc": "Linen or satin blazer via Revolve Men — NOT velvet. Worn open over a tee. Elevated and stays comfortable."}, {"person": "guy1", "time": "night", "dayNum": 3, "price": 168, "heat": "cool", "name": "AllSaints Satin Shirt — Night", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$168", "url": "https://www.allsaints.com/search/?q=satin+shirt&gender=male", "tags": ["Satin", "Shirt", "Night", "Evening"], "desc": "Satin shirt reflects stage lights at night. Cool to the touch. Revolve Men."}, {"person": "guy1", "time": "night", "dayNum": 3, "price": 600, "heat": "cool", "name": "Dries Van Noten Printed Jacket (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$400–$800", "url": "https://www.therealreal.com/shop/men/clothing?q=dries+van+noten+jacket&sort=price_asc", "tags": ["Print", "Jacket", "Resale", "Evening"], "desc": "Dries Van Noten printed jacket on TRR. The 10pm entrance statement piece."}, {"person": "guy1", "time": "night", "dayNum": 3, "price": 42, "heat": "cool", "name": "Men's Festival Fringe Scarf (Etsy)", "retailer": "Etsy", "rbcls": "etsy", "ret": "boutique", "priceDisp": "$25–$60", "url": "https://www.etsy.com/search?q=mens+festival+fringe+scarf+boho", "tags": ["Fringe", "Accessory", "Light Layer", "Evening"], "desc": "Lightweight fringe scarf for 68-72°F nights — enough warmth without overheating."}, {"person": "guy2", "time": "day", "dayNum": 1, "price": 24, "heat": "cool", "name": "Soamat Striped Color Block Polo", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$24", "url": "https://www.amazon.com/Soamat-Sweatshirt-Oversized-Corllared-Pullover/dp/B0FNX1MT2W/", "tags": ["Stripes", "Polo", "Cotton", "Morning/Evening"], "desc": "Cotton-blend polo — best for morning arrival or evening. In 90°F+ midday, wear open over a linen tank. $24."}, {"person": "guy2", "time": "day", "dayNum": 1, "price": 148, "heat": "cool", "name": "Barney Cools B.Relaxed Linen Trouser", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$148", "url": "https://barneycools.com/search?q=relaxed+linen+trouser&type=product", "tags": ["Linen", "Wide-Leg", "Perfect Fabric"], "desc": "Barney Cools linen trouser — linen wide-leg is the single best trouser for Palm Springs."}, {"person": "guy2", "time": "day", "dayNum": 1, "price": 65, "heat": "cool", "name": "Zara Animal Print Button-Down", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$65", "url": "https://www.zara.com/us/en/search?q=animal+print+button+down+shirt&section=man", "tags": ["Animal Print", "Shirt", "Wear Open"], "desc": "Wear fully open over a white linen tank. Animal print open shirt + linen trousers in Palm Springs = the perfect look."}, {"person": "guy2", "time": "day", "dayNum": 1, "price": 17, "heat": "cool", "name": "JASGOOD Wide Elastic Stretch Belt", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$17", "url": "https://www.amazon.com/JASGOOD-Fashion-Vintage-Interlock-Halloween/dp/B0BGC4WM9W/", "tags": ["Belt", "Decorated Waist", "SS26"], "desc": "Belt the trousers. Elastic avoids hot metal buckle hardware in direct sun. Under $20."}, {"person": "guy2", "time": "day", "dayNum": 1, "price": 25, "heat": "cool", "name": "Men's Wide-Brim Straw Hat", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$20–$50", "url": "https://www.amazon.com/s?k=men+wide+brim+straw+hat+festival+packable", "tags": ["Sun Protection", "Hat", "Non-Negotiable", "Essential"], "desc": "Non-negotiable in Palm Springs 100°F. Wide-brim straw hats are the single most important heat management tool."}, {"person": "guy2", "time": "day", "dayNum": 1, "price": 55, "heat": "cool", "name": "Woven Raffia Festival Bag (Etsy)", "retailer": "Etsy", "rbcls": "etsy", "ret": "boutique", "priceDisp": "$30–$80", "url": "https://www.etsy.com/search?q=mens+woven+raffia+shoulder+bag+festival", "tags": ["Bag", "Woven", "Ventilated"], "desc": "Open-weave raffia breathes. Carry only essentials — less weight = cooler body temp."}, {"person": "guy2", "time": "day", "dayNum": 2, "price": 168, "heat": "cool", "name": "Rails Claude Linen Shirt — Stripe", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$168", "url": "https://www.rails.com/search?q=claude+linen+stripe&type=product", "tags": ["Stripe", "Linen", "Perfect Fabric"], "desc": "Rails linen stripe shirt — as close to wearing nothing as you can get while still wearing a shirt. Perfect for 95°F."}, {"person": "guy2", "time": "day", "dayNum": 2, "price": 300, "heat": "cool", "name": "Etro Paisley Wide-Leg Trousers (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$200–$400", "url": "https://www.therealreal.com/shop/men/clothing/bottoms?q=etro+paisley+wide+leg&sort=price_asc", "tags": ["Print", "Wide-Leg", "Silk/Cotton", "Resale", "Cool Fabric"], "desc": "Etro uses silk-cotton blends on wide-leg styles — cool, printed, elegant. TRR resale price."}, {"person": "guy2", "time": "day", "dayNum": 2, "price": 45, "heat": "cool", "name": "ASOS Relaxed Linen Wide-Leg (Tall)", "retailer": "ASOS", "rbcls": "asos", "ret": "other", "priceDisp": "~$45", "url": "https://www.asos.com/us/men/search/?q=relaxed+linen+wide+leg+trousers&refine=fit:14", "tags": ["Linen", "Wide-Leg", "Tall Fit", "Perfect Fabric"], "desc": "Drawstring linen wide-leg with extra inseam in Tall sizing. The most heat-logical daywear trouser."}, {"person": "guy2", "time": "day", "dayNum": 2, "price": 70, "heat": "cool", "name": "Zara Embroidered Open Shirt", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$70", "url": "https://www.zara.com/us/en/search?q=embroidered+open+shirt&section=man", "tags": ["Embroidered", "Shirt", "Cotton", "Cool Fabric"], "desc": "Zara embroidered cotton shirt — wear loose and open. Embroidery adds texture and breathability."}, {"person": "guy2", "time": "day", "dayNum": 2, "price": 30, "heat": "cool", "name": "Vintage Rectangle Sunglasses", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$20–$40", "url": "https://www.amazon.com/s?k=men+retro+rectangle+sunglasses+UV400+narrow+festival", "tags": ["Sunglasses", "UV Protection", "Essential"], "desc": "UV400 essential. Slim rectangular frames. Premium-looking under $50."}, {"person": "guy2", "time": "day", "dayNum": 3, "price": 138, "heat": "cool", "name": "RVCA Chino Short — Tan", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$138", "url": "https://www.rvca.com/search?q=chino+short+tan&type=product", "tags": ["Shorts", "Chino", "Tan", "Maximum Cool"], "desc": "Day 3 energy: shorts. Tan/light color reflects heat. Less fabric = cooler. Desert-logical choice."}, {"person": "guy2", "time": "day", "dayNum": 3, "price": 148, "heat": "cool", "name": "Banks Journal Graphic Tee", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$148", "url": "https://banksjournalco.com/search?q=graphic+tee&type=product", "tags": ["Graphic", "Tee", "Cotton", "Cool Tip"], "desc": "Simple cotton tee is the most breathable top. Graphic tee as a statement piece. Wear loose."}, {"person": "guy2", "time": "day", "dayNum": 3, "price": 45, "heat": "cool", "name": "Zara Men's Bermuda Linen Short", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$45", "url": "https://www.zara.com/us/en/search?q=bermuda+linen+short&section=man", "tags": ["Shorts", "Linen", "Perfect Fabric"], "desc": "Linen bermuda short — the single best daywear fabric in the heat. Relaxed fit."}, {"person": "guy2", "time": "day", "dayNum": 3, "price": 35, "heat": "cool", "name": "Cotton-Linen V-Neck Tied at Waist", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$30–$60", "url": "https://www.amazon.com/s?k=men+lightweight+linen+cotton+vneck+sweater+festival", "tags": ["Cotton-Linen", "Tied", "Layer", "Heat Smart"], "desc": "Cotton-linen blend tied at the waist over shorts. The editorial look without the heat penalty."}, {"person": "guy2", "time": "day", "dayNum": 3, "price": 115, "heat": "cool", "name": "Sand Open-Toe Sandal or Loafer", "retailer": "Bloomingdale's", "rbcls": "bloom", "ret": "other", "priceDisp": "$80–$150", "url": "https://www.amazon.com/s?k=men+open+toe+leather+sandal+tan+brown+festival", "tags": ["Sandal", "Open Toe", "Sand", "Heat Smart"], "desc": "Open-toe or ventilated footwear for Day 3 — your feet generate significant body heat."}, {"person": "guy2", "time": "night", "dayNum": 1, "price": 120, "heat": "cool", "name": "Printed Silk Festival Shirt (Etsy)", "retailer": "Etsy", "rbcls": "etsy", "ret": "boutique", "priceDisp": "$60–$180", "url": "https://www.etsy.com/search?q=mens+printed+silk+festival+shirt+coachella", "tags": ["Silk", "Print", "Evening"], "desc": "Silk shirt for the night — regulates temperature beautifully at 70-75°F. Boutique makers do extraordinary prints."}, {"person": "guy2", "time": "night", "dayNum": 1, "price": 55, "heat": "cool", "name": "ASOS Satin Wide-Leg Trousers (Tall)", "retailer": "ASOS", "rbcls": "asos", "ret": "other", "priceDisp": "~$55", "url": "https://www.asos.com/us/men/search/?q=satin+wide+leg+trousers&refine=fit:14", "tags": ["Satin", "Wide-Leg", "Night", "Evening"], "desc": "Satin wide-leg in a jewel tone. The night look that works in 70°F without overheating."}, {"person": "guy2", "time": "night", "dayNum": 1, "price": 80, "heat": "cool", "name": "Zara Lightweight Satin Blazer", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$80", "url": "https://www.zara.com/us/en/search?q=satin+blazer&section=man", "tags": ["Blazer", "Satin", "Lightweight", "Evening Smart"], "desc": "Lightweight satin blazer worn open — NOT velvet. The heat-smart blazer choice for warm desert nights."}, {"person": "guy2", "time": "night", "dayNum": 1, "price": 200, "heat": "cool", "name": "Chelsea Boot — Platform Leather", "retailer": "Nordstrom", "rbcls": "nordstrom", "ret": "nordstrom", "priceDisp": "$100–$300", "url": "https://www.nordstrom.com/sr?origin=keywordsearch&keyword=mens+chelsea+boot+platform", "tags": ["Boots", "Night", "Platform", "Evening"], "desc": "70°F nights are boot-appropriate. Chelsea or slight platform. Looks incredible on tall frames."}, {"person": "guy2", "time": "night", "dayNum": 1, "price": 55, "heat": "cool", "name": "Floral Print Long Kimono Jacket", "retailer": "Amazon", "rbcls": "amazon", "ret": "amazon", "priceDisp": "$30–$80", "url": "https://www.amazon.com/s?k=men+floral+print+long+kimono+open+front+jacket+festival", "tags": ["Kimono", "Print", "Light Layer", "Evening"], "desc": "Long floral kimono worn open. Lightweight — perfect for 70°F nights. Extended lengths for tall guys."}, {"person": "guy2", "time": "night", "dayNum": 2, "price": 248, "heat": "cool", "name": "Ksubi Denim Jacket — Indigo Wash", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$248", "url": "https://ksubi.com/search?q=denim+jacket+indigo&type=product", "tags": ["Denim", "Jacket", "Late Evening"], "desc": "Ksubi denim jacket for after 10pm when temps dip. Carry it until needed — the 'arrived late looking perfect' layer."}, {"person": "guy2", "time": "night", "dayNum": 2, "price": 178, "heat": "cool", "name": "John Varvatos Burnout Tee", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$178", "url": "https://www.johnvarvatos.com/search?q=burnout+tee", "tags": ["Burnout", "Tee", "Night", "Evening"], "desc": "Burnout tee = semi-sheer sections = extra ventilation. Rock-and-roll night energy that stays cool."}, {"person": "guy2", "time": "night", "dayNum": 2, "price": 600, "heat": "evening", "name": "Dries Van Noten Printed Jacket (Resale)", "retailer": "TheRealReal", "rbcls": "trr", "ret": "trr", "priceDisp": "$400–$800", "url": "https://www.therealreal.com/shop/men/clothing?q=dries+van+noten+jacket&sort=price_asc", "tags": ["Print", "Jacket", "Resale", "Late Evening"], "desc": "Dries Van Noten printed jacket from TRR — wear after 10pm or in an air-conditioned venue. The statement entrance."}, {"person": "guy2", "time": "night", "dayNum": 2, "price": 45, "heat": "cool", "name": "Zara Satin Wide-Leg Trouser", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$65", "url": "https://www.zara.com/us/en/search?q=satin+wide+leg+trouser&section=man", "tags": ["Satin", "Wide-Leg", "Night", "Evening"], "desc": "Zara satin trouser — cool to the touch, elevated look. Best value night trouser on the market."}, {"person": "guy2", "time": "night", "dayNum": 2, "price": 675, "heat": "cool", "name": "Dries Van Noten Fringe Scarf", "retailer": "Bergdorf Goodman", "rbcls": "bergdorf", "ret": "other", "priceDisp": "$675", "url": "https://www.bergdorfgoodman.com/p/dries-van-noten-folds-embellished-fringe-scarf-prod193570080", "tags": ["Fringe", "Accessory", "Silk", "Evening"], "desc": "Silk fringe scarf for 70°F desert nights — moves in the breeze. Vogue SS26 trend #1."}, {"person": "guy2", "time": "night", "dayNum": 3, "price": 188, "heat": "cool", "name": "Embroidered Lightweight Jacket", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$188", "url": "https://www.revolve.com/r/Search.jsp?navsrc=main&q=mens+embroidered+lightweight+jacket+festival&sortBy=featured", "tags": ["Embroidered", "Jacket", "Night", "Evening"], "desc": "Embroidered jacket via Revolve Men. Look for linen or lightweight cotton construction for warm nights."}, {"person": "guy2", "time": "night", "dayNum": 3, "price": 168, "heat": "cool", "name": "AllSaints Silk Blend Button-Down", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$168", "url": "https://www.allsaints.com/search/?q=silk+blend+shirt&gender=male", "tags": ["Silk", "Shirt", "Night", "Evening"], "desc": "AllSaints silk blend — silk cools and regulates at 70°F. The no-fail night shirt choice."}, {"person": "guy2", "time": "night", "dayNum": 3, "price": 178, "heat": "cool", "name": "AG Adriano Goldschmied Slim Denim", "retailer": "Revolve Men", "rbcls": "revolve", "ret": "revolve", "priceDisp": "$178", "url": "https://www.agoldschmied.com/search?q=slim+denim&type=product", "tags": ["Denim", "Slim", "Night", "Late Evening"], "desc": "Slim denim for late-night when temps drop. After midnight in the desert, denim is actually comfortable."}, {"person": "guy2", "time": "night", "dayNum": 3, "price": 80, "heat": "evening", "name": "Zara Embellished Bomber Jacket", "retailer": "Zara", "rbcls": "zara", "ret": "zara", "priceDisp": "~$100", "url": "https://www.zara.com/us/en/search?q=embellished+bomber+jacket&section=man", "tags": ["Bomber", "Jacket", "Night", "Late Evening"], "desc": "Bomber jacket for after 10pm. Carry until temperatures drop. Night 3 finale outerwear."}];
+
+/* ── COUNTDOWN ── */
+function tick(){
+  const t=new Date('2026-04-10T14:00:00-07:00')-new Date();
+  if(t<=0)return;
+  const d=Math.floor(t/864e5),h=Math.floor(t%864e5/36e5),m=Math.floor(t%36e5/6e4),s=Math.floor(t%6e4/1e3);
+  const p=n=>String(n).padStart(2,'0');
+  document.getElementById('cd-d').textContent=d;
+  document.getElementById('cd-h').textContent=p(h);
+  document.getElementById('cd-m').textContent=p(m);
+  document.getElementById('cd-s').textContent=p(s);
+}
+tick();setInterval(tick,1000);
+
+/* ── TABS ── */
+const tabs=document.querySelectorAll('.tab-btn');
+const sections=document.querySelectorAll('.section');
+tabs.forEach(btn=>btn.addEventListener('click',()=>{
+  tabs.forEach(b=>b.classList.remove('active'));
+  sections.forEach(s=>s.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sec-'+btn.dataset.tab).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}));
+
+/* ── LOOKBOOK RENDER ── */
+const PERSONAS=[
+  {id:'girl',label:'Tall Girl',desc:'Quiet Luxury Desert \u2014 Boho 2.0',icon:'hero-icon-girl',emoji:'\ud83d\udc51',accentCls:'',tip:'5\u201910\u2033, blonde, blue eyes, narrow shoulders. Sculptural shoulders + oversized tailoring + barrel leg trousers balance narrow shoulders beautifully. Desert neutrals \u2014 olive, pistachio, ecru \u2014 make blue eyes pop. Halter-neck and tie blouses draw the eye up. Open-toe only in the day. Wide-brim straw hat required.'},
+  {id:'guy1',label:'Guy 1',desc:'Desert Dandy',icon:'hero-icon-guy1',emoji:'\ud83d\udd76\ufe0f',accentCls:'',tip:'Linen wide-leg + open linen shirt + white tank = perfect proportion AND stays cool in 100\u00b0F. Straw hat required. Light colors reflect heat.'},
+  {id:'guy2',label:'Guy 2',desc:'Desert Cool Minimalist',icon:'hero-icon-guy2',emoji:'\ud83c\udf19',accentCls:'',tip:'Linen shorts + cotton tee + open printed shirt = most comfortable tall-man Coachella daywear. Night: satin blazer (not velvet) + wide-leg trouser.'},
+];
+
+function renderCard(p){
+  const alt=p.alt?`<a class="btn-secondary" href="${p.alt.url}" target="_blank">${p.alt.text}</a>`:'';
+  return `<div class="pcard${p.heat==='evening'?' evening-item':''}" data-time="${p.time}" data-price="${p.price}" data-heat="${p.heat||'cool'}" data-ret="${p.ret}" data-srch="${encodeURIComponent((p.name+' '+p.tags.join(' ')+' '+p.retailer).toLowerCase())}">
+<div class="pcard-top"><span class="retailer-badge rb-${p.rbcls}">${p.retailer}</span><div class="pcard-price"><span class="price-main">${p.priceDisp}</span></div></div>
+<div class="pcard-name">${p.name}</div>
+<div class="pcard-desc">${p.desc}</div>
+<div class="pcard-tags">${p.tags.map(t=>`<span class="ptag">${t}</span>`).join('')}</div>
+<div class="pcard-actions"><a class="btn-primary" href="${p.url}" target="_blank">Shop →</a>${alt}</div>
+</div>`;
+}
+
+function renderLookbook(persona){
+  const el=document.getElementById('lb-'+persona.id);
+  let html=`<div class="tall-tip-bar">\ud83d\udca1 <strong>Tall + Heat Tip:</strong> ${persona.tip}</div>`;
+  for(let d=1;d<=3;d++){
+    if(d>1)html+='<hr class="day-sep">';
+    const day=PRODUCTS.filter(p=>p.person===persona.id&&p.time==='day'&&p.dayNum===d);
+    const ngt=PRODUCTS.filter(p=>p.person===persona.id&&p.time==='night'&&p.dayNum===d);
+    html+=`<div class="time-header"><span class="time-badge badge-day">\u2600\ufe0f Day ${d}</span><span class="time-meta">90\u2013100\u00b0F \u00b7 Linen, chiffon, rayon only</span></div>`;
+    html+=`<div class="pgrid day-grid-${d}">${day.map(renderCard).join('')}</div>`;
+    html+=`<div class="time-header"><span class="time-badge badge-night">\ud83c\udf19 Night ${d}</span><span class="time-meta">68\u201375\u00b0F \u00b7 Satin, silk, sequin</span></div>`;
+    html+=`<div class="pgrid night-grid-${d}">${ngt.map(renderCard).join('')}</div>`;
+  }
+  el.innerHTML=html;
+}
+PERSONAS.forEach(renderLookbook);
+
+/* ── LOOKBOOK FILTERS ── */
+const RANGES={all:[0,1e9],u50:[0,50],u200:[0,200],u500:[0,500],over500:[500,1e9]};
+let FS={time:'all',price:'all',ret:'all',search:''};
+
+function applyFilters(personaId){
+  const [lo,hi]=RANGES[FS.price]||[0,1e9];
+  let vis=0;
+  document.querySelectorAll(`#lb-${personaId} .pcard`).forEach(c=>{
+    const ok=(FS.time==='all'||c.dataset.time===FS.time)&&
+      (parseFloat(c.dataset.price)||0)>=lo&&(parseFloat(c.dataset.price)||0)<=hi&&
+      (FS.ret==='all'||c.dataset.ret===FS.ret)&&
+      (!FS.search||decodeURIComponent(c.dataset.srch||'').includes(FS.search));
+    c.classList.toggle('hidden',!ok);if(ok)vis++;
+  });
+  const rc=document.querySelector('.active .rcount');
+  if(rc)rc.textContent=vis>0?`Showing ${vis} items`:'';
+  const nr=document.querySelector('.active #no-results, .active [id^="no-results"]');
+  if(nr)nr.style.display=vis===0?'block':'none';
+}
+
+document.querySelectorAll('.lb-controls .pill').forEach(p=>p.addEventListener('click',()=>{
+  const f=p.dataset.f;
+  p.closest('.pill-group').querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+  p.classList.add('active');
+  if(f==='time')FS.time=p.dataset.time||'all';
+  else if(f==='price')FS.price=p.dataset.price||'all';
+  else if(f==='ret')FS.ret=p.dataset.ret||'all';
+  const activeTab=document.querySelector('.tab-btn.active');
+  if(activeTab&&['girl','guy1','guy2'].includes(activeTab.dataset.tab))applyFilters(activeTab.dataset.tab);
+}));
+document.querySelectorAll('.lb-search').forEach(inp=>inp.addEventListener('input',e=>{
+  FS.search=e.target.value.toLowerCase().trim();
+  const activeTab=document.querySelector('.tab-btn.active');
+  if(activeTab&&['girl','guy1','guy2'].includes(activeTab.dataset.tab))applyFilters(activeTab.dataset.tab);
+}));
+
+/* ── PACKING LIST ── */
+const PACKING_CATS=[
+  {icon:'\u2600\ufe0f',name:'Sun Protection',items:[
+    {t:'Wide-brim straw hat (1 per person)',n:'Non-negotiable \u2014 drops personal temp 10\u00b0F'},
+    {t:'Sunscreen SPF 50+ (2 bottles)'},
+    {t:'UV400 sunglasses'},
+    {t:'Lip balm with SPF 30+'},
+    {t:'Rash guard or sun shirt (light layer)'},
+    {t:'Cooling face mist spray'},
+    {t:'UPF 50 parasol (optional, for girl)'},
+  ]},
+  {icon:'\ud83d\udc57',name:'Clothing',items:[
+    {t:'3 day outfits \u2014 linen / chiffon / rayon ONLY',n:'See lookbook \u2014 heat-approved fabrics'},
+    {t:'3 night outfits \u2014 satin / silk / sequin',n:'Evenings are 68\u201375\u00b0F \u2014 lighter than you think'},
+    {t:'3 backup tanks or crop tops'},
+    {t:'1 lightweight kimono or coverup'},
+    {t:'Swimsuit + coverup (hotel pool)'},
+    {t:'Comfortable walking shoes (day)'},
+    {t:'Night shoes \u2014 sandal or boot'},
+    {t:'Extra open-toe sandals (spare pair)'},
+    {t:'Light evening layer \u2014 silk scarf or satin blazer',n:'NOT velvet, cashmere, or mohair'},
+    {t:'Compression socks (for flying)'},
+  ]},
+  {icon:'\ud83d\udca7',name:'Hydration & Heat',items:[
+    {t:'Insulated water bottle 32oz+',n:'You need 1L per hour in 100\u00b0F heat'},
+    {t:'Electrolyte packets \u2014 Liquid IV etc.',n:'Bring 12+ packets for the weekend'},
+    {t:'Cooling towel (wet, drape on neck)'},
+    {t:'Portable misting fan',n:'Battery-powered \u2014 absolute game changer'},
+    {t:'Portable neck fan',n:'Hands-free cooling'},
+    {t:'Hydration pack / Camelback',n:'Check Coachella bag policy \u2014 clear bag required'},
+  ]},
+  {icon:'\ud83d\udcf1',name:'Festival Tech',items:[
+    {t:'Portable battery pack 20,000+ mAh',n:'You will need it \u2014 3 days, limited charging'},
+    {t:'Charging cables (bring backups)'},
+    {t:'Coachella app downloaded offline'},
+    {t:'Apple AirTag in bag'},
+    {t:'Phone lanyard or wristlet'},
+    {t:'Offline Spotify playlist downloaded'},
+    {t:'Uber/Lyft app + credit loaded'},
+  ]},
+  {icon:'\ud83c\udfb5',name:'Festival Bag Essentials',items:[
+    {t:'Clear bag \u2014 12"x6"x12" max (Coachella policy)',n:'Required for venue entry'},
+    {t:'Small crossbody or fanny pack'},
+    {t:'ID + credit card + $100 cash minimum'},
+    {t:'Wristband (keep on all weekend)'},
+    {t:'Hand sanitizer'},
+    {t:'Wet wipes + face wipes'},
+    {t:'Feminine hygiene products'},
+  ]},
+  {icon:'\ud83d\udc84',name:'Beauty & Skincare',items:[
+    {t:'SPF moisturizer (apply every AM)'},
+    {t:'Setting spray + powder (sweat-proof)'},
+    {t:'Dry shampoo (pack 2)'},
+    {t:'Extra deodorant'},
+    {t:'Body glitter or festival makeup'},
+    {t:'Face masks (for hotel nights)'},
+    {t:'Micellar water + cotton pads'},
+    {t:'Under-eye patches'},
+    {t:'Hair ties + bobby pins x20'},
+    {t:'Fashion tape / double-sided tape'},
+  ]},
+  {icon:'\ud83e\ude79',name:'First Aid & Survival',items:[
+    {t:'Blister patches 10+ pairs',n:'You WILL walk 8\u201310 miles per day'},
+    {t:'Ibuprofen + Tylenol'},
+    {t:'Antacids + Pepto tablets'},
+    {t:'Allergy medication',n:'Dust can be high in desert'},
+    {t:'Moleskin padding (for new shoes)'},
+    {t:'Tide pen (1 per person)'},
+    {t:'Safety pins x10'},
+    {t:'Bandaids assorted'},
+    {t:'Melatonin (for early sleep after late nights)'},
+  ]},
+  {icon:'\ud83c\udfe0',name:'Hotel & Accommodation',items:[
+    {t:'Pool / hotel sandals'},
+    {t:'Lightweight robe or coverup'},
+    {t:'Full skincare routine (travel size)'},
+    {t:'Sleep mask + earplugs',n:'Festival crowds are loud'},
+    {t:'Snacks for hotel room'},
+    {t:'Reusable grocery bag'},
+    {t:'Laundry bag (dirty vs clean)'},
+  ]},
+  {icon:'\ud83d\udcc4',name:'Documents & Logistics',items:[
+    {t:'Coachella tickets \u2014 screenshot + email'},
+    {t:'Hotel confirmation + address saved offline'},
+    {t:'Photo ID'},
+    {t:'Emergency contacts written down',n:'Not just in phone \u2014 what if phone dies?'},
+    {t:'Car / shuttle pickup arranged'},
+    {t:'Palm Springs restaurant reservations'},
+  ]},
+];
+let packState={};
+function loadPack(){try{const s=localStorage.getItem('c26pack');if(s)packState=JSON.parse(s);}catch(e){}}
+function savePack(){try{localStorage.setItem('c26pack',JSON.stringify(packState));}catch(e){}}
+function resetPack(){if(confirm('Reset all packing progress?')){packState={};savePack();renderPack();}}
+function updateProgress(){
+  let tot=0,done=0;
+  PACKING_CATS.forEach(c=>c.items.forEach(i=>{tot++;if(packState[i.t])done++;}));
+  const pct=tot?Math.round(done/tot*100):0;
+  document.getElementById('pack-bar').style.width=pct+'%';
+  document.getElementById('pack-pct').textContent=pct+'%';
+  document.getElementById('pack-count').textContent=`${done} of ${tot} packed`;
+}
+function togglePack(key,el){
+  packState[key]=!packState[key];
+  el.classList.toggle('checked',!!packState[key]);
+  savePack();updateProgress();
+}
+function renderPack(){
+  loadPack();
+  document.getElementById('pack-cats').innerHTML=PACKING_CATS.map(cat=>`
+<div class="pack-cat">
+<div class="pack-cat-header"><span>${cat.icon}</span><span>${cat.name}</span></div>
+<div class="pack-cat-body">${cat.items.map(it=>`<div class="pack-item${packState[it.t]?' checked':''}" onclick="togglePack('${it.t.replace(/\\/g,'\\\\').replace(/'/g,"\\'")}',this)">
+<div class="pchk"></div><div><span class="pitem-text">${it.t}</span>${it.n?`<span class="pitem-note">${it.n}</span>`:''}</div></div>`).join('')}</div>
+</div>`).join('');
+  updateProgress();
+}
+renderPack();
+
+</script>
+</body>
+</html>

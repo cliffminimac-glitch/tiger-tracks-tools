@@ -4,33 +4,36 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tiger Tracks Monthly Feedback</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <style>
-:root { --accent:#229FA1; --accent-light:#e0f7f7; --text:#1a1a2e; --text-light:#6b7280; --border:#e5e7eb; --bg:#f9fafb; --panel:#fff; --success:#10b981; }
+:root { --accent:#229FA1; --accent-light:rgba(34,159,161,0.15); --text:#FFFFFF; --text-light:#9E9E9E; --border:rgba(255,255,255,0.07); --bg:#0A1119; --panel:#1B2126; --success:#229FA1; }
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Montserrat',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
-.header { background:linear-gradient(135deg,#1a1a2e 0%,#16213e 100%); color:#fff; padding:1.5rem 2rem; display:flex; align-items:center; gap:1rem; }
+body { font-family:Inter,system-ui,sans-serif; background:var(--bg); color:var(--text); min-height:100vh; }
+.header { background:linear-gradient(135deg,#1B2126 0%,#0A1119 100%); color:#fff; padding:1.5rem 2rem; display:flex; align-items:center; gap:1rem; border-bottom:1px solid var(--border); }
 .header img { height:44px; }
 .header h1 { font-size:1.15rem; font-weight:700; }
-.header .sub { font-size:.8rem; color:#94a3b8; margin-top:.15rem; }
+.header .sub { font-size:.8rem; color:#9E9E9E; margin-top:.15rem; }
 .container { max-width:720px; margin:2rem auto; padding:0 1.5rem; }
-.card { background:var(--panel); border-radius:12px; border:1px solid var(--border); padding:1.5rem; margin-bottom:1.25rem; }
+.card { background:var(--panel); border-radius:12px; border:1px solid var(--border); padding:1.5rem; margin-bottom:1.25rem; transition:border-color 0.25s ease, box-shadow 0.25s ease; }
+.card:hover { border-color:#229FA1; box-shadow:0 0 20px rgba(34,159,161,0.15); }
 .card h2 { font-size:1rem; color:var(--accent); margin-bottom:.75rem; }
-.card h3 { font-size:.88rem; color:var(--text); margin-bottom:.5rem; margin-top:.75rem; }
-label { font-size:.82rem; font-weight:600; display:block; margin-bottom:.3rem; color:var(--text); }
+.card h3 { font-size:.88rem; color:#F4F1EB; margin-bottom:.5rem; margin-top:.75rem; }
+label { font-size:.82rem; font-weight:600; display:block; margin-bottom:.3rem; color:#F4F1EB; }
 .hint { font-size:.75rem; color:var(--text-light); margin-bottom:.4rem; font-style:italic; }
-textarea { width:100%; padding:.6rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:.85rem; resize:vertical; min-height:70px; }
-textarea:focus { outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(34,159,161,.15); }
-select { width:100%; padding:.5rem; border:1px solid var(--border); border-radius:8px; font-family:inherit; font-size:.85rem; }
+textarea { width:100%; padding:.6rem; border:1px solid rgba(255,255,255,0.1); border-radius:8px; font-family:inherit; font-size:.85rem; resize:vertical; min-height:70px; background:rgba(255,255,255,0.05); color:#FFFFFF; }
+textarea::placeholder { color:#9E9E9E; }
+textarea:focus { outline:none; border-color:#229FA1; box-shadow:0 0 0 3px rgba(34,159,161,.15); }
+select { width:100%; padding:.5rem; border:1px solid rgba(255,255,255,0.1); border-radius:8px; font-family:inherit; font-size:.85rem; background:rgba(255,255,255,0.05); color:#FFFFFF; }
 .rating-row { display:flex; gap:.5rem; margin:.4rem 0 .75rem; }
-.rating-btn { padding:.4rem .75rem; border:2px solid var(--border); border-radius:8px; background:#fff; cursor:pointer; font-size:.82rem; font-weight:600; transition:all .15s; }
-.rating-btn:hover { border-color:var(--accent); }
+.rating-btn { padding:.4rem .75rem; border:2px solid rgba(255,255,255,0.1); border-radius:8px; background:rgba(255,255,255,0.05); cursor:pointer; font-size:.82rem; font-weight:600; transition:all .15s; color:#9E9E9E; }
+.rating-btn:hover { border-color:var(--accent); color:var(--accent); }
 .rating-btn.active { border-color:var(--accent); background:var(--accent-light); color:var(--accent); }
-.btn { display:inline-block; padding:.7rem 1.5rem; background:var(--accent); color:#fff; border:none; border-radius:8px; font-weight:700; font-size:.9rem; cursor:pointer; font-family:inherit; }
+.btn { display:inline-block; padding:.7rem 1.5rem; background:linear-gradient(135deg,#1F807E,#1A7477); color:#fff; border:none; border-radius:8px; font-weight:700; font-size:.9rem; cursor:pointer; font-family:inherit; }
 .btn:hover { opacity:.9; }
 .btn:disabled { opacity:.5; cursor:not-allowed; }
-.success-msg { display:none; padding:1.25rem; background:#dcfce7; border:1px solid #86efac; border-radius:10px; text-align:center; }
-.success-msg h2 { color:#059669; margin-bottom:.3rem; }
+.success-msg { display:none; padding:1.25rem; background:rgba(34,159,161,0.1); border:1px solid rgba(34,159,161,0.3); border-radius:10px; text-align:center; }
+.success-msg h2 { color:#229FA1; margin-bottom:.3rem; }
 .meta-bar { display:flex; gap:1.5rem; flex-wrap:wrap; margin-bottom:.5rem; font-size:.85rem; }
 .meta-bar strong { color:var(--accent); }
 .divider { height:1px; background:var(--border); margin:1rem 0; }
@@ -53,7 +56,7 @@ select { width:100%; padding:.5rem; border:1px solid var(--border); border-radiu
   <div id="emailGate" class="card" style="max-width:440px;margin:3rem auto;padding:2rem;text-align:center;">
     <h2 style="font-size:1.1rem;color:var(--accent);margin-bottom:.5rem;">🔒 Verify Your Identity</h2>
     <p style="font-size:.85rem;color:var(--text-light);margin-bottom:1rem;">Enter your Tiger Tracks email to access this feedback form.</p>
-    <input type="email" id="gateEmail" placeholder="you@tigertracks.ai" onkeydown="if(event.key==='Enter')verifyEmail()" style="width:100%;padding:.6rem;border:1px solid var(--border);border-radius:8px;font-size:.9rem;font-family:inherit;margin-bottom:.75rem;">
+    <input type="email" id="gateEmail" placeholder="you@tigertracks.ai" onkeydown="if(event.key==='Enter')verifyEmail()" style="width:100%;padding:.6rem;border:1px solid rgba(255,255,255,0.1);border-radius:8px;font-size:.9rem;font-family:inherit;margin-bottom:.75rem;background:rgba(255,255,255,0.05);color:#FFFFFF;">
     <button class="btn" onclick="verifyEmail()" style="width:100%;">Continue</button>
     <div id="gateError" style="display:none;margin-top:.6rem;color:#dc2626;font-size:.82rem;font-weight:600;">Access denied. This form is only accessible to authorized team members.</div>
   </div>

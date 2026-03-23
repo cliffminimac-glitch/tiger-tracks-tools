@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Tiger Tracks - Recruiting & Talent Acquisition</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root {
   --accent: #229FA1;
@@ -25,6 +26,8 @@
   --part-bg: #ede9fe;
   --mkt-color: #ea580c;
   --mkt-bg: #fff7ed;
+  --ops-color: #6366f1;
+  --ops-bg: #eef2ff;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
@@ -208,6 +211,7 @@ tr.clickable:hover td { background: var(--accent-light); }
 .practice-badge.am { background: var(--am-bg); color: var(--am-color); }
 .practice-badge.part { background: var(--part-bg); color: var(--part-color); }
 .practice-badge.mkt { background: var(--mkt-bg); color: var(--mkt-color); }
+.practice-badge.ops { background: var(--ops-bg); color: var(--ops-color); }
 
 /* ROLE CARDS */
 .role-detail-card { background: var(--bg-card); border-radius: 12px; margin-bottom: 1.25rem; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
@@ -238,31 +242,36 @@ tr.clickable:hover td { background: var(--accent-light); }
 @media print { nav, #auth-gate, .btn, .tab-bar, #toast, .modal-overlay { display: none !important; } .section { display: block !important; } }
 </style>
 </head>
-<body>
+<body onload="authCheck()">
 
 <!-- AUTH GATE -->
-<div id="auth-gate">
-  <img src="logo.png" alt="Tiger Tracks" style="height:50px;margin-bottom:1rem;" onerror="this.style.display='none'">
-  <h2>🔒 Tiger Tracks Recruiting</h2>
-  <input type="password" id="authInput" placeholder="Enter access code" onkeydown="if(event.key==='Enter')checkAuth()">
-  <button onclick="checkAuth()">Access Site</button>
-  <div class="err" id="authErr">Incorrect access code</div>
+<div id="authGate" style="position:fixed;inset:0;background:#1B2126;z-index:9999;display:flex;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:16px;padding:2.5rem 2rem;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.4);">
+    <img src="logo.png" alt="Tiger Tracks" style="height:48px;margin-bottom:1.25rem;" onerror="this.style.display='none'">
+    <h2 style="font-size:1.2rem;margin-bottom:.35rem;color:#1B2126;">Tiger Tracks Recruiting</h2>
+    <p style="font-size:.85rem;color:#6b7280;margin-bottom:1.75rem;">Internal tool — @tigertracks.ai access only.</p>
+    <div id="google-signin-btn" style="display:flex;justify-content:center;margin-bottom:.75rem;"></div>
+    <p id="authErr" style="color:#dc2626;font-size:.8rem;margin-top:.5rem;display:none;"></p>
+  </div>
 </div>
 
 <!-- NAV -->
 <nav>
-  <div class="logo">
+  <a href="https://tigertracks.ai" target="_blank" rel="noopener" style="text-decoration:none;display:flex;align-items:center;gap:.5rem;" class="logo">
     <img src="logo.png" alt="TT" onerror="this.style.display='none'">
     <span>RECRUITING</span>
-  </div>
+  </a>
   <span class="nav-link active" onclick="go('dashboard')">Dashboard</span>
   <span class="nav-link" onclick="go('acctmgmt')">📊 Account Management</span>
   <span class="nav-link" onclick="go('partnerships')">🤝 Partnerships</span>
-  <span class="nav-link" onclick="go('marketing')">📢 Marketing</span>
+  <!-- <span class="nav-link" onclick="go('marketing')">📢 Marketing</span> -->
+  <span class="nav-link" onclick="go('ea')">🗓️ EA</span>
   <span class="nav-link" onclick="go('pipeline')">Pipeline</span>
-  <span class="nav-link" onclick="go('linkedin')">LinkedIn</span>
+
   <span class="nav-link" onclick="go('candidates')">👥 Candidates</span>
+  <span class="nav-link" onclick="go('aireview')">🤖 AI Review</span>
   <span class="nav-link" onclick="go('templates')">Templates</span>
+  <span class="nav-link" onclick="authLogout()" style="margin-left:auto;font-size:.78rem;opacity:.6;" title="Sign out">⎋ Sign Out</span>
 </nav>
 
 <!-- HERO -->
@@ -276,6 +285,23 @@ tr.clickable:hover td { background: var(--accent-light); }
 <!-- ============ DASHBOARD ============ -->
 <div class="section active" id="sec-dashboard">
   <div class="stats" id="dashStats"></div>
+
+  <!-- LINKEDIN RECRUITER SYNC PANEL -->
+  <div class="card" style="margin-bottom:1rem;" id="liSyncPanel">
+    <div style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="toggleLiSync()">
+      <h3 style="margin:0;font-size:.95rem;">🔗 LinkedIn Recruiter Pipeline <span id="liSyncBadge" style="font-size:.72rem;font-weight:400;color:var(--text-light);margin-left:.5rem;">click to sync</span></h3>
+      <span id="liSyncChevron" style="color:var(--text-light);font-size:.8rem;">▼</span>
+    </div>
+    <div id="liSyncBody" style="display:none;margin-top:.75rem;">
+      <p style="font-size:.78rem;color:var(--text-light);margin-bottom:.75rem;">Enter current pipeline counts from LinkedIn Recruiter to show accurate numbers on the dashboard. Update these after reviewing your LinkedIn projects.</p>
+      <div id="liProjectRows" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem;"></div>
+      <div style="margin-top:.75rem;display:flex;gap:.5rem;">
+        <button class="btn btn-primary btn-sm" onclick="saveLiSync()">💾 Save LinkedIn Counts</button>
+        <a href="https://www.linkedin.com/talent/hire/1406527201/overview" target="_blank" class="btn btn-outline btn-sm">🔗 DoP Project</a>
+        <span id="liAmBtns"></span>
+      </div>
+    </div>
+  </div>
 
   <!-- PRACTICE AREA LANES -->
   <div class="practice-lanes" id="dashLanes"></div>
@@ -291,7 +317,7 @@ tr.clickable:hover td { background: var(--accent-light); }
         <button class="btn btn-primary" onclick="go('pipeline');setTimeout(openAddCandidate,100);">➕ Add Candidate</button>
         <button class="btn btn-outline" onclick="go('positions')">📋 Manage Positions</button>
         <button class="btn btn-outline" onclick="go('screening')">🎯 Screening Tool</button>
-        <button class="btn btn-outline" onclick="go('linkedin')">🔗 LinkedIn Tracker</button>
+
         <button class="btn btn-outline" onclick="exportAllData()">📥 Export Data</button>
       </div>
     </div>
@@ -311,6 +337,7 @@ tr.clickable:hover td { background: var(--accent-light); }
       <button class="tab-btn" onclick="switchPracticeTab('am','interview',this)">Interview Questions & Process</button>
       <button class="tab-btn" onclick="switchPracticeTab('am','eval',this)">Evaluation Criteria</button>
       <button class="tab-btn" onclick="switchPracticeTab('am','screening',this)">🎯 Screen Candidate</button>
+      <button class="tab-btn" onclick="switchPracticeTab('am','extjd',this)">📄 External JD</button>
     </div>
     <div id="amContent"></div>
   </div>
@@ -335,7 +362,7 @@ tr.clickable:hover td { background: var(--accent-light); }
 </div>
 
 <!-- ===== MARKETING ===== -->
-<div class="section" id="sec-marketing">
+<div class="section" id="sec-marketing" style="display:none">
   <div class="container">
     <div style="background:var(--mkt-bg);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.5rem;border-top:5px solid var(--mkt-color);">
       <h2 style="font-size:1.4rem;color:var(--mkt-color);margin-bottom:.25rem;">📢 Marketing</h2>
@@ -352,6 +379,24 @@ tr.clickable:hover td { background: var(--accent-light); }
   </div>
 </div>
 
+<!-- ===== OPERATIONS & SUPPORT (EA) ===== -->
+<div class="section" id="sec-ea">
+  <div class="container">
+    <div style="background:var(--ops-bg);border-radius:12px;padding:1.5rem 2rem;margin-bottom:1.5rem;border-top:5px solid var(--ops-color);">
+      <h2 style="font-size:1.4rem;color:var(--ops-color);margin-bottom:.25rem;">🗓️ Operations & Support</h2>
+      <p style="font-size:.88rem;color:var(--text-light);">Strategic support for the CEO and leadership team. Owns calendar, communications, BD pipeline support, invoicing, and operations.</p>
+    </div>
+    <div class="tab-bar" id="eaTabs">
+      <button class="tab-btn active" onclick="switchPracticeTab('ea','roles',this)">Roles & Responsibilities</button>
+      <button class="tab-btn" onclick="switchPracticeTab('ea','interview',this)">Interview Questions & Process</button>
+      <button class="tab-btn" onclick="switchPracticeTab('ea','eval',this)">Evaluation Criteria</button>
+      <button class="tab-btn" onclick="switchPracticeTab('ea','screening',this)">🎯 Screen Candidate</button>
+      <button class="tab-btn" onclick="switchPracticeTab('ea','extjd',this)">📄 External JD</button>
+    </div>
+    <div id="eaContent"></div>
+  </div>
+</div>
+
 <div class="section" id="sec-pipeline">
   <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.75rem;">
     <h2 style="font-size:1.25rem;">🔄 Candidate Pipeline</h2>
@@ -361,14 +406,12 @@ tr.clickable:hover td { background: var(--accent-light); }
         <option value="Account Management">📊 Account Management</option>
         <option value="Partnerships">🤝 Partnerships</option>
         <option value="Marketing">📢 Marketing</option>
+        <option value="Operations & Support">🗓️ Operations & Support</option>
       </select>
       <select class="form-input" id="pipeFilterRole" style="width:200px;font-size:.8rem;" onchange="renderPipeline()">
         <option value="">All Positions</option>
       </select>
-      <select class="form-input" id="pipeFilterSource" style="width:150px;font-size:.8rem;" onchange="renderPipeline()">
-        <option value="">All Sources</option>
-        <option>LinkedIn</option><option>Referral</option><option>Job Board</option><option>Direct</option><option>Recruiter</option><option>Other</option>
-      </select>
+
       <button class="btn btn-primary" onclick="openAddCandidate()">➕ Add Candidate</button>
     </div>
   </div>
@@ -428,29 +471,29 @@ tr.clickable:hover td { background: var(--accent-light); }
 <div class="section" id="sec-questions">
   <h2 style="font-size:1.25rem;margin-bottom:.75rem;">💬 Interview Question Bank</h2>
 
-  <div class="form-row c2" style="margin-bottom:.5rem;">
-    <div>
-      <label class="form-label">Filter by Role Level</label>
+  <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;flex-wrap:wrap;">
+    <div style="flex:1;min-width:200px;">
+      <label class="form-label">Select Job</label>
       <select class="form-input" id="qbRole" onchange="renderQBank()">
-        <option value="">All Levels</option>
+        <option value="">— Choose a role —</option>
         <option value="AC">Account Coordinator</option>
         <option value="AS">Account Strategist</option>
         <option value="AM">Account Manager</option>
         <option value="SrAM">Senior Account Manager</option>
-
         <option value="BD">Dir of Partnerships (BD)</option>
         <option value="MKT">Marketing Director</option>
+        <option value="EA">Executive Assistant</option>
       </select>
     </div>
-    <div>
-      <label class="form-label">Category</label>
+    <div style="flex:1;min-width:180px;">
+      <label class="form-label">Filter by Category (optional)</label>
       <select class="form-input" id="qbCat" onchange="renderQBank()">
         <option value="">All Categories</option>
       </select>
     </div>
   </div>
 
-  <div id="qBankContent"></div>
+  <div id="qBankContent"><p style="font-size:.85rem;color:var(--text-light);">Select a job above to see all interview questions by stage.</p></div>
 </div>
 
 <!-- ============ LINKEDIN ============ -->
@@ -624,6 +667,7 @@ tr.clickable:hover td { background: var(--accent-light); }
     <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:.5rem;">
       <input type="file" id="candidateCsvUpload" accept=".csv" onchange="uploadCandidateCsv(event)" style="display:none;">
       <button class="btn btn-sm" onclick="document.getElementById('candidateCsvUpload').click()">📂 Upload CSV</button>
+      <button class="btn btn-sm" style="background:#fee2e2;color:#dc2626;border:1px solid #fca5a5;" onclick="if(confirm('Delete ALL candidates from this tab? This cannot be undone.')){localStorage.removeItem('ttrec_phantom_candidates');PHANTOM_CANDIDATES.length=0;renderCandidateList();showToast('🗑️ All candidates cleared');}">🗑️ Clear All</button>
       <span id="candidateCount" style="font-size:.78rem;color:var(--text-light);"></span>
     </div>
     <p style="font-size:.75rem;color:var(--text-light);">Review candidates sourced from LinkedIn. Give a 👍 or 👎 so Eliz knows who to reach out to.</p>
@@ -632,7 +676,8 @@ tr.clickable:hover td { background: var(--accent-light); }
   <!-- Sub-tabs -->
   <div class="tab-bar" style="margin-bottom:1rem;">
     <div class="tab active" onclick="switchCandTab('bd')" id="candTab-bd">🤝 Director of Partnerships <span id="candTabCount-bd" style="font-size:.7rem;opacity:.7;"></span></div>
-    <div class="tab" onclick="switchCandTab('mkt')" id="candTab-mkt">📢 Director of Marketing <span id="candTabCount-mkt" style="font-size:.7rem;opacity:.7;"></span></div>
+    <!-- <div class="tab" onclick="switchCandTab('mkt')" id="candTab-mkt">📢 Director of Marketing <span id="candTabCount-mkt" style="font-size:.7rem;opacity:.7;"></span></div> -->
+    <div class="tab" onclick="switchCandTab('ea')" id="candTab-ea">🗓️ Executive Assistant <span id="candTabCount-ea" style="font-size:.7rem;opacity:.7;"></span></div>
   </div>
 
   <!-- BD sub-tab content -->
@@ -656,7 +701,7 @@ tr.clickable:hover td { background: var(--accent-light); }
   </div>
 
   <!-- MKT sub-tab content -->
-  <div id="candPanelMKT" style="display:none;">
+  <div id="candPanelMKT" style="display:none !important;">
     <div style="display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;margin-bottom:.75rem;">
       <select id="candSortMKT" onchange="renderCandidateList()" style="padding:.35rem .5rem;border-radius:6px;border:1px solid var(--border);font-size:.82rem;">
         <option value="score">Sort: Best Match</option>
@@ -674,6 +719,275 @@ tr.clickable:hover td { background: var(--accent-light); }
     </div>
     <div id="candidateListMKT"></div>
   </div>
+
+
+  <!-- EA sub-tab content -->
+  <div id="candPanelEA" style="display:none;">
+    <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;">
+      <h3 style="font-size:1rem;">Executive Assistant Candidates</h3>
+      <span id="candCountEA" style="font-size:.78rem;color:var(--text-light);"></span>
+    </div>
+    <div id="candidateListEA"></div>
+  </div>
+
+</div><!-- /sec-candidates -->
+
+<!-- ============ AI REVIEW ============ -->
+<div class="section" id="sec-aireview">
+  <h2 style="font-size:1.25rem;margin-bottom:.25rem;">🤖 AI Candidate Review</h2>
+  <p style="color:var(--text-light);font-size:.85rem;margin-bottom:1.5rem;">Step 1: Add a new candidate to the pipeline before the screen call. Step 2: Generate a Claude-powered Candidate Overview brief after the call.</p>
+
+  <!-- STEP 1: QUICK ADD (admin only) -->
+  <div class="card air-admin-only" style="margin-bottom:1.25rem;border-left:4px solid var(--accent);">
+    <h3 style="font-size:.95rem;margin-bottom:.1rem;">➕ Step 1 — Add Candidate to Pipeline</h3>
+    <p style="font-size:.78rem;color:var(--text-light);margin-bottom:1rem;">Do this before the screen call. Adds the candidate to the pipeline so you can track them from first contact.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.75rem;align-items:end;">
+      <div>
+        <label class="form-label">Full Name</label>
+        <input class="form-input" id="air-quick-name" placeholder="Jane Smith" style="width:100%;">
+      </div>
+      <div>
+        <label class="form-label">LinkedIn URL</label>
+        <input class="form-input" id="air-quick-linkedin" placeholder="linkedin.com/in/..." style="width:100%;">
+      </div>
+      <div>
+        <label class="form-label">Role</label>
+        <select class="form-input" id="air-quick-role" style="width:100%;">
+          <option value="">— Select role —</option>
+          <option value="AC">Account Coordinator</option>
+          <option value="AS">Account Strategist</option>
+          <option value="AM">Account Manager</option>
+          <option value="SrAM">Senior Account Manager</option>
+          <option value="BD">Director of Partnerships</option>
+          <option value="MKT">Director of Marketing</option>
+          <option value="EA">Executive Assistant</option>
+        </select>
+      </div>
+    </div>
+    <div style="margin-top:.75rem;">
+      <label class="form-label">Resume (optional)</label>
+      <div style="display:flex;gap:.5rem;align-items:stretch;flex-wrap:wrap;">
+        <div id="air-quick-resume-drop" style="flex:1;min-width:200px;border:2px dashed var(--border);border-radius:8px;padding:.6rem 1rem;text-align:center;cursor:pointer;font-size:.78rem;transition:border-color .2s;"
+          onclick="document.getElementById('air-quick-resume-file').click()"
+          ondragover="event.preventDefault();this.style.borderColor='var(--accent)'"
+          ondragleave="this.style.borderColor='var(--border)'"
+          ondrop="event.preventDefault();this.style.borderColor='var(--border)';airQuickResumeHandleDrop(event)">
+          <span id="air-quick-resume-label">📎 Upload resume (PDF / DOCX)</span>
+          <input type="file" id="air-quick-resume-file" accept=".pdf,.doc,.docx" style="display:none;" onchange="airQuickResumeHandleFile(this)">
+        </div>
+        <textarea class="form-input" id="air-quick-resume-text" rows="2" placeholder="Or paste resume text…" style="flex:2;min-width:200px;resize:vertical;font-size:.78rem;"></textarea>
+      </div>
+    </div>
+    <div style="margin-top:.75rem;display:flex;align-items:center;gap:.75rem;">
+      <div style="margin-top:.75rem;">
+        <label class="form-label">Assign Interviewers</label>
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;" id="air-quick-interviewers">
+          <label style="font-size:.82rem;display:flex;align-items:center;gap:.3rem;"><input type="checkbox" value="charlotte@tigertracks.ai"> Charlotte</label>
+          <label style="font-size:.82rem;display:flex;align-items:center;gap:.3rem;"><input type="checkbox" value="riley@tigertracks.ai"> Riley</label>
+          <label style="font-size:.82rem;display:flex;align-items:center;gap:.3rem;"><input type="checkbox" value="hannah@tigertracks.ai"> Hannah</label>
+          <label style="font-size:.82rem;display:flex;align-items:center;gap:.3rem;"><input type="checkbox" value="kersten@tigertracks.ai"> Kersten</label>
+        </div>
+      </div>
+      <div style="margin-top:.75rem;display:flex;align-items:center;gap:.75rem;">
+        <button class="btn btn-primary" onclick="airQuickAdd()">➕ Add to Pipeline</button>
+        <span id="air-quick-status" style="font-size:.82rem;"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 2: FULL FEEDBACK FORM -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+
+    <!-- LEFT: INPUTS -->
+    <div>
+      <div class="card" style="margin-bottom:1rem;">
+        <h3 style="font-size:.95rem;margin-bottom:.1rem;">📋 Step 2 — Post-Screen Feedback</h3>
+        <p style="font-size:.78rem;color:var(--text-light);margin-bottom:1rem;">Fill this out after the screen call. Claude will generate a formatted Candidate Overview brief.</p>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Candidate</label>
+          <select class="form-input" id="air2-cand-select" style="width:100%;" onchange="air2SelectCandidate(this.value)">
+            <option value="">— Select from pipeline —</option>
+          </select>
+          <input type="hidden" id="air-name">
+        </div>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Role Interviewing For</label>
+          <select class="form-input" id="air-role" style="width:100%;">
+            <option value="">— Select role —</option>
+            <option value="Account Coordinator (AC)">Account Coordinator</option>
+            <option value="Account Strategist (AS)">Account Strategist</option>
+            <option value="Account Manager (AM)">Account Manager</option>
+            <option value="Senior Account Manager (Sr AM)">Senior Account Manager</option>
+            <option value="Director of Partnerships">Director of Partnerships</option>
+            <option value="Director of Marketing">Director of Marketing</option>
+            <option value="Executive Assistant to the CEO">Executive Assistant to CEO</option>
+          </select>
+        </div>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Current Interview Stage</label>
+          <select class="form-input" id="air-stage" style="width:100%;">
+            <option value="">— Select stage —</option>
+            <option value="contacted">Contacted</option>
+            <option value="phone">Phone Screen</option>
+            <option value="interview1">Interview 1</option>
+            <option value="interview2">Interview 2</option>
+            <option value="exec">Executive Interview</option>
+            <option value="panel">Panel Presentation</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">Recommended Next Step</label>
+          <select class="form-input" id="air-nextstep" style="width:100%;">
+            <option value="">— Select next step —</option>
+            <option value="advance_phone">Advance → Phone Screen</option>
+            <option value="advance_interview1">Advance → Interview 1</option>
+            <option value="advance_interview2">Advance → Interview 2</option>
+            <option value="advance_exec">Advance → Executive</option>
+            <option value="advance_panel">Advance → Panel</option>
+            <option value="advance_offer">Advance → Offer</option>
+            <option value="hold">Hold — Further Review</option>
+            <option value="rejected">Reject</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:1rem;">
+        <h3 style="font-size:.95rem;margin-bottom:.75rem;">Resume</h3>
+        <div id="air-resume-drop" style="border:2px dashed var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('air-resume-file').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleAirResumeDrop(event)">
+          <div style="font-size:1.5rem;margin-bottom:.35rem;">📄</div>
+          <div style="font-size:.82rem;font-weight:600;" id="air-resume-label">Click or drag to upload resume (PDF)</div>
+          <input type="file" id="air-resume-file" accept=".pdf,.doc,.docx,.txt" style="display:none;" onchange="handleAirResumeSelect(this)">
+        </div>
+        <div style="margin-top:.75rem;">
+          <label class="form-label" style="font-size:.75rem;">Or paste resume text</label>
+          <textarea class="form-input" id="air-resume-text" rows="5" placeholder="Paste resume text here..." style="width:100%;resize:vertical;font-size:.8rem;"></textarea>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:.95rem;margin-bottom:.75rem;">Interview Notes</h3>
+        <textarea class="form-input" id="air-notes" rows="8" placeholder="Paste your interview notes, transcript, or key takeaways here. Include: current situation, why they're looking, comp expectations, timeline, any flags, and how the conversation went." style="width:100%;resize:vertical;font-size:.82rem;"></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.6rem;margin-top:.75rem;">
+          <div>
+            <label class="form-label" style="font-size:.75rem;">GPA</label>
+            <input class="form-input" id="air-gpa" placeholder="e.g. 3.8 / 4.0" style="width:100%;font-size:.82rem;">
+          </div>
+          <div>
+            <label class="form-label" style="font-size:.75rem;">Salary Expectations</label>
+            <input class="form-input" id="air-salary" placeholder="e.g. $85K–$95K" style="width:100%;font-size:.82rem;">
+          </div>
+          <div>
+            <label class="form-label" style="font-size:.75rem;">Start Date</label>
+            <input class="form-input" id="air-startdate" placeholder="e.g. 2 weeks / April 1" style="width:100%;font-size:.82rem;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: OUTPUT -->
+    <div>
+      <div class="card" style="margin-bottom:1rem;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;">
+          <h3 style="font-size:.95rem;margin:0;">Generated Feedback</h3>
+          <div style="display:flex;gap:.5rem;">
+            <button class="btn btn-outline" id="air-copy-btn" onclick="airCopyFeedback()" style="display:none;font-size:.8rem;padding:.4rem .9rem;">📋 Copy</button>
+            <button class="btn btn-primary" onclick="airGenerate()" id="air-generate-btn" style="font-size:.85rem;padding:.5rem 1.25rem;">✨ Generate with Claude</button>
+          </div>
+        </div>
+        <div id="air-output" style="min-height:200px;background:var(--bg);border-radius:8px;padding:1rem;font-size:.84rem;line-height:1.7;white-space:pre-wrap;border:1px solid var(--border);">
+          <span style="color:var(--text-light);font-style:italic;">Fill in the candidate details and click "Generate with Claude" to create a formatted Candidate Overview brief.</span>
+        </div>
+      </div>
+
+      <div class="card air-admin-only" id="air-apply-card" style="display:none;">
+        <h3 style="font-size:.95rem;margin-bottom:.75rem;">Apply to Pipeline</h3>
+        <p style="font-size:.83rem;color:var(--text-light);margin-bottom:1rem;">Find this candidate in the pipeline and apply the recommended next step.</p>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Select Candidate in Pipeline</label>
+          <select class="form-input" id="air-pipeline-cand" style="width:100%;"></select>
+        </div>
+        <button class="btn btn-primary" onclick="airApplyToCandidate()" style="width:100%;">Apply Next Step to Candidate</button>
+        <div id="air-apply-status" style="margin-top:.75rem;font-size:.83rem;"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- STEP 3: INTERVIEW RECORDING ANALYSIS -->
+  <div class="card" style="margin-top:1.25rem;border-left:4px solid #7c3aed;">
+    <h3 style="font-size:.95rem;margin-bottom:.1rem;">🎬 Step 3 — Interview Recording Analysis</h3>
+    <p style="font-size:.78rem;color:var(--text-light);margin-bottom:1rem;">Upload the interview recording (or paste a transcript) and Claude will generate structured feedback automatically.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;">
+
+      <!-- LEFT: UPLOAD + CANDIDATE INFO -->
+      <div>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Candidate</label>
+          <select class="form-input" id="air3-cand-select" style="width:100%;" onchange="air3SelectCandidate(this.value)">
+            <option value="">— Select from pipeline —</option>
+          </select>
+          <input class="form-input" id="air3-name" placeholder="Or type name manually" style="width:100%;margin-top:.35rem;font-size:.82rem;">
+        </div>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Role</label>
+          <select class="form-input" id="air3-role" style="width:100%;">
+            <option value="">— Select role —</option>
+            <option value="Account Coordinator (AC)">Account Coordinator</option>
+            <option value="Account Strategist (AS)">Account Strategist</option>
+            <option value="Account Manager (AM)">Account Manager</option>
+            <option value="Senior Account Manager (Sr AM)">Senior Account Manager</option>
+            <option value="Director of Partnerships">Director of Partnerships</option>
+            <option value="Director of Marketing">Director of Marketing</option>
+            <option value="Executive Assistant to the CEO">Executive Assistant to CEO</option>
+          </select>
+        </div>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Interview Stage</label>
+          <select class="form-input" id="air3-stage" style="width:100%;">
+            <option value="">— Select stage —</option>
+            <option value="phone">Phone Screen</option>
+            <option value="interview1">Interview 1</option>
+            <option value="interview2">Interview 2</option>
+            <option value="exec">Executive Interview</option>
+          </select>
+        </div>
+        <div style="margin-bottom:.75rem;">
+          <label class="form-label">Upload Recording (audio or video)</label>
+          <div id="air3-drop" style="border:2px dashed var(--border);border-radius:10px;padding:1.25rem;text-align:center;cursor:pointer;transition:all .2s;"
+            onclick="document.getElementById('air3-file').click()"
+            ondragover="event.preventDefault();this.style.borderColor='#7c3aed'"
+            ondragleave="this.style.borderColor='var(--border)'"
+            ondrop="event.preventDefault();this.style.borderColor='var(--border)';air3HandleDrop(event)">
+            <div style="font-size:1.5rem;margin-bottom:.35rem;">🎙️</div>
+            <div style="font-size:.82rem;font-weight:600;" id="air3-file-label">Click or drag to upload recording or document</div>
+            <div style="font-size:.72rem;color:var(--text-light);margin-top:.2rem;">mp3, mp4, m4a, webm, wav, docx, doc, pdf</div>
+            <input type="file" id="air3-file" accept="audio/*,video/*,.docx,.doc,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf" style="display:none;" onchange="air3HandleFile(this)">
+          </div>
+        </div>
+        <div>
+          <label class="form-label" style="font-size:.75rem;">Or paste transcript directly</label>
+          <textarea class="form-input" id="air3-transcript" rows="6" placeholder="Paste Zoom/Teams/Otter transcript here if you already have it..." style="width:100%;resize:vertical;font-size:.8rem;"></textarea>
+        </div>
+      </div>
+
+      <!-- RIGHT: OUTPUT -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem;">
+          <h3 style="font-size:.9rem;margin:0;color:#7c3aed;">Generated Interview Feedback</h3>
+          <div style="display:flex;gap:.5rem;">
+            <button class="btn btn-outline" id="air3-copy-btn" onclick="air3CopyFeedback()" style="display:none;font-size:.8rem;padding:.4rem .9rem;">📋 Copy</button>
+            <button class="btn btn-sm" onclick="air3Generate()" id="air3-generate-btn" style="background:#7c3aed;color:#fff;border:none;font-size:.85rem;padding:.5rem 1.25rem;border-radius:8px;cursor:pointer;">✨ Analyze with Claude</button>
+          </div>
+        </div>
+        <div id="air3-status" style="font-size:.8rem;color:#7c3aed;margin-bottom:.5rem;min-height:1.2rem;"></div>
+        <div id="air3-output" style="min-height:280px;background:var(--bg);border-radius:8px;padding:1rem;font-size:.84rem;line-height:1.7;white-space:pre-wrap;border:1px solid var(--border);">
+          <span style="color:var(--text-light);font-style:italic;">Upload a recording or paste a transcript, then click "Analyze with Claude" to generate structured interview feedback.</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
 </div>
 
 <!-- ============ TEMPLATES ============ -->
@@ -708,16 +1022,161 @@ tr.clickable:hover td { background: var(--accent-light); }
 </div>
 
 <script>
-// ===== AUTH =====
-(function(){if(sessionStorage.getItem('tt_rec_auth'))document.getElementById('auth-gate').style.display='none';})();
-function checkAuth(){
-  var v=document.getElementById('authInput').value;
-  crypto.subtle.digest('SHA-256',new TextEncoder().encode(v)).then(function(h){
-    var hex=Array.from(new Uint8Array(h)).map(function(b){return b.toString(16).padStart(2,'0')}).join('');
-    if(hex==='b27f5dd4b61162d334ce841d1a37f24cc252556e265723edca743bb2579035ef'){
-      sessionStorage.setItem('tt_rec_auth','1');document.getElementById('auth-gate').style.display='none';
-    } else { document.getElementById('authErr').style.display='block';document.getElementById('authInput').value=''; }
+// ===== AUTH (Google OAuth) =====
+// Full platform access
+var ADMIN_EMAILS=[
+  'cliff@tigertracks.ai','henry@tigertracks.ai',
+  'rachael@tigertracks.ai','elizabeth@tigertracks.ai',
+  'ashley@tigertracks.ai'
+];
+// Interviewers: AI Review tab + assigned candidates only
+var INTERVIEWER_EMAILS=[
+  'charlotte@tigertracks.ai','riley@tigertracks.ai',
+  'hannah@tigertracks.ai','kersten@tigertracks.ai'
+];
+var AUTH_ALLOWLIST=ADMIN_EMAILS.concat(INTERVIEWER_EMAILS);
+var CURRENT_ROLE=null; // 'admin' | 'interviewer'
+var CURRENT_EMAIL=null;
+var AUTH_CLIENT_ID='1010698547754-h3pfeegsn3tkemksjjtjlcgccoqtqbt6.apps.googleusercontent.com';
+var AUTH_TTL=30*24*60*60*1000; // 30 days
+
+// ===== ROLE-BASED ACCESS CONTROL =====
+function setRole(email){
+  CURRENT_EMAIL=email;
+  CURRENT_ROLE=ADMIN_EMAILS.indexOf(email)>=0?'admin':'interviewer';
+  localStorage.setItem('ttrec_role',CURRENT_ROLE);
+}
+
+function applyRoleAccess(){
+  if(CURRENT_ROLE==='interviewer'){
+    // Hide all nav items except AI Review and Sign Out
+    document.querySelectorAll('.nav-link').forEach(function(el){
+      var oc=el.getAttribute('onclick')||'';
+      if(oc.indexOf("'aireview'")<0&&oc.indexOf('authLogout')<0) el.style.display='none';
+    });
+    // Navigate to AI Review and hide all other sections
+    document.querySelectorAll('.section').forEach(function(el){
+      el.classList.remove('active');
+      if(el.id!=='sec-aireview') el.style.display='none';
+    });
+    var airSec=document.getElementById('sec-aireview');
+    if(airSec){airSec.style.display='';airSec.classList.add('active');}
+    // Hide admin-only controls within AI Review
+    var addCard=document.querySelector('#sec-aireview .air-admin-only');
+    document.querySelectorAll('.air-admin-only').forEach(function(el){el.style.display='none';});
+  }
+}
+
+function isAdmin(){return CURRENT_ROLE==='admin';}
+function isInterviewer(){return CURRENT_ROLE==='interviewer';}
+function canSeeEA(){return CURRENT_EMAIL==='elizabeth@tigertracks.ai';}
+
+// Hide all EA-related UI for users who aren't Elizabeth
+function applyEARestrictions(){
+  if(canSeeEA()) return; // Elizabeth sees everything
+  // Nav link
+  document.querySelectorAll('.nav-link').forEach(function(el){
+    if((el.getAttribute('onclick')||'').indexOf("'ea'")>=0) el.style.display='none';
   });
+  // EA section
+  var eaSec=document.getElementById('sec-ea');
+  if(eaSec) eaSec.style.display='none';
+  // Candidates tab + panel
+  var eaTab=document.getElementById('candTab-ea');
+  if(eaTab) eaTab.style.display='none';
+  var eaPanel=document.getElementById('candPanelEA');
+  if(eaPanel) eaPanel.style.display='none';
+  // Remove EA from all <select> option lists
+  document.querySelectorAll('option').forEach(function(opt){
+    var v=opt.value||'';
+    if(v==='EA'||v.toLowerCase().indexOf('executive assistant')>=0) opt.remove();
+  });
+}
+
+function authEnter(email){
+  setRole(email);
+  document.getElementById('authGate').style.display='none';
+  showToast('🔄 Syncing pipeline...');
+  syncFromServer(function(){
+    showToast('✅ Pipeline synced');
+    applyRoleAccess();
+    applyEARestrictions();
+    if(isAdmin()){go('dashboard');renderDashboard();checkDeepLink();}
+    else{go('aireview');air2PopulateCandidates();air3PopulateCandidates();}
+  });
+}
+
+function authCheck(){
+  var email=localStorage.getItem('ttrec_email');
+  var exp=parseInt(localStorage.getItem('ttrec_exp')||'0');
+  if(email&&AUTH_ALLOWLIST.indexOf(email)>=0&&Date.now()<exp){
+    authEnter(email);
+    return;
+  }
+  // Clear stale session
+  localStorage.removeItem('ttrec_email');
+  localStorage.removeItem('ttrec_exp');
+  localStorage.removeItem('ttrec_role');
+  document.getElementById('authGate').style.display='flex';
+  // Init Google Sign-In button
+  if(window.google&&window.google.accounts){
+    authInitGoogle();
+  } else {
+    // GSI script may still be loading — retry
+    var t=setInterval(function(){
+      if(window.google&&window.google.accounts){clearInterval(t);authInitGoogle();}
+    },200);
+  }
+}
+
+function authInitGoogle(){
+  try {
+    google.accounts.id.initialize({
+      client_id: AUTH_CLIENT_ID,
+      callback: handleGoogleLogin,
+      auto_select: false
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('google-signin-btn'),
+      {theme:'outline', size:'large', text:'signin_with', shape:'rectangular', width:280}
+    );
+  } catch(e) {
+    document.getElementById('authErr').textContent='Google Sign-In failed to load. Please refresh.';
+    document.getElementById('authErr').style.display='block';
+  }
+}
+
+function handleGoogleLogin(response){
+  var errEl=document.getElementById('authErr');
+  try {
+    // Decode JWT payload (base64 middle segment)
+    var payload=JSON.parse(atob(response.credential.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+    var email=(payload.email||'').toLowerCase();
+    if(AUTH_ALLOWLIST.indexOf(email)<0){
+      errEl.textContent='Access denied. '+email+' is not on the access list. Contact Elizabeth to request access.';
+      errEl.style.display='block';
+      google.accounts.id.disableAutoSelect();
+      return;
+    }
+    localStorage.setItem('ttrec_email',email);
+    localStorage.setItem('ttrec_exp',Date.now()+AUTH_TTL);
+    errEl.style.display='none';
+    authEnter(email);
+  } catch(e) {
+    errEl.textContent='Sign-in error. Please try again.';
+    errEl.style.display='block';
+  }
+}
+
+function authLogout(){
+  var email=localStorage.getItem('ttrec_email');
+  localStorage.removeItem('ttrec_email');
+  localStorage.removeItem('ttrec_exp');
+  if(window.google&&window.google.accounts&&email){
+    try { google.accounts.id.revoke(email); } catch(e){}
+  }
+  document.getElementById('authGate').style.display='flex';
+  authInitGoogle();
 }
 
 // ===== TOAST =====
@@ -740,6 +1199,7 @@ function go(id){
   if(id==='acctmgmt'){currentPracticeTab={am:'roles'};renderPracticeSection('am');}
   if(id==='partnerships'){currentPracticeTab={part:'roles'};renderPracticeSection('part');}
   if(id==='marketing'){currentPracticeTab={mkt:'roles'};renderPracticeSection('mkt');}
+  if(id==='ea'){currentPracticeTab.ea='roles';renderPracticeSection('ea');}
   if(id==='roles')renderRoles();
   if(id==='pipeline')renderPipeline();
   if(id==='positions')renderPositions();
@@ -747,21 +1207,55 @@ function go(id){
   if(id==='questions')renderQBank();
   if(id==='linkedin')renderLinkedIn();
   if(id==='candidates')renderCandidateList();
+  if(id==='aireview')airReviewInit();
   if(id==='templates')renderTemplates();
 }
 
 // ===== DATA LAYER =====
 function getData(k){return JSON.parse(localStorage.getItem('ttrec_'+k)||'[]');}
-function setData(k,v){localStorage.setItem('ttrec_'+k,JSON.stringify(v));}
 function getObj(k){return JSON.parse(localStorage.getItem('ttrec_'+k)||'{}');}
-function setObj(k,v){localStorage.setItem('ttrec_'+k,JSON.stringify(v));}
+
+// ===== CLOUD SYNC =====
+var SYNC_KEYS=['candidates','positions','li_pipeline'];
+var syncTimers={};
+
+function setData(k,v){
+  localStorage.setItem('ttrec_'+k,JSON.stringify(v));
+  if(SYNC_KEYS.indexOf(k)>=0) scheduleSyncPush(k,v);
+}
+function setObj(k,v){
+  localStorage.setItem('ttrec_'+k,JSON.stringify(v));
+  if(SYNC_KEYS.indexOf(k)>=0) scheduleSyncPush(k,v);
+}
+function scheduleSyncPush(k,v){
+  clearTimeout(syncTimers[k]);
+  syncTimers[k]=setTimeout(function(){
+    fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:k,data:v})})
+      .catch(function(){});
+  },600);
+}
+
+function syncFromServer(callback){
+  var pending=SYNC_KEYS.length, done=0;
+  var finish=function(){done++;if(done===pending&&callback)callback();};
+  SYNC_KEYS.forEach(function(k){
+    fetch('/api/sync?key='+k)
+      .then(function(r){return r.json();})
+      .then(function(res){
+        if(res.ok&&Array.isArray(res.data)&&res.data.length){
+          localStorage.setItem('ttrec_'+k,JSON.stringify(res.data));
+        } else if(res.ok&&res.data&&typeof res.data==='object'&&!Array.isArray(res.data)){
+          localStorage.setItem('ttrec_'+k,JSON.stringify(res.data));
+        }
+        finish();
+      })
+      .catch(function(){finish();});
+  });
+}
 
 // ===== PIPELINE STAGES =====
 var STAGES=[
-  {id:'uncontacted',label:'Uncontacted',icon:'📋',color:'#f1f5f9'},
-  {id:'applied',label:'Applied',icon:'📥',color:'#dbeafe'},
-  {id:'knockout',label:'Knockout',icon:'🚪',color:'#fef3c7'},
-  {id:'async',label:'Async Challenge',icon:'📹',color:'#fce7f3'},
+  {id:'contacted',label:'Contacted',icon:'📬',color:'#f1f5f9'},
   {id:'phone',label:'Phone Screen',icon:'📞',color:'#e0e7ff'},
   {id:'interview1',label:'Interview 1',icon:'🤝',color:'#ede9fe'},
   {id:'interview2',label:'Interview 2',icon:'🔍',color:'#e8daef'},
@@ -1298,11 +1792,39 @@ var ROLES = {
     },
     interviewAreas: ['Agency marketing track record','Writing quality and creative thinking','Design sensibility','Inbound lead generation results','Content strategy execution','Case study development','LinkedIn organic + paid','Brand positioning','Email marketing and lifecycle'],
     keyTraits: ['Agency-proven','Exceptional writer','Design-capable','Creatively oriented','Inbound generator','Content strategist','AI-savvy content creator','Self-starter','Brand builder','Results-driven']
+  },
+  EA: {
+    title: 'Executive Assistant',
+    short: 'EA',
+    level: 'Support',
+    practice: 'Operations & Support',
+    description: 'True strategic partner to our CEO. Serves as the central hub connecting the CEO to his team, clients, and priorities — managing calendar, communications, BD pipeline support, invoicing/accounting, and operations. This isn\'t a "hold my calls" role. Reports directly to Cliff Simmons.',
+    keyTraits: ['Highly organized','Proactive','Discreet','Detail-oriented','Strong writer','Financially literate','Calendar expert','Travel logistics','Executive-first mindset','Systems thinker'],
+    responsibilities: [
+      'Own the CEO\'s calendar end-to-end: scheduling, conflict resolution, Calendly syncing, and travel coordination',
+      'Monitor, organize, and manage the CEO\'s email inbox daily — draft responses, prioritize, ensure nothing falls through the cracks',
+      'Deliver a daily Slack brief each morning with call rundowns, prep notes, and key agenda items',
+      'Track the BD pipeline and maintain client status documentation; draft follow-up emails and outreach using templates',
+      'Own the accounting inbox: triage, categorize, respond per SLAs; send monthly invoices through QuickBooks',
+      'Coordinate with the accountant on collections, exceptions, credits, and month-end reconciliation',
+      'Manage Asana tasks and projects: status updates, due dates, and weekly reporting',
+      'Coordinate new hire onboarding and offboarding logistics',
+      'Plan and coordinate internal events, executive dinners, retreats, and team milestones',
+      'Assist with contracts, tax documentation, and communications with external counsel',
+      'Manage personal travel, appointments, household services, and family event logistics as needed'
+    ],
+    impact: [
+      'Monthly invoices sent by the 2nd of each month with 95%+ accuracy against contracts',
+      'Daily call rundown delivered by 9:00 AM ET with fewer than 2% scheduling conflicts per month',
+      'New hires fully onboarded within 2 business days of start',
+      'Accounting inbox at zero critical unread daily; finance records updated within 24 hours of payment'
+    ],
+    extJDUrl: '/ea-jd.html'
   }
 };
 
 // ===== INIT POSITIONS =====
-var POS_VERSION='v4_2026_03_04';
+var POS_VERSION='v5_2026_03_11';
 (function(){
   if(getData('positions').length===0||localStorage.getItem('ttrec_pos_version')!==POS_VERSION){
     localStorage.setItem('ttrec_pos_version',POS_VERSION);
@@ -1317,8 +1839,8 @@ var POS_VERSION='v4_2026_03_04';
         status:'open',
         created:'2026-03-01',
         description:r.description,
-        headcount:k==='AC'?2:k==='AS'?2:k==='AM'?1:k==='SrAM'?1:k==='BD'?2:k==='MKT'?1:k==='RP'?0:0,
-        salary: k==='AC'?'$60,000 - $75,000':k==='AS'?'$85,000 - $95,000':k==='AM'?'$95,000 - $135,000':k==='SrAM'?'$122,000 - $140,000':k==='BD'?'$110,000 - $130,000 base + OTE $160,000 - $175,000':k==='MKT'?'$100,000 - $155,000':k==='RP'?'Referral Commission Structure':'TBD',
+        headcount:k==='AC'?2:k==='AS'?2:k==='AM'?1:k==='SrAM'?1:k==='BD'?2:k==='MKT'?1:k==='RP'?0:k==='EA'?1:0,
+        salary: k==='AC'?'$60,000 - $75,000':k==='AS'?'$85,000 - $95,000':k==='AM'?'$95,000 - $135,000':k==='SrAM'?'$122,000 - $140,000':k==='BD'?'$110,000 - $130,000 base + OTE $160,000 - $175,000':k==='MKT'?'$100,000 - $155,000':k==='RP'?'Referral Commission Structure':k==='EA'?'$55,000 - $75,000':'TBD',
         practice: ROLES[k]?ROLES[k].practice:'Account Management'
       });
     });
@@ -1328,11 +1850,12 @@ var POS_VERSION='v4_2026_03_04';
 
 // ===== DASHBOARD =====
 // ===== PRACTICE AREA SECTIONS =====
-var currentPracticeTab={am:'roles',part:'roles',mkt:'roles'};
+var currentPracticeTab={am:'roles',part:'roles',mkt:'roles',ea:'roles'};
 var PRACTICE_MAP={
   am:{key:'Account Management',css:'am',icon:'📊',roles:['AC','AS','AM','SrAM']},
   part:{key:'Partnerships',css:'part',icon:'🤝',roles:['BD','RP']},
-  mkt:{key:'Marketing',css:'mkt',icon:'📢',roles:['MKT']}
+  mkt:{key:'Marketing',css:'mkt',icon:'📢',roles:['MKT']},
+  ea:{key:'Operations & Support',css:'ops',icon:'🗓️',roles:['EA']}
 };
 
 function switchPracticeTab(practice,tab,btn){
@@ -1348,6 +1871,7 @@ function renderPracticeSection(practice){
   var h='';
 
   if(tab==='roles') h=renderPracticeRoles(pm);
+  else if(tab==='intjd') h=renderInternalJD(practice);
   else if(tab==='interview') h=renderPracticeInterview(pm);
   else if(tab==='eval') h=renderPracticeEval(pm);
   else if(tab==='screening') h=renderPracticeScreening(pm);
@@ -1407,11 +1931,16 @@ function renderPracticeRoles(pm){
     }
 
     // Impact & KPIs
-    if(role.impact&&role.impact.length){
+    if(role.impact){
       h+='<details style="margin-top:.5rem;"><summary style="font-size:.85rem;font-weight:700;cursor:pointer;">Expected Impact</summary>';
-      h+='<ul style="margin-top:.5rem;padding-left:1.25rem;font-size:.8rem;">';
-      role.impact.forEach(function(i){h+='<li>'+i+'</li>';});
-      h+='</ul></details>';
+      if(Array.isArray(role.impact)){
+        h+='<ul style="margin-top:.5rem;padding-left:1.25rem;font-size:.8rem;">';
+        role.impact.forEach(function(i){h+='<li>'+i+'</li>';});
+        h+='</ul>';
+      } else {
+        h+='<p style="margin-top:.5rem;font-size:.8rem;">'+role.impact+'</p>';
+      }
+      h+='</details>';
     }
     if(role.kpis&&role.kpis.length){
       h+='<details style="margin-top:.5rem;"><summary style="font-size:.85rem;font-weight:700;cursor:pointer;">KPIs & Metrics</summary>';
@@ -1466,6 +1995,9 @@ function renderPracticeRoles(pm){
     // BD-specific: Who We Sell To
     if(role.sellsTo&&role.sellsTo.length){
       h+='<details style="margin-top:.5rem;"><summary style="font-size:.85rem;font-weight:700;cursor:pointer;">Who We Sell To (Client Tiers)</summary>';
+      if(typeof role.sellsTo==='string'){
+        h+='<div style="background:var(--bg);padding:.6rem;border-radius:8px;font-size:.78rem;margin-top:.5rem;">'+role.sellsTo+'</div></details>';
+      } else {
       h+='<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.5rem;margin-top:.5rem;">';
       role.sellsTo.forEach(function(t){
         h+='<div style="background:var(--bg);padding:.6rem;border-radius:8px;font-size:.78rem;">'+t+'</div>';
@@ -1474,7 +2006,8 @@ function renderPracticeRoles(pm){
       if(role.disqualifiers&&role.disqualifiers.length){
         h+='<div style="margin-top:.5rem;background:#fef2f2;padding:.6rem;border-radius:8px;font-size:.78rem;"><strong style="color:var(--danger);">Disqualifiers:</strong> '+role.disqualifiers.join(' | ')+'</div>';
       }
-      h+='</details>';
+      h+='</div></details>';
+      } // end array sellsTo
     }
 
     // BD-specific: Services We Sell
@@ -1572,19 +2105,26 @@ function renderPracticeInterview(pm){
   h+='<p style="font-size:.8rem;color:var(--text-light);margin-top:.5rem;">Anti-AI protocol: Loom async video (unscripted), follow-up probes requiring specific names, numbers, dates, and timelines. No advance question access.</p>';
   h+='</div>';
 
-  // Questions by stage, then by role within the practice area
-  stageNames.forEach(function(stage){
-    h+='<div class="card" style="margin-bottom:1rem;">';
-    h+='<h3 style="color:var(--'+pm.css+'-color);margin-bottom:.25rem;">'+stage.label+'</h3>';
-    h+='<p style="font-size:.78rem;color:var(--text-light);margin-bottom:.75rem;">'+stage.desc+'</p>';
+  // Questions by role, then by stage within each role
+  pm.roles.forEach(function(rk){
+    var role=ROLES[rk];if(!role)return;
+    // Only include roles that have at least one stage with questions
+    var hasAny=stageNames.some(function(s){return STAGE_QUESTIONS[s.id]&&STAGE_QUESTIONS[s.id][rk]&&STAGE_QUESTIONS[s.id][rk].length;});
+    if(!hasAny)return;
 
-    pm.roles.forEach(function(rk){
-      var role=ROLES[rk];if(!role)return;
+    h+='<div class="card" style="border-left:4px solid var(--'+pm.css+'-color);margin-bottom:1rem;">';
+    h+='<h3 style="color:var(--'+pm.css+'-color);margin-bottom:.75rem;">'+role.title+'</h3>';
+
+    stageNames.forEach(function(stage){
       var qs=STAGE_QUESTIONS[stage.id]&&STAGE_QUESTIONS[stage.id][rk]?STAGE_QUESTIONS[stage.id][rk]:[];
       if(!qs.length)return;
 
-      h+='<details style="margin-bottom:.5rem;"><summary style="font-weight:700;font-size:.85rem;cursor:pointer;">'+role.title+' ('+qs.length+' questions)</summary>';
-      h+='<div style="margin-top:.5rem;">';
+      h+='<details style="margin-bottom:.5rem;border:1px solid var(--border);border-radius:8px;overflow:hidden;">';
+      h+='<summary style="font-weight:700;font-size:.85rem;cursor:pointer;padding:.6rem .9rem;background:var(--bg);list-style:none;display:flex;align-items:center;justify-content:space-between;">';
+      h+=stage.label+'<span style="font-size:.72rem;font-weight:400;color:var(--text-light);">'+qs.length+' questions</span>';
+      h+='</summary>';
+      h+='<div style="padding:.5rem .9rem .75rem;">';
+      h+='<p style="font-size:.75rem;color:var(--text-light);margin-bottom:.5rem;">'+stage.desc+'</p>';
       qs.forEach(function(q,i){
         h+='<div class="q-item"><div class="q-text">'+(i+1)+'. '+q.q+'</div>';
         if(q.why) h+='<div class="q-why">Why: '+q.why+'</div>';
@@ -1654,6 +2194,58 @@ function renderPracticeEval(pm){
 }
 
 var EXTERNAL_JDS = {
+  am: {
+    title: 'Account Coordinator',
+    intro: 'Tiger Tracks was founded by former Google marketing leaders with decades of experience managing top-tier digital ad accounts. We deliver exceptional results for our clients, partnering with private equity firms, venture-backed startups, and publicly traded companies.\n\nIn a constantly evolving industry, we focus on the fundamentals of successful account management — combining long-term strategic advising with daily hands-on performance optimization. Our commitment to customer service and salesmanship drives us to exceed expectations.',
+    role: 'The Account Coordinator is an early-career execution and operational support role focused on building strong paid media fundamentals, accuracy, and professional confidence. You\'ll support execution across 6–10 accounts, working alongside Account Strategists and Account Managers to keep campaigns running smoothly, data clean, and deliverables on track.\n\nThis is a hands-on, detail-intensive role for individuals who take pride in getting things right and are eager to build a career in paid media from the ground up.',
+    whatYouDo: [
+      'Build campaigns, ad sets, and ad copy under strategist guidance; execute basic optimizations across Google and Meta Ads',
+      'Pull daily/weekly performance data, maintain change logs, and support pacing and budget tracking',
+      'Request, upload, and traffic creative assets into platforms following naming conventions',
+      'QA campaign setups, tracking links, UTMs, and conversions for accuracy',
+      'Keep task management tools, timelines, and documentation organized and up to date',
+      'Flag issues early, follow documented processes, and communicate task status proactively'
+    ],
+    whatYouBring: [
+      '1–2 years of experience in digital marketing or advertising (internships count)',
+      'Familiarity with Google Ads, Meta Ads, and/or Microsoft Ads',
+      'Detail-oriented, organized, and process-driven',
+      'Proactive communicator who flags issues early',
+      'Eager to build deep paid media expertise'
+    ],
+    customSections: [
+      {
+        title: 'Compensation & Benefits',
+        items: [
+          'Salary: $60,000 – $75,000 + quarterly performance-based bonuses',
+          'Fully remote team — always',
+          'Company-paid medical, dental, and vision insurance',
+          'Flexible time off policy',
+          '12 weeks paid parental leave',
+          '$2,000 technology stipend',
+          'Employee growth plans, appreciation programs, and paid company summits'
+        ]
+      },
+      {
+        title: 'Screening Questions — Please address these in your application',
+        items: [
+          'Have you worked hands-on in Google Ads and/or Meta Ads (not just Google Analytics or organic social)? (Yes / No)',
+          'Are you comfortable with a fully remote position paying $60,000–$75,000? (Yes / No)',
+          'Are you able to start within 30 days? (Yes / No)',
+          'Have you managed tasks or deliverables across multiple accounts or projects simultaneously? (Yes / No)',
+          'You notice a tracking error right before a campaign launches. Do you flag it to your team before pushing it live, even if it means a delay? (Yes / No)'
+        ]
+      },
+      {
+        title: 'Skills (Add as LinkedIn skill tags)',
+        items: ['Google Ads','Meta Ads','Digital Advertising','Campaign Management','Data Analysis','Ad Copywriting','Project Management','Quality Assurance']
+      },
+      {
+        title: 'Job Functions',
+        items: ['Marketing','Advertising','Project Management']
+      }
+    ]
+  },
   part: {
     title: 'Director of Partnerships, Performance Marketing',
     intro: 'Tiger Tracks is a fully remote performance marketing agency built by former Google marketing leaders with decades of experience managing top tier digital ad accounts. We partner with PE firms, startups, and enterprise brands to drive measurable growth through paid search and social advertising. Our approach combines strategic consulting with hands-on optimization, helping clients outperform in an ever changing digital landscape.',
@@ -1731,7 +2323,93 @@ var EXTERNAL_JDS = {
   }
 };
 
+function renderInternalJD(practice){
+  var pm=PRACTICE_MAP[practice];if(!pm)return'';
+  var roleKey=practice==='part'?'BD':practice==='am'?'SrAM':practice==='mkt'?'MKT':null;
+  var role=roleKey?ROLES[roleKey]:null;
+  if(!role)return'<div class="card"><p>No internal JD available for this practice area yet.</p></div>';
+
+  // For Partnerships, embed the bd-jd.html file directly
+  var jdFile=practice==='part'?'bd-jd.html':practice==='am'?'sram-jd.html':practice==='mkt'?'mkt-jd.html':null;
+  if(jdFile){
+    return '<div class="card" style="padding:0;overflow:hidden;">'
+      +'<div style="display:flex;justify-content:space-between;align-items:center;padding:.75rem 1.25rem;border-bottom:1px solid var(--border);">'
+      +'<h3 style="font-size:1rem;margin:0;">📋 Internal Position Description — '+role.title+'</h3>'
+      +'<div style="display:flex;gap:.5rem;">'
+      +'<a href="'+jdFile+'" target="_blank" class="btn btn-sm btn-outline" style="font-size:.78rem;padding:.35rem .75rem;">↗ Open Full</a>'
+      +'<button class="btn btn-sm" onclick="document.getElementById(\'intjd-frame\').contentWindow.print()" style="font-size:.78rem;padding:.35rem .75rem;">🖨️ Print</button>'
+      +'</div></div>'
+      +'<iframe id="intjd-frame" src="'+jdFile+'" style="width:100%;height:780px;border:none;" title="Internal JD"></iframe>'
+      +'</div>';
+  }
+
+  var h='<div class="card">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.25rem;">';
+  h+='<h3 style="font-size:1.05rem;">📋 Internal Position Description</h3>';
+  h+='<button class="btn btn-sm" onclick="window.print()" style="font-size:.78rem;padding:.4rem .8rem;">🖨️ Print</button>';
+  h+='</div>';
+  h+='<h4 style="font-size:1.1rem;margin-bottom:.2rem;color:var(--'+pm.css+'-color);">'+role.title+'</h4>';
+  h+='<p style="font-size:.8rem;color:var(--text-light);margin-bottom:1.25rem;">Tiger Tracks | Fully Remote | Full-Time | '+role.level+' Level</p>';
+  if(role.description){
+    h+='<div style="background:var(--bg);padding:1rem;border-radius:8px;margin-bottom:1.25rem;">';
+    h+='<strong style="font-size:.85rem;">Role Overview</strong>';
+    h+='<p style="font-size:.85rem;margin-top:.5rem;line-height:1.7;">'+role.description+'</p>';
+    if(role.replacesRoles)h+='<p style="font-size:.8rem;font-style:italic;color:var(--text-light);margin-top:.4rem;">'+role.replacesRoles+'</p>';
+    h+='</div>';
+  }
+  if(role.scope){
+    h+='<p style="font-size:.85rem;margin-bottom:1.25rem;"><strong>Scope:</strong> '+role.scope+'</p>';
+  }
+  if(role.keyTraits&&role.keyTraits.length){
+    h+='<div style="margin-bottom:1.25rem;">';
+    h+='<strong style="font-size:.9rem;display:block;margin-bottom:.5rem;">Key Traits</strong>';
+    h+='<div style="display:flex;flex-wrap:wrap;gap:.5rem;">';
+    role.keyTraits.forEach(function(t){h+='<span style="display:inline-block;padding:.35rem .85rem;border-radius:20px;font-size:.78rem;font-weight:600;background:var(--'+pm.css+'-bg);color:var(--'+pm.css+'-color);">'+t+'</span>';});
+    h+='</div></div>';
+  }
+  if(role.responsibilities&&role.responsibilities.length){
+    h+='<div style="margin-bottom:1.25rem;">';
+    h+='<strong style="font-size:.9rem;display:block;margin-bottom:.5rem;">Core Responsibilities ('+role.responsibilities.length+')</strong>';
+    h+='<ul style="padding-left:1.25rem;font-size:.83rem;line-height:1.9;">';
+    role.responsibilities.forEach(function(r){h+='<li>'+r+'</li>';});
+    h+='</ul></div>';
+  }
+  if(role.impact){
+    h+='<div style="margin-bottom:1.25rem;">';
+    h+='<strong style="font-size:.9rem;display:block;margin-bottom:.5rem;">Expected Impact</strong>';
+    if(Array.isArray(role.impact)){
+      h+='<ul style="padding-left:1.25rem;font-size:.83rem;line-height:1.9;">';
+      role.impact.forEach(function(i){h+='<li>'+i+'</li>';});
+      h+='</ul>';
+    } else {
+      h+='<p style="font-size:.83rem;line-height:1.7;">'+role.impact+'</p>';
+    }
+    h+='</div>';
+  }
+  if(role.kpis&&role.kpis.length){
+    h+='<div style="margin-bottom:1.25rem;">';
+    h+='<strong style="font-size:.9rem;display:block;margin-bottom:.5rem;">KPIs &amp; Success Metrics</strong>';
+    h+='<ul style="padding-left:1.25rem;font-size:.83rem;line-height:1.9;">';
+    role.kpis.forEach(function(k){h+='<li>'+k+'</li>';});
+    h+='</ul></div>';
+  }
+  h+='</div>';
+  return h;
+}
+
 function renderExternalJD(practice){
+  // Check if the practice's primary role has an extJDUrl (e.g. EA → ea-jd.html)
+  var pm=PRACTICE_MAP[practice];
+  if(pm&&pm.roles&&pm.roles.length){
+    var primaryRole=ROLES[pm.roles[0]];
+    if(primaryRole&&primaryRole.extJDUrl){
+      return '<div class="card" style="text-align:center;padding:2rem;">'
+        +'<p style="margin-bottom:1rem;font-size:.9rem;">The full position description opens in a new tab.</p>'
+        +'<a href="'+primaryRole.extJDUrl+'" target="_blank" class="btn btn-primary">📄 Open '+primaryRole.title+' Job Description</a>'
+        +'<div style="margin-top:1.5rem;"><iframe src="'+primaryRole.extJDUrl+'" style="width:100%;height:600px;border:1px solid var(--border);border-radius:8px;"></iframe></div>'
+        +'</div>';
+    }
+  }
   var jd=EXTERNAL_JDS[practice];
   if(!jd) return '<div class="card"><p>No external JD available for this practice area yet.</p></div>';
   var h='';
@@ -1757,17 +2435,31 @@ function renderExternalJD(practice){
   jd.whatYouBring.forEach(function(b){h+='<li>'+b+'</li>';});
   h+='</ul>';
 
-  h+='<p style="margin-bottom:.5rem;"><strong><em>Bonus Points:</em></strong></p><ul style="margin-bottom:1rem;">';
-  jd.bonus.forEach(function(b){h+='<li>'+b+'</li>';});
-  h+='</ul>';
+  if(jd.bonus&&jd.bonus.length){
+    h+='<p style="margin-bottom:.5rem;"><strong><em>Bonus Points:</em></strong></p><ul style="margin-bottom:1rem;">';
+    jd.bonus.forEach(function(b){h+='<li>'+b+'</li>';});
+    h+='</ul>';
+  }
 
-  h+='<p style="margin-bottom:.5rem;"><strong><em>Non-Negotiables:</em></strong></p><ul style="margin-bottom:1rem;">';
-  jd.nonNeg.forEach(function(b){h+='<li>'+b+'</li>';});
-  h+='</ul>';
+  if(jd.nonNeg&&jd.nonNeg.length){
+    h+='<p style="margin-bottom:.5rem;"><strong><em>Non-Negotiables:</em></strong></p><ul style="margin-bottom:1rem;">';
+    jd.nonNeg.forEach(function(b){h+='<li>'+b+'</li>';});
+    h+='</ul>';
+  }
 
-  h+='<p style="margin-bottom:.5rem;"><strong><em>What Success Looks Like:</em></strong></p><ul style="margin-bottom:1rem;">';
-  jd.success.forEach(function(b){h+='<li>'+b+'</li>';});
-  h+='</ul>';
+  if(jd.success&&jd.success.length){
+    h+='<p style="margin-bottom:.5rem;"><strong><em>What Success Looks Like:</em></strong></p><ul style="margin-bottom:1rem;">';
+    jd.success.forEach(function(b){h+='<li>'+b+'</li>';});
+    h+='</ul>';
+  }
+
+  if(jd.customSections){
+    jd.customSections.forEach(function(s){
+      h+='<p style="margin-bottom:.5rem;"><strong><em>'+s.title+'</em></strong></p>';
+      if(s.items&&s.items.length){h+='<ul style="margin-bottom:1rem;">';s.items.forEach(function(i){h+='<li>'+i+'</li>';});h+='</ul>';}
+      if(s.text){h+='<p style="margin-bottom:1rem;font-size:.85rem;">'+s.text+'</p>';}
+    });
+  }
 
   h+='<p style="font-style:italic;color:var(--text-light);margin-top:.75rem;">Tiger Tracks is committed to building a diverse and inclusive team. We are an Equal Opportunity Employer.</p>';
   h+='</div></div>';
@@ -1858,8 +2550,18 @@ function scoreCandidateForRole(c, roleKey){
 function switchCandTab(tab){
   document.getElementById('candPanelBD').style.display=tab==='bd'?'':'none';
   document.getElementById('candPanelMKT').style.display=tab==='mkt'?'':'none';
+  var eaEl=document.getElementById('candPanelEA');if(eaEl)eaEl.style.display=tab==='ea'?'':'none';
   document.querySelectorAll('#sec-candidates .tab').forEach(function(t){t.classList.remove('active');});
   var el=document.getElementById('candTab-'+tab);if(el)el.classList.add('active');
+  if(tab==='ea'){
+    var cands=getData('candidates').filter(function(c){return c.roleKey==='EA';});
+    var container=document.getElementById('candidateListEA');
+    var cnt=document.getElementById('candCountEA');
+    if(cnt)cnt.textContent=cands.length?cands.length+' candidate'+(cands.length===1?'':'s'):'';
+    if(!container)return;
+    if(!cands.length){container.innerHTML='<p style="color:var(--text-light);font-size:.85rem;padding:1rem;">No Executive Assistant candidates yet. Use <strong>Add Candidate</strong> in the Pipeline and select Executive Assistant as the role.</p>';return;}
+    container.innerHTML=cands.map(function(c){return '<div class="card" style="margin-bottom:.75rem;padding:1rem;"><div style="font-weight:700;">'+c.name+'</div><div style="font-size:.82rem;color:var(--text-light);">'+c.company+' · '+stageLabel(c.stage)+'</div></div>';}).join('');
+  }
 }
 
 var CAND_VOTES=JSON.parse(localStorage.getItem('ttrec_cand_votes')||'{}');
@@ -1940,10 +2642,40 @@ function renderCandidateCard(c, roleKey, scoreObj){
   h+='<div style="display:flex;flex-direction:column;gap:.4rem;flex-shrink:0;">';
   h+='<button onclick="voteCand(\''+escapedUrl+'\',\'up\',\''+roleKey+'\')" style="width:44px;height:44px;border-radius:8px;border:2px solid '+(vote==='up'?'var(--success)':'var(--border)')+';background:'+(vote==='up'?'#dcfce7':'#fff')+';cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;" title="Approve for outreach">👍</button>';
   h+='<button onclick="voteCand(\''+escapedUrl+'\',\'down\',\''+roleKey+'\')" style="width:44px;height:44px;border-radius:8px;border:2px solid '+(vote==='down'?'var(--danger)':'var(--border)')+';background:'+(vote==='down'?'#fef2f2':'#fff')+';cursor:pointer;font-size:1.2rem;display:flex;align-items:center;justify-content:center;" title="Skip this candidate">👎</button>';
+  if(vote==='up'){
+    var inPipeline=getData('candidates').some(function(p){return p.linkedinUrl&&p.linkedinUrl===c.linkedin;});
+    if(!inPipeline){
+      h+='<button onclick="addReviewCandToPipeline('+JSON.stringify({name:'__NAME__',linkedin:'__LI__',title:'__TITLE__',company:'__CO__'}).replace('__NAME__',c.name).replace('__LI__',c.linkedin.replace(/'/g,"\\'")).replace('__TITLE__',c.currentTitle||c.jobTitle||'').replace('__CO__',c.company||'')+',\''+roleKey+'\')" style="width:44px;height:44px;border-radius:8px;border:2px solid var(--accent);background:#e8f7f7;cursor:pointer;font-size:.85rem;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--accent);" title="Add to pipeline">➕</button>';
+    } else {
+      h+='<div style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-size:.8rem;color:var(--success);" title="Already in pipeline">✓</div>';
+    }
+  }
   h+='</div>';
 
   h+='</div></div>';
   return h;
+}
+
+function addReviewCandToPipeline(c, roleKey){
+  var pos=getData('positions').find(function(p){return p.roleKey===roleKey;});
+  var candidate={
+    id:'rev_'+Date.now()+'_'+Math.random().toString(36).substr(2,5),
+    name:c.name||'Unknown',
+    linkedinUrl:c.linkedin||'',
+    currentTitle:c.title||'',
+    company:c.company||'',
+    stage:'applied',
+    roleKey:roleKey,
+    positionId:pos?pos.id:'',
+    source:'Candidate Review',
+    notes:'Approved in Candidate Review',
+    created:new Date().toISOString().slice(0,10)
+  };
+  var cands=getData('candidates');
+  cands.push(candidate);
+  setData('candidates',cands);
+  renderCandidateList();
+  showToast('✅ Added '+c.name+' to pipeline as '+stageLabel('applied'));
 }
 
 function renderCandidateList(){
@@ -2067,9 +2799,10 @@ function copyExternalJD(practice){
   t+='The Role:\n'+jd.role+'\n\n';
   t+='What You Will Do:\n';jd.whatYouDo.forEach(function(b){t+='• '+b+'\n';});
   t+='\nWhat You Bring:\n';jd.whatYouBring.forEach(function(b){t+='• '+b+'\n';});
-  t+='\nBonus Points:\n';jd.bonus.forEach(function(b){t+='• '+b+'\n';});
-  t+='\nNon-Negotiables:\n';jd.nonNeg.forEach(function(b){t+='• '+b+'\n';});
-  t+='\nWhat Success Looks Like:\n';jd.success.forEach(function(b){t+='• '+b+'\n';});
+  if(jd.bonus&&jd.bonus.length){t+='\nBonus Points:\n';jd.bonus.forEach(function(b){t+='• '+b+'\n';});}
+  if(jd.nonNeg&&jd.nonNeg.length){t+='\nNon-Negotiables:\n';jd.nonNeg.forEach(function(b){t+='• '+b+'\n';});}
+  if(jd.success&&jd.success.length){t+='\nWhat Success Looks Like:\n';jd.success.forEach(function(b){t+='• '+b+'\n';});}
+  if(jd.customSections){jd.customSections.forEach(function(s){t+='\n'+s.title+':\n';if(s.items)s.items.forEach(function(i){t+='• '+i+'\n';});if(s.text)t+=s.text+'\n';});}
   t+='\nTiger Tracks is committed to building a diverse and inclusive team. We are an Equal Opportunity Employer.';
   navigator.clipboard.writeText(t).then(function(){
     var btn=event.target;btn.textContent='✅ Copied!';setTimeout(function(){btn.textContent='📋 Copy to Clipboard';},2000);
@@ -2098,13 +2831,144 @@ function renderPracticeScreening(pm){
 
 function startPracticeScreen(css){
   var rk=document.getElementById('practiceScreenRole_'+css).value;
-  var name=document.getElementById('practiceScreenName_'+css).value||'Candidate';
+  var name=document.getElementById('practiceScreenName_'+css).value.trim()||'Candidate';
   var role=ROLES[rk];if(!role)return;
-  // Use the existing screening tool by setting the selectors and navigating
-  document.getElementById('screenRole').value=rk;
-  populateScreenSel();
-  onScreenRoleChange();
-  go('screening');
+  var box=document.getElementById('practiceScreenContent_'+css);
+  var savedKey='inline_screen_'+rk+'_'+name.replace(/\s+/g,'_');
+  var saved=getObj(savedKey);
+
+  var h='<div class="card" style="margin-top:1rem;">';
+  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">';
+  h+='<h3 style="margin:0;">🎯 Screening: <span style="color:var(--accent);">'+esc(name)+'</span> — '+esc(role.title)+'</h3>';
+  h+='<div style="display:flex;gap:.5rem;">';
+  h+='<button class="btn btn-outline btn-sm" onclick="saveInlineScreen(\''+css+'\',\''+savedKey+'\')">💾 Save</button>';
+  h+='<button class="btn btn-outline btn-sm" onclick="printInlineScreen(\''+css+'\')">🖨️ Print</button>';
+  h+='<button class="btn btn-outline btn-sm" onclick="copyInlineScreen(\''+css+'\')">📋 Copy</button>';
+  h+='<button class="btn btn-sm" style="background:#6b7280;color:#fff;" onclick="document.getElementById(\'practiceScreenContent_'+css+'\').innerHTML=\'\'">✕</button>';
+  h+='</div></div>';
+
+  // 1. Knockout criteria
+  if(role.knockout&&role.knockout.length){
+    h+='<div class="screen-section"><h4>🚪 Knockout Screen <span style="font-size:.72rem;font-weight:400;color:var(--text-light);">— any fail = do not advance</span></h4>';
+    h+='<table><tr><th style="width:40%;">Criteria</th><th>Candidate Answer / Notes</th><th style="width:90px;">Min Required</th><th style="width:70px;">Pass?</th></tr>';
+    role.knockout.forEach(function(ko,i){
+      var a=saved['ko_a'+i]||''; var p=saved['ko_p'+i]||'';
+      h+='<tr><td><strong>'+esc(ko.q)+'</strong></td>';
+      h+='<td><input class="form-input psc-ko-a" data-i="'+i+'" value="'+esc(a)+'" placeholder="Notes..."></td>';
+      h+='<td style="text-align:center;font-size:.78rem;font-weight:700;">'+esc(ko.min)+'</td>';
+      h+='<td><select class="form-input psc-ko-p" data-i="'+i+'" style="padding:.25rem;font-size:.8rem;"><option value="">-</option><option value="pass"'+(p==='pass'?' selected':'')+'>✅ Pass</option><option value="fail"'+(p==='fail'?' selected':'')+'>❌ Fail</option></select></td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  // 2. Stage questions (phone screen)
+  var stageQ=typeof STAGE_QUESTIONS!=='undefined'?STAGE_QUESTIONS:{};
+  var phoneQs=(stageQ.phone&&stageQ.phone[rk])||[];
+  if(phoneQs.length){
+    h+='<div class="screen-section"><h4>📞 Phone Screen Questions</h4>';
+    phoneQs.forEach(function(q,i){
+      var a=saved['phone_a'+i]||'';
+      h+='<div class="screen-q"><div class="question">'+(i+1)+'. '+esc(q.q||q)+'</div>';
+      if(q.why)h+='<div class="why">Why we ask: '+esc(q.why)+'</div>';
+      h+='<textarea class="form-input psc-phone-a" data-i="'+i+'" rows="2" placeholder="Candidate response / notes..." style="margin-top:.4rem;">'+esc(a)+'</textarea>';
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+
+  // 3. Eval criteria (scorecard)
+  var criteria=getEvalCriteria(rk);
+  if(criteria.length){
+    h+='<div class="screen-section"><h4>📊 Scorecard</h4>';
+    h+='<table><tr><th>Competency</th><th>Description</th><th style="width:140px;">Rating (1-5)</th></tr>';
+    criteria.forEach(function(cr,i){
+      var sv=saved['eval_s'+i]||0;
+      h+='<tr><td><strong>'+esc(cr.name)+'</strong></td><td style="font-size:.78rem;color:var(--text-light);">'+esc(cr.desc)+'</td><td>';
+      h+='<div style="display:flex;gap:.2rem;">';
+      for(var s=1;s<=5;s++){
+        h+='<button class="rating-btn psc-eval-r'+(sv==s?' sel':'')+'" data-i="'+i+'" data-v="'+s+'" onclick="this.closest(\'tr\').querySelectorAll(\'.rating-btn\').forEach(function(b){b.classList.remove(\'sel\')});this.classList.add(\'sel\');">'+s+'</button>';
+      }
+      h+='</div></td></tr>';
+    });
+    h+='</table></div>';
+  }
+
+  // 4. Green/red flags
+  var fl=getFlags(rk);
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin:.75rem 0;">';
+  h+='<div style="background:#f0fdf4;border-radius:8px;padding:.75rem;"><strong style="color:#16a34a;font-size:.8rem;">✅ GREEN FLAGS</strong><ul style="margin:.4rem 0 0;padding-left:1.2rem;">';
+  fl.green.forEach(function(f){h+='<li style="font-size:.78rem;margin-bottom:.2rem;">'+esc(f)+'</li>';});
+  h+='</ul></div>';
+  h+='<div style="background:#fef2f2;border-radius:8px;padding:.75rem;"><strong style="color:#dc2626;font-size:.8rem;">🚩 RED FLAGS</strong><ul style="margin:.4rem 0 0;padding-left:1.2rem;">';
+  fl.red.forEach(function(f){h+='<li style="font-size:.78rem;margin-bottom:.2rem;">'+esc(f)+'</li>';});
+  h+='</ul></div></div>';
+
+  // 5. Overall notes + recommendation
+  h+='<div class="screen-section"><h4>📝 Overall Notes & Recommendation</h4>';
+  h+='<textarea class="form-input psc-notes" rows="3" placeholder="Overall impression, standout moments, concerns...">'+esc(saved.notes||'')+'</textarea>';
+  h+='<div style="display:flex;gap:.75rem;margin-top:.5rem;flex-wrap:wrap;">';
+  ['advance','hold','reject'].forEach(function(rec){
+    var labels={advance:'✅ Advance',hold:'⏸ Hold',reject:'❌ Reject'};
+    var colors={advance:'var(--success)',hold:'#f59e0b',reject:'var(--danger)'};
+    h+='<label style="display:flex;align-items:center;gap:.35rem;font-size:.82rem;cursor:pointer;">';
+    h+='<input type="radio" name="psc_rec_'+css+'" value="'+rec+'"'+(saved.rec===rec?' checked':'')+' style="accent-color:'+colors[rec]+';"> <span style="font-weight:600;color:'+colors[rec]+';">'+labels[rec]+'</span></label>';
+  });
+  h+='</div></div>';
+
+  h+='<div style="display:flex;gap:.5rem;margin-top:.75rem;">';
+  h+='<button class="btn btn-primary" onclick="saveInlineScreen(\''+css+'\',\''+savedKey+'\')">💾 Save Screening</button>';
+  h+='<button class="btn btn-outline" onclick="copyInlineScreen(\''+css+'\')">📋 Copy to Clipboard</button>';
+  h+='<button class="btn btn-outline" onclick="printInlineScreen(\''+css+'\')">🖨️ Print / PDF</button>';
+  // If candidate is in pipeline, offer to advance
+  h+='<button class="btn btn-outline" onclick="addScreenedToPipeline(\''+esc(name)+'\',\''+rk+'\',\''+css+'\',\''+savedKey+'\')">➕ Add to Pipeline</button>';
+  h+='</div></div>';
+
+  box.innerHTML=h;
+  box.scrollIntoView({behavior:'smooth'});
+}
+
+function saveInlineScreen(css,savedKey){
+  var box=document.getElementById('practiceScreenContent_'+css);
+  var data={};
+  box.querySelectorAll('.psc-ko-a').forEach(function(el){data['ko_a'+el.dataset.i]=el.value});
+  box.querySelectorAll('.psc-ko-p').forEach(function(el){data['ko_p'+el.dataset.i]=el.value});
+  box.querySelectorAll('.psc-phone-a').forEach(function(el){data['phone_a'+el.dataset.i]=el.value});
+  box.querySelectorAll('.psc-eval-r.sel').forEach(function(el){data['eval_s'+el.dataset.i]=el.dataset.v});
+  var n=box.querySelector('.psc-notes');if(n)data.notes=n.value;
+  var r=box.querySelector('input[name^="psc_rec_"]:checked');if(r)data.rec=r.value;
+  setObj(savedKey,data);
+  showToast('💾 Screening saved!');
+}
+
+function copyInlineScreen(css){
+  var box=document.getElementById('practiceScreenContent_'+css);
+  var lines=[];
+  box.querySelectorAll('h3,h4,.question,.form-input,.psc-notes').forEach(function(el){
+    var t=el.innerText||el.value;
+    if(t&&t.trim())lines.push(t.trim());
+  });
+  navigator.clipboard.writeText(lines.join('\n')).then(function(){showToast('📋 Copied to clipboard!');});
+}
+
+function printInlineScreen(css){
+  var box=document.getElementById('practiceScreenContent_'+css);
+  var w=window.open('','_blank');
+  w.document.write('<html><head><title>Screening Form</title><style>body{font-family:sans-serif;padding:2rem;}table{width:100%;border-collapse:collapse;}td,th{border:1px solid #ccc;padding:.4rem;font-size:.82rem;}textarea,input{width:100%;border:1px solid #ccc;padding:.3rem;font-size:.8rem;}</style></head><body>'+box.innerHTML+'</body></html>');
+  w.document.close();w.focus();w.print();
+}
+
+function addScreenedToPipeline(name,rk,css,savedKey){
+  var role=ROLES[rk];
+  if(!name||!role){showToast('Enter a candidate name first.');return;}
+  var cands=getData('candidates');
+  var exists=cands.find(function(c){return c.name.toLowerCase()===name.toLowerCase()&&c.roleKey===rk});
+  if(exists){showToast('Already in pipeline!');return;}
+  var pos=getData('positions').find(function(p){return p.roleKey===rk&&p.status==='open'});
+  var newC={id:Date.now().toString(),name:name,position:role.title,roleKey:rk,positionId:pos?pos.id:'',stage:'knockout',score:70,source:'Screened',notes:'Added from inline screen',created:new Date().toISOString(),updated:new Date().toISOString()};
+  cands.push(newC);
+  setData('candidates',cands);
+  showToast('✅ '+name+' added to pipeline!');
+  renderDashboard();
 }
 
 function getEvalCriteria(rk){
@@ -2250,26 +3114,98 @@ function renderRoles(){
   document.getElementById('rolesContent').innerHTML=h;
 }
 
+// ===== LINKEDIN RECRUITER SYNC =====
+var LI_PROJECTS = [
+  {id:'1406527201', name:'Director of Partnerships', roleKey:'BD', fields:['uncontacted','contacted','replied','total']},
+  {id:'LI_SRAM', name:'Senior Account Manager', roleKey:'SrAM', fields:['uncontacted','contacted','replied','total']},
+  {id:'LI_AM', name:'Account Manager', roleKey:'AM', fields:['uncontacted','contacted','replied','total']},
+  {id:'LI_AC', name:'Account Coordinator', roleKey:'AC', fields:['uncontacted','contacted','replied','total']},
+  {id:'LI_EA', name:'Executive Assistant', roleKey:'EA', fields:['uncontacted','contacted','replied','total']}
+];
+
+function getLiData(){ return getObj('li_pipeline'); }
+
+function renderLiSync(){
+  var data=getLiData();
+  var lastSync=data._lastSync?new Date(data._lastSync).toLocaleDateString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'Never';
+  document.getElementById('liSyncBadge').textContent='Last synced: '+lastSync;
+  var h='';
+  LI_PROJECTS.forEach(function(proj){
+    var pd=data[proj.id]||{};
+    h+='<div style="border:1px solid var(--border);border-radius:8px;padding:.75rem;">';
+    var liLink=proj.id.startsWith('LI_')?'':'<a href="https://www.linkedin.com/talent/hire/'+proj.id+'/manage/all" target="_blank" style="font-size:.7rem;color:var(--accent);">View project ↗</a>';
+    h+='<div style="font-weight:700;font-size:.85rem;margin-bottom:.5rem;">'+proj.name+' '+liLink+'</div>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.4rem;">';
+    proj.fields.forEach(function(f){
+      var label=f.charAt(0).toUpperCase()+f.slice(1);
+      h+='<div><label style="font-size:.72rem;color:var(--text-light);display:block;">'+label+'</label>';
+      h+='<input class="form-input li-field" data-proj="'+proj.id+'" data-field="'+f+'" type="number" min="0" value="'+(pd[f]||'')+'" style="padding:.3rem .5rem;font-size:.82rem;"></div>';
+    });
+    h+='</div></div>';
+  });
+  document.getElementById('liProjectRows').innerHTML=h;
+  // Populate AM quick-open buttons (only for projects with real LI IDs)
+  var amBtns='';
+  LI_PROJECTS.forEach(function(proj){
+    if(!proj.id.startsWith('LI_'))return; // placeholder — skip link
+    // skip
+  });
+  var amBtnsEl=document.getElementById('liAmBtns');
+  if(amBtnsEl)amBtnsEl.innerHTML=amBtns;
+}
+
+function toggleLiSync(){
+  var body=document.getElementById('liSyncBody');
+  var chevron=document.getElementById('liSyncChevron');
+  var open=body.style.display==='none';
+  body.style.display=open?'':'none';
+  chevron.textContent=open?'▲':'▼';
+  if(open)renderLiSync();
+}
+
+function saveLiSync(){
+  var data=getLiData();
+  document.querySelectorAll('.li-field').forEach(function(el){
+    var proj=el.dataset.proj, field=el.dataset.field, val=parseInt(el.value)||0;
+    if(!data[proj])data[proj]={};
+    data[proj][field]=val;
+  });
+  data._lastSync=new Date().toISOString();
+  setObj('li_pipeline',data);
+  renderLiSync();
+  renderDashboard();
+  showToast('✅ LinkedIn pipeline updated!');
+}
+
 function renderDashboard(){
   var cands=getData('candidates'), pos=getData('positions'), pros=getData('prospects');
+  var liData=getLiData();
   var open=pos.filter(function(p){return p.status==='open'}).length;
   var active=cands.filter(function(c){return c.stage!=='rejected'&&c.stage!=='hired'}).length;
   var hired=cands.filter(function(c){return c.stage==='hired'}).length;
   var rej=cands.filter(function(c){return c.stage==='rejected'}).length;
 
+  // LinkedIn totals
+  var liTotal=0, liUncontacted=0;
+  LI_PROJECTS.forEach(function(proj){
+    var pd=liData[proj.id]||{};
+    liTotal+=(pd.total||0);
+    liUncontacted+=(pd.uncontacted||0);
+  });
+
   document.getElementById('dashStats').innerHTML=
     '<div class="stat"><div class="num">'+open+'</div><div class="label">Open Positions</div></div>'+
-    '<div class="stat"><div class="num">'+cands.length+'</div><div class="label">Total Candidates</div></div>'+
-    '<div class="stat"><div class="num">'+active+'</div><div class="label">Active Pipeline</div></div>'+
+    '<div class="stat"><div class="num">'+active+'</div><div class="label">Active Candidates</div></div>'+
+    '<div class="stat"><div class="num">'+cands.length+'</div><div class="label">Total in Pipeline</div></div>'+
     '<div class="stat"><div class="num">'+hired+'</div><div class="label">Hired</div></div>'+
-    '<div class="stat"><div class="num">'+pros.length+'</div><div class="label">LinkedIn Prospects</div></div>'+
-    '<div class="stat"><div class="num">'+PHANTOM_CANDIDATES.length+'</div><div class="label">LinkedIn Profiles</div></div>';
+    (liTotal?'<div class="stat" style="border-color:#0077B5;"><div class="num" style="color:#0077B5;">'+liTotal+'</div><div class="label">LinkedIn Pipeline</div></div>':'')+
+    (liUncontacted?'<div class="stat" style="border-color:#0077B5;"><div class="num" style="color:#0077B5;">'+liUncontacted+'</div><div class="label">LI Uncontacted</div></div>':'');
 
   // Practice area lanes
   var practices=[
     {key:'Account Management',css:'am',icon:'📊',roles:['AC','AS','AM','SrAM']},
     {key:'Partnerships',css:'part',icon:'🤝',roles:['BD','RP']},
-    {key:'Marketing',css:'mkt',icon:'📢',roles:['MKT']}
+    {key:'Operations & Support',css:'ops',icon:'🗓️',roles:['EA']}
   ];
   var lanesH='';
   practices.forEach(function(pr){
@@ -2280,9 +3216,15 @@ function renderDashboard(){
     lanesH+='<div class="practice-lane '+pr.css+'">';
     lanesH+='<h3>'+pr.icon+' '+pr.key+'</h3>';
     lanesH+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:.4rem;margin-bottom:.75rem;">';
+    // LinkedIn counts for this practice
+    var liProj=LI_PROJECTS.filter(function(lp){return pr.roles.indexOf(lp.roleKey)>=0});
+    var liProjTotal=0,liProjUncontacted=0;
+    liProj.forEach(function(lp){var pd=liData[lp.id]||{};liProjTotal+=(pd.total||0);liProjUncontacted+=(pd.uncontacted||0);});
     lanesH+='<div class="lane-stat"><div class="num" style="color:var(--'+pr.css+'-color);">'+prPos.length+'</div><div class="label">Open</div></div>';
-    lanesH+='<div class="lane-stat"><div class="num" style="color:var(--'+pr.css+'-color);">'+prActive+'</div><div class="label">Active</div></div>';
+    lanesH+='<div class="lane-stat"><div class="num" style="color:var(--'+pr.css+'-color);">'+prActive+'</div><div class="label">Active (Tool)</div></div>';
     lanesH+='<div class="lane-stat"><div class="num" style="color:var(--'+pr.css+'-color);">'+prHired+'</div><div class="label">Hired</div></div>';
+    if(liProjTotal){lanesH+='<div class="lane-stat" style="border-color:#0077B5;"><div class="num" style="color:#0077B5;">'+liProjTotal+'</div><div class="label">LI Pipeline</div></div>';}
+    if(liProjUncontacted){lanesH+='<div class="lane-stat" style="border-color:#0077B5;"><div class="num" style="color:#0077B5;">'+liProjUncontacted+'</div><div class="label">LI Uncontacted</div></div>';}
     lanesH+='</div>';
     lanesH+='<div class="lane-roles">';
     prPos.forEach(function(p){
@@ -2331,15 +3273,16 @@ function renderDashboard(){
 var pipeView='board';
 function renderPipeline(){
   var cands=getData('candidates');
+  if(!canSeeEA()) cands=cands.filter(function(c){return c.roleKey!=='EA';});
   var fPrac=document.getElementById('pipeFilterPractice').value;
   var fRole=document.getElementById('pipeFilterRole').value;
-  var fSrc=document.getElementById('pipeFilterSource').value;
+
   if(fPrac){
     var roleKeys=Object.keys(ROLES).filter(function(k){return ROLES[k].practice===fPrac});
     cands=cands.filter(function(c){return roleKeys.indexOf(c.roleKey)>=0});
   }
   if(fRole) cands=cands.filter(function(c){return c.positionId===fRole||c.roleKey===fRole});
-  if(fSrc) cands=cands.filter(function(c){return c.source===fSrc});
+
 
   // Populate role filter
   var pos=getData('positions'),sel=document.getElementById('pipeFilterRole'),cur=sel.value;
@@ -2358,13 +3301,13 @@ function renderPipeBoard(cands){
     h+='<div class="pipeline-col"><div class="pipeline-col-header">'+s.icon+' '+s.label+' <span class="cnt">'+sc.length+'</span></div>';
     sc.forEach(function(c){
       var prac=ROLES[c.roleKey]?ROLES[c.roleKey].practice:'';
-      var pcss=prac==='Account Management'?'am':prac==='Partnerships'?'part':prac==='Marketing'?'mkt':'';
-      var lc=pcss==='am'?'var(--am-color)':pcss==='part'?'var(--part-color)':pcss==='mkt'?'var(--mkt-color)':'var(--accent)';
+      var pcss=prac==='Account Management'?'am':prac==='Partnerships'?'part':prac==='Marketing'?'mkt':prac==='Operations & Support'?'ops':'';
+      var lc=pcss==='am'?'var(--am-color)':pcss==='part'?'var(--part-color)':pcss==='mkt'?'var(--mkt-color)':pcss==='ops'?'var(--ops-color)':'var(--accent)';
       h+='<div class="p-card" style="border-left-color:'+lc+';" onclick="openCandDetail(\''+c.id+'\')">';
       h+='<div class="nm">'+c.name+'</div>';
       h+='<div class="rl">'+c.position+'</div>';
       if(pcss) h+='<span class="practice-badge '+pcss+'">'+prac+'</span>';
-      if(c.source) h+='<div class="src">via '+c.source+'</div>';
+
       h+='</div>';
     });
     h+='</div>';
@@ -2385,15 +3328,15 @@ function renderPipeBoard(cands){
 
 function renderPipeTable(cands){
   var sorted=cands.slice().sort(function(a,b){return new Date(b.updated||b.created)-new Date(a.updated||a.created)});
-  var h='<table><tr><th>Name</th><th>Position</th><th>Stage</th><th>Source</th><th>Added</th><th>Updated</th><th>Actions</th></tr>';
+  var h='<table><tr><th>Name</th><th>Position</th><th>Stage</th><th>Added</th><th>Updated</th><th>Actions</th></tr>';
   sorted.forEach(function(c){
     h+='<tr class="clickable" onclick="openCandDetail(\''+c.id+'\')">';
     h+='<td><strong>'+c.name+'</strong>'+(c.linkedin?' <a href="'+c.linkedin+'" target="_blank" onclick="event.stopPropagation();" style="font-size:.75rem;">🔗</a>':'')+'</td>';
     var tprac=ROLES[c.roleKey]?ROLES[c.roleKey].practice:'';
-    var tpcss=tprac==='Account Management'?'am':tprac==='Partnerships'?'part':tprac==='Marketing'?'mkt':'';
+    var tpcss=tprac==='Account Management'?'am':tprac==='Partnerships'?'part':tprac==='Marketing'?'mkt':tprac==='Operations & Support'?'ops':'';
     h+='<td>'+c.position+(tpcss?' <span class="practice-badge '+tpcss+'">'+tprac+'</span>':'')+'</td>';
     h+='<td><span class="badge badge-'+c.stage+'">'+stageLabel(c.stage)+'</span></td>';
-    h+='<td>'+(c.source||'-')+'</td>';
+
     h+='<td>'+new Date(c.created).toLocaleDateString()+'</td>';
     h+='<td>'+new Date(c.updated||c.created).toLocaleDateString()+'</td>';
     h+='<td><button class="btn btn-sm btn-outline" onclick="event.stopPropagation();go(\'screening\');setTimeout(function(){document.getElementById(\'scrCandidate\').value=\''+c.id+'\';loadScreen()},100);">🎯</button></td>';
@@ -2415,7 +3358,7 @@ function openAddCandidate(){
   h+='<div class="form-row c2"><div><label class="form-label">Phone</label><input class="form-input" id="addPhone"></div>';
   h+='<div><label class="form-label">LinkedIn Profile URL</label><input class="form-input" id="addLinkedin" placeholder="https://linkedin.com/in/..."></div></div>';
   h+='<div class="form-row c2"><div><label class="form-label">Position *</label><select class="form-input" id="addPosition"><option value="">- Select -</option>'+opts+'</select></div>';
-  h+='<div><label class="form-label">Source</label><select class="form-input" id="addSource"><option>LinkedIn</option><option>Referral</option><option>Job Board</option><option>Direct</option><option>Recruiter</option><option>Other</option></select></div></div>';
+  h+='</div>';
   h+='<div><label class="form-label">Resume / Summary Notes</label><textarea class="form-input" id="addNotes" rows="3" placeholder="Key qualifications, years experience, notable achievements..."></textarea></div>';
   h+='<div style="margin-top:.75rem;"><button class="btn btn-primary" onclick="saveNewCandidate()">💾 Save Candidate</button></div>';
   openModal(h);
@@ -2436,7 +3379,7 @@ function saveNewCandidate(){
     positionId:posId,
     roleKey:pos?pos.roleKey:'',
     position:pos?pos.title:'',
-    source:document.getElementById('addSource').value,
+    source:'Elizabeth',
     notes:document.getElementById('addNotes').value,
     stage:'applied',
     created:new Date().toISOString(),
@@ -2462,52 +3405,204 @@ function openCandDetail(id){
   h+='<span class="badge badge-'+c.stage+'">'+stageLabel(c.stage)+'</span>';
   h+='<span style="font-size:.82rem;color:var(--text-light);">'+c.position+'</span>';
   if(role){
-    var dpcss=role.practice==='Account Management'?'am':role.practice==='Partnerships'?'part':role.practice==='Marketing'?'mkt':'';
+    var dpcss=role.practice==='Account Management'?'am':role.practice==='Partnerships'?'part':role.practice==='Marketing'?'mkt':role.practice==='Operations & Support'?'ops':'';
     if(dpcss) h+='<span class="practice-badge '+dpcss+'">'+role.practice+'</span>';
     h+='<span style="font-size:.75rem;color:var(--accent);">'+role.level+'</span>';
   }
   h+='</div>';
 
   // Contact info
-  h+='<div class="form-row c2" style="font-size:.85rem;">';
+  h+='<div style="font-size:.85rem;margin-bottom:.75rem;display:grid;grid-template-columns:1fr 1fr;gap:.3rem .75rem;">';
   if(c.email) h+='<div>📧 <a href="mailto:'+c.email+'">'+c.email+'</a></div>';
   if(c.phone) h+='<div>📞 '+c.phone+'</div>';
-  if(c.linkedin) h+='<div>🔗 <a href="'+c.linkedin+'" target="_blank">LinkedIn Profile</a></div>';
-  h+='<div>📥 Source: '+(c.source||'-')+'</div>';
-  h+='<div>📅 Added: '+new Date(c.created).toLocaleDateString()+'</div>';
-  h+='</div>';
 
-  // Move stage
-  h+='<div class="screen-section" style="margin-top:.75rem;">';
-  h+='<h4>Move Stage</h4>';
-  h+='<div style="display:flex;gap:.5rem;align-items:end;">';
-  h+='<div style="flex:1;"><select class="form-input" id="moveStage">'+stgOpts+'</select></div>';
-  h+='<div style="flex:2;"><input class="form-input" id="moveNote" placeholder="Note (optional)"></div>';
-  h+='<button class="btn btn-primary" onclick="moveCand(\''+id+'\')">Move</button>';
+  h+='<div>📅 Added: '+new Date(c.created).toLocaleDateString()+'</div>';
+
+  // LinkedIn row
+  h+='<div style="grid-column:1/-1;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">';
+  h+='<span>🔗</span>';
+  if(c.linkedin){
+    h+='<a href="'+c.linkedin+'" target="_blank" style="font-weight:600;">LinkedIn Profile</a>';
+    h+='<button onclick="toggleEl(\'cand-li-edit\')" style="font-size:.7rem;padding:.1rem .4rem;border:1px solid var(--border);border-radius:4px;background:none;cursor:pointer;color:var(--accent);">✏️ Edit</button>';
+  } else {
+    h+='<span style="color:var(--text-light);">No LinkedIn</span>';
+    h+='<button onclick="toggleEl(\'cand-li-edit\')" style="font-size:.7rem;padding:.1rem .4rem;border:1px dashed var(--accent);border-radius:4px;background:none;cursor:pointer;color:var(--accent);">+ Add</button>';
+  }
+  h+='</div>';
+  h+='<div id="cand-li-edit" style="display:none;grid-column:1/-1;display:none;">';
+  h+='<div style="display:flex;gap:.4rem;align-items:center;">';
+  h+='<input class="form-input" id="candLinkedInInput" value="'+esc(c.linkedin||'')+'" placeholder="https://linkedin.com/in/..." style="font-size:.82rem;flex:1;">';
+  h+='<button class="btn btn-primary btn-sm" onclick="saveCandLinkedIn(\''+id+'\')">Save</button>';
   h+='</div></div>';
 
-  // Notes
-  h+='<div style="margin-top:.75rem;"><label class="form-label">Notes</label>';
-  h+='<textarea class="form-input" id="candNotes" rows="3">'+esc(c.notes||'')+'</textarea>';
-  h+='<button class="btn btn-outline btn-sm" style="margin-top:.4rem;" onclick="saveCandNotes(\''+id+'\')">💾 Save Notes</button></div>';
+  // Resume row
+  h+='<div style="grid-column:1/-1;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;">';
+  h+='<span>📎</span>';
+  if(c.resumeUrl){
+    h+='<a href="'+c.resumeUrl+'" target="_blank" style="font-weight:600;">View Resume</a>';
+    h+='<button onclick="toggleEl(\'cand-resume-edit\')" style="font-size:.7rem;padding:.1rem .4rem;border:1px solid var(--border);border-radius:4px;background:none;cursor:pointer;color:var(--accent);">✏️ Replace</button>';
+  } else {
+    h+='<span style="color:var(--text-light);">No resume</span>';
+    h+='<button onclick="toggleEl(\'cand-resume-edit\')" style="font-size:.7rem;padding:.1rem .4rem;border:1px dashed var(--accent);border-radius:4px;background:none;cursor:pointer;color:var(--accent);">+ Add</button>';
+  }
+  h+='</div>';
+  h+='<div id="cand-resume-edit" style="display:none;grid-column:1/-1;">';
+  h+='<div style="border:1px solid var(--border);border-radius:8px;padding:.6rem .75rem;background:var(--bg);">';
+  h+='<div style="font-size:.75rem;font-weight:700;color:var(--text-light);margin-bottom:.4rem;">Upload PDF or paste a link</div>';
+  h+='<input type="file" id="candResumeFile" accept=".pdf,.doc,.docx" style="font-size:.8rem;margin-bottom:.4rem;width:100%;" onchange="uploadCandResumePDF(\''+id+'\',this.files[0])">';
+  h+='<div style="display:flex;gap:.4rem;align-items:center;">';
+  h+='<input class="form-input" id="candResumeUrlInput" value="'+esc(c.resumeUrl||'')+'" placeholder="https://drive.google.com/..." style="font-size:.82rem;flex:1;">';
+  h+='<button class="btn btn-outline btn-sm" onclick="saveCandResumeUrl(\''+id+'\')">Save URL</button>';
+  h+='</div></div></div>';
+
+  h+='</div>';
+
+  // ===== CANDIDATE BACKGROUND =====
+  if(c.notes){
+    h+='<div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:.75rem;margin-bottom:.75rem;">';
+    h+='<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--text-light);margin-bottom:.4rem;letter-spacing:.05em;">📋 Candidate Background</div>';
+    h+='<div style="font-size:.82rem;white-space:pre-wrap;line-height:1.55;">'+esc(c.notes)+'</div>';
+    h+='</div>';
+  }
+
+  // ===== AI CANDIDATE OVERVIEW =====
+  if(c.aiOverview){
+    var aoDate=c.aiOverviewDate?new Date(c.aiOverviewDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+    h+='<div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:.75rem;margin-bottom:.75rem;">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">';
+    h+='<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#15803d;letter-spacing:.05em;">🤖 AI Candidate Overview</div>';
+    if(aoDate) h+='<div style="font-size:.7rem;color:#6b7280;">'+aoDate+'</div>';
+    h+='</div>';
+    var aoHtml=c.aiOverview.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    h+='<div style="font-size:.82rem;line-height:1.65;white-space:pre-wrap;">'+aoHtml+'</div>';
+    h+='</div>';
+  }
+
+  // ===== AI INTERVIEW ANALYSIS =====
+  if(c.aiInterviewFeedback){
+    var aifDate=c.aiInterviewFeedbackDate?new Date(c.aiInterviewFeedbackDate).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'';
+    var aifStage=c.aiInterviewFeedbackStage?stageLabel(c.aiInterviewFeedbackStage):'';
+    h+='<div style="background:#faf5ff;border:1px solid #d8b4fe;border-radius:8px;padding:.75rem;margin-bottom:.75rem;">';
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:.4rem;">';
+    h+='<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#7c3aed;letter-spacing:.05em;">🎬 AI Interview Analysis'+(aifStage?' — '+aifStage:'')+'</div>';
+    if(aifDate) h+='<div style="font-size:.7rem;color:#6b7280;">'+aifDate+'</div>';
+    h+='</div>';
+    var aifHtml=c.aiInterviewFeedback.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    h+='<div style="font-size:.82rem;line-height:1.65;white-space:pre-wrap;">'+aifHtml+'</div>';
+    h+='</div>';
+  }
+
+  // ===== PREVIOUS INTERVIEW FEEDBACK =====
+  var prevNotes=c.stageNotes||{};
+  var prevStages=Object.keys(prevNotes).filter(function(s){return s!==c.stage&&prevNotes[s]&&prevNotes[s].trim();});
+  if(prevStages.length){
+    h+='<div style="background:#fffbeb;border:1px solid #fbbf24;border-radius:8px;padding:.75rem;margin-bottom:.75rem;">';
+    h+='<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:#92400e;margin-bottom:.5rem;letter-spacing:.05em;">💬 Previous Interview Feedback</div>';
+    prevStages.forEach(function(s){
+      var stgLbl=stageLabel(s);
+      h+='<div style="margin-bottom:.5rem;">';
+      h+='<div style="font-size:.75rem;font-weight:700;color:#78350f;margin-bottom:.2rem;">'+stgLbl+'</div>';
+      h+='<div style="font-size:.82rem;white-space:pre-wrap;line-height:1.5;color:#1B2126;">'+esc(prevNotes[s])+'</div>';
+      h+='</div>';
+    });
+    h+='</div>';
+  }
+
+  // ===== INTERVIEW QUESTIONS FOR THIS STAGE & ROLE =====
+  var stageQs=(STAGE_QUESTIONS[c.stage]&&STAGE_QUESTIONS[c.stage][c.roleKey])||[];
+  if(stageQs.length){
+    var stgObj=STAGES.find(function(s){return s.id===c.stage;})||{label:stageLabel(c.stage),desc:''};
+    h+='<div style="background:var(--accent-light,#e6f4f4);border:1px solid var(--accent);border-radius:8px;padding:.75rem;margin-bottom:.75rem;">';
+    h+='<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--accent-dark,#1a7a7a);margin-bottom:.2rem;letter-spacing:.05em;">🎯 Interview Questions — '+stgObj.label+' | '+c.position+'</div>';
+    if(stgObj.desc) h+='<div style="font-size:.75rem;color:var(--text-light);margin-bottom:.6rem;">'+stgObj.desc+'</div>';
+    stageQs.forEach(function(q,i){
+      h+='<div style="padding:.5rem 0;border-bottom:1px solid rgba(0,0,0,.07);">';
+      h+='<div style="display:flex;gap:.5rem;align-items:flex-start;">';
+      h+='<span style="font-size:.72rem;font-weight:700;color:var(--accent);min-width:1.4rem;padding-top:.1rem;">'+(i+1)+'.</span>';
+      h+='<div style="flex:1;">';
+      h+='<div style="font-size:.85rem;font-weight:600;line-height:1.4;">'+esc(q.q)+'</div>';
+      if(q.why) h+='<div style="font-size:.75rem;color:var(--text-light);margin-top:.15rem;font-style:italic;">Why: '+esc(q.why)+'</div>';
+      if(q.followUp) h+='<div style="font-size:.75rem;color:#7c3aed;margin-top:.15rem;">↳ Follow-up: '+esc(q.followUp)+'</div>';
+      h+='</div></div></div>';
+    });
+    h+='</div>';
+  }
+
+  // ===== INTERVIEW NOTES (current stage) =====
+  var curStageNotes=(c.stageNotes&&c.stageNotes[c.stage])||'';
+  h+='<div style="background:#fff;border:2px solid var(--accent);border-radius:8px;padding:.75rem;margin-bottom:.75rem;">';
+  h+='<div style="font-size:.72rem;font-weight:700;text-transform:uppercase;color:var(--accent-dark,#1a7a7a);margin-bottom:.4rem;letter-spacing:.05em;">📝 Interview Notes — '+stageLabel(c.stage)+'</div>';
+  h+='<textarea class="form-input" id="candStageNotes" rows="6" placeholder="Take notes here during or after the interview...\n\n• First impressions\n• Answers to key questions\n• Red flags or green lights\n• Compensation / availability confirmed\n• Recommendation: advance / hold / reject" style="resize:vertical;font-size:.83rem;">'+esc(curStageNotes)+'</textarea>';
+  h+='<button class="btn btn-primary btn-sm" style="margin-top:.4rem;" onclick="saveCandStageNotes(\''+id+'\',\''+c.stage+'\')">💾 Save Interview Notes</button>';
+  h+='</div>';
+
+  // ===== EDIT ROLE & STAGE =====
+  h+='<details style="margin-bottom:.75rem;"><summary style="cursor:pointer;font-size:.82rem;font-weight:600;color:var(--text-light);">⚙️ Edit Role & Stage</summary>';
+  h+='<div class="screen-section" style="margin-top:.5rem;">';
+  var roleOpts=Object.keys(ROLES).map(function(k){return '<option value="'+k+'"'+(c.roleKey===k?' selected':'')+'>'+ROLES[k].title+'</option>';}).join('');
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:.5rem;">';
+  h+='<div><label class="form-label" style="font-size:.75rem;">Role</label><select class="form-input" id="editRole">'+roleOpts+'</select></div>';
+  h+='<div><label class="form-label" style="font-size:.75rem;">Stage</label><select class="form-input" id="moveStage">'+stgOpts+'</select></div>';
+  h+='</div>';
+  h+='<div style="display:flex;gap:.5rem;align-items:center;">';
+  h+='<input class="form-input" id="moveNote" placeholder="Transition note (optional)" style="flex:1;">';
+  h+='<button class="btn btn-primary" onclick="moveCand(\''+id+'\')">Save</button>';
+  h+='</div></div></details>';
+
+  // ===== BACKGROUND NOTES (editable) =====
+  h+='<details style="margin-bottom:.75rem;"><summary style="cursor:pointer;font-size:.82rem;font-weight:600;color:var(--text-light);">✏️ Edit Background Notes</summary>';
+  h+='<div style="margin-top:.5rem;">';
+  h+='<textarea class="form-input" id="candNotes" rows="4">'+esc(c.notes||'')+'</textarea>';
+  h+='<button class="btn btn-outline btn-sm" style="margin-top:.4rem;" onclick="saveCandNotes(\''+id+'\')">💾 Save</button>';
+  h+='</div></details>';
+
+  // ===== EDIT INTERVIEWERS (admin only) =====
+  if(isAdmin()){
+    var assigned=c.interviewers||[];
+    var intMap=[
+      {email:'charlotte@tigertracks.ai',label:'Charlotte Pohl'},
+      {email:'riley@tigertracks.ai',label:'Riley Abercrombie'},
+      {email:'hannah@tigertracks.ai',label:'Hannah Price'},
+      {email:'kersten@tigertracks.ai',label:'Kersten Kruse'}
+    ];
+    h+='<details style="margin-bottom:.75rem;"><summary style="cursor:pointer;font-size:.82rem;font-weight:600;color:var(--text-light);">👥 Edit Interviewers</summary>';
+    h+='<div style="margin-top:.5rem;padding:.75rem;background:var(--bg);border-radius:8px;border:1px solid var(--border);">';
+    h+='<p style="font-size:.78rem;color:var(--text-light);margin-bottom:.6rem;">Checked interviewers can see this candidate in the AI Review tab.</p>';
+    h+='<div style="display:flex;flex-direction:column;gap:.45rem;" id="intChecks-'+id+'">';
+    intMap.forEach(function(iv){
+      var chk=assigned.indexOf(iv.email)>=0?' checked':'';
+      h+='<label style="font-size:.85rem;display:flex;align-items:center;gap:.5rem;cursor:pointer;">';
+      h+='<input type="checkbox" value="'+iv.email+'"'+chk+'> '+iv.label;
+      h+='</label>';
+    });
+    h+='</div>';
+    h+='<button class="btn btn-primary btn-sm" style="margin-top:.65rem;" onclick="saveInterviewers(\''+id+'\')">💾 Save Interviewers</button>';
+    h+='<span id="intSaveStatus-'+id+'" style="font-size:.8rem;margin-left:.5rem;"></span>';
+    h+='</div></details>';
+  }
 
   // Quick actions
-  h+='<div class="btn-group" style="margin-top:.75rem;">';
+  h+='<div class="btn-group" style="margin-bottom:.75rem;">';
+  h+='<button class="btn btn-outline btn-sm" onclick="copyCandLink(\''+id+'\')" title="Copy shareable link to this candidate">🔗 Copy Link</button>';
   h+='<button class="btn btn-outline btn-sm" onclick="closeModal();go(\'screening\');setTimeout(function(){document.getElementById(\'scrCandidate\').value=\''+id+'\';loadScreen()},100);">🎯 Open Screening</button>';
   if(c.email) h+='<button class="btn btn-outline btn-sm" onclick="copyOutreach(\''+id+'\')">📧 Copy Outreach</button>';
   h+='<button class="btn btn-danger btn-sm" onclick="deleteCand(\''+id+'\')">🗑️ Delete</button>';
   h+='</div>';
 
   // History
-  h+='<h4 style="margin-top:1rem;">📜 History</h4>';
+  h+='<details open><summary style="cursor:pointer;font-size:.82rem;font-weight:600;margin-bottom:.4rem;">📜 Stage History</summary>';
   if(c.history&&c.history.length){
     c.history.slice().reverse().forEach(function(ev){
       h+='<div style="padding:.25rem 0;border-bottom:1px solid var(--border);font-size:.8rem;">';
-      h+='<strong>'+stageLabel(ev.stage)+'</strong> - '+new Date(ev.date).toLocaleString();
-      if(ev.note) h+=' - <em>'+esc(ev.note)+'</em>';
+      h+='<strong>'+stageLabel(ev.stage)+'</strong> — '+new Date(ev.date).toLocaleString();
+      if(ev.note) h+=' — <em>'+esc(ev.note)+'</em>';
       h+='</div>';
     });
+  } else {
+    h+='<p style="font-size:.8rem;color:var(--text-light);">No history yet.</p>';
   }
+  h+='</details>';
+
   openModal(h);
 }
 
@@ -2517,11 +3612,15 @@ function moveCand(id){
   if(!c) return;
   var ns=document.getElementById('moveStage').value;
   var note=document.getElementById('moveNote').value;
+  var newRoleKey=document.getElementById('editRole')?document.getElementById('editRole').value:c.roleKey;
+  var roleChanged=newRoleKey&&newRoleKey!==c.roleKey;
+  if(roleChanged){c.roleKey=newRoleKey;c.position=ROLES[newRoleKey]?ROLES[newRoleKey].title:c.position;}
   c.stage=ns;c.updated=new Date().toISOString();
   if(!c.history)c.history=[];
-  c.history.push({stage:ns,date:new Date().toISOString(),note:note});
+  var histNote=note||(roleChanged?'Role changed to '+c.position:'');
+  c.history.push({stage:ns,date:new Date().toISOString(),note:histNote});
   setData('candidates',cands);
-  closeModal();showToast('✅ '+c.name+' moved to '+stageLabel(ns));
+  closeModal();showToast('✅ '+c.name+' updated');
   renderPipeline();
 }
 
@@ -2534,11 +3633,128 @@ function saveCandNotes(id){
   setData('candidates',cands);showToast('💾 Notes saved');
 }
 
+function saveInterviewers(id){
+  var cands=getData('candidates');
+  var c=cands.find(function(x){return x.id===id});
+  if(!c) return;
+  var checks=document.querySelectorAll('#intChecks-'+id+' input[type=checkbox]');
+  var selected=[];
+  checks.forEach(function(cb){if(cb.checked) selected.push(cb.value);});
+  c.interviewers=selected;
+  c.updated=new Date().toISOString();
+  setData('candidates',cands);
+  var statusEl=document.getElementById('intSaveStatus-'+id);
+  if(statusEl){
+    statusEl.textContent='✅ Saved';
+    statusEl.style.color='var(--success)';
+    setTimeout(function(){statusEl.textContent='';},2500);
+  }
+  showToast('👥 Interviewers updated for '+c.name);
+  syncToServer();
+}
+
+function saveCandStageNotes(id,stage){
+  var cands=getData('candidates');
+  var c=cands.find(function(x){return x.id===id});
+  if(!c) return;
+  var txt=document.getElementById('candStageNotes').value;
+  if(!c.stageNotes) c.stageNotes={};
+  c.stageNotes[stage]=txt;
+  c.updated=new Date().toISOString();
+  // Also add a history entry if this is new/changed
+  if(txt.trim()){
+    if(!c.history) c.history=[];
+    // Update existing note for this stage or add new
+    var existing=c.history.filter(function(h){return h.stage===stage&&h.isInterviewNote;});
+    if(existing.length){
+      existing[existing.length-1].note='Interview notes updated';
+      existing[existing.length-1].date=new Date().toISOString();
+    } else {
+      c.history.push({stage:stage,date:new Date().toISOString(),note:'Interview notes added',isInterviewNote:true});
+    }
+  }
+  setData('candidates',cands);
+  showToast('💾 Interview notes saved');
+}
+
+function toggleEl(elId){
+  var el=document.getElementById(elId);
+  if(!el) return;
+  el.style.display=el.style.display==='none'?'block':'none';
+}
+
+function saveCandLinkedIn(id){
+  var val=(document.getElementById('candLinkedInInput').value||'').trim();
+  var cands=getData('candidates');
+  var c=cands.find(function(x){return x.id===id});
+  if(!c) return;
+  c.linkedin=val;
+  c.updated=new Date().toISOString();
+  setData('candidates',cands);
+  showToast('🔗 LinkedIn saved');
+  openCandDetail(id);
+}
+
+function saveCandResumeUrl(id){
+  var val=(document.getElementById('candResumeUrlInput').value||'').trim();
+  var cands=getData('candidates');
+  var c=cands.find(function(x){return x.id===id});
+  if(!c) return;
+  c.resumeUrl=val;
+  c.updated=new Date().toISOString();
+  setData('candidates',cands);
+  showToast('📎 Resume URL saved');
+  openCandDetail(id);
+}
+
+function uploadCandResumePDF(id, file){
+  if(!file) return;
+  showToast('⬆️ Uploading resume…');
+  var fd = new FormData();
+  fd.append('file', file);
+  fd.append('candidateId', id);
+  fetch('/api/upload-resume', { method:'POST', body:fd })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if(!data.url) throw new Error(data.error || 'Upload failed');
+    var cands=getData('candidates');
+    var c=cands.find(function(x){return x.id===id});
+    if(!c) return;
+    c.resumeUrl=data.url;
+    c.updated=new Date().toISOString();
+    setData('candidates',cands);
+    showToast('📎 Resume uploaded!');
+    openCandDetail(id);
+  })
+  .catch(function(e){ showToast('❌ Upload failed: '+(e.message||e)); });
+}
+
 function deleteCand(id){
   if(!confirm('Delete this candidate permanently?')) return;
   setData('candidates',getData('candidates').filter(function(x){return x.id!==id}));
   localStorage.removeItem('ttrec_screen_'+id);
   closeModal();showToast('🗑️ Candidate deleted');renderPipeline();
+}
+
+function copyCandLink(id){
+  var url=window.location.origin+window.location.pathname+'?c='+encodeURIComponent(id);
+  navigator.clipboard.writeText(url).then(function(){
+    showToast('🔗 Candidate link copied! Send it to the interviewer.');
+  });
+}
+
+function checkDeepLink(){
+  var params=new URLSearchParams(window.location.search);
+  var candId=params.get('c');
+  if(!candId) return;
+  // Navigate to pipeline and open the candidate
+  go('pipeline');
+  setTimeout(function(){
+    var cands=getData('candidates');
+    var c=cands.find(function(x){return x.id===candId;});
+    if(c) openCandDetail(candId);
+    else showToast('⚠️ Candidate not found — they may have been removed.');
+  }, 300);
 }
 
 function copyOutreach(id){
@@ -2555,7 +3771,8 @@ function renderPositions(){
   var practices=[
     {key:'Account Management',css:'am',icon:'📊'},
     {key:'Partnerships',css:'part',icon:'🤝'},
-    {key:'Marketing',css:'mkt',icon:'📢'}
+    {key:'Marketing',css:'mkt',icon:'📢'},
+    {key:'Operations & Support',css:'ops',icon:'🗓️'}
   ];
   practices.forEach(function(prac){
     var pracPos=pos.filter(function(p){
@@ -3328,7 +4545,15 @@ var QB = [
   {cat:'Anti-AI Probes',q:'Show us your portfolio. For each piece, tell us the brief, your process, and the result.',roles:['MKT'],why:'Real marketers remember their work intimately'},
   {cat:'Anti-AI Probes',q:'Write a LinkedIn post for Tiger Tracks right now in 2 minutes. Go.',roles:['MKT'],why:'Tests real writing ability in real time'},
   {cat:'Scenario-Based',q:'Organic engagement dropped 40% over 3 months. Diagnose and present your recovery plan.',roles:['MKT'],why:'Tests analytical troubleshooting'},
-  {cat:'Scenario-Based',q:'Leadership wants a polished case study for a pitch in 48 hours. Walk through your process.',roles:['MKT'],why:'Tests speed and quality under pressure'}
+  {cat:'Scenario-Based',q:'Leadership wants a polished case study for a pitch in 48 hours. Walk through your process.',roles:['MKT'],why:'Tests speed and quality under pressure'},
+  {q:'Walk me through managing a complex travel itinerary with last-minute changes. What was your system?',roles:['EA'],cat:'Logistics & Operations',why:'Tests real-world logistics competence and grace under pressure'},
+  {q:'How do you prioritize competing calendar requests when multiple people need the same time slot?',roles:['EA'],cat:'Prioritization',why:'Core EA skill — reveals system and judgment'},
+  {q:"Describe your approach to managing an executive's inbox. Do you triage it actively or monitor it?",roles:['EA'],cat:'Communication',why:'Tests ownership vs passive support style'},
+  {q:"You have a 9 AM briefing to prepare, a flight to rebook, and two execs needing calendar holds at once. Walk me through your next 30 minutes.",roles:['EA'],cat:'Prioritization',why:'Situational — tests multitasking and executive-first thinking'},
+  {q:'What tools have you used for calendar management? How do you handle scheduling across time zones?',roles:['EA'],cat:'Tools & Systems',why:'Validates practical tool knowledge'},
+  {q:'How do you handle confidential or sensitive information? Give a specific example.',roles:['EA'],cat:'Discretion',why:'Non-negotiable trust signal for an EA role'},
+  {q:"How do you prep an executive for a meeting they've had no time to prepare for?",roles:['EA'],cat:'Meeting Prep',why:'Tests resourcefulness and brevity under constraints'},
+  {q:"What is the most complex administrative project you have managed end-to-end?",roles:['EA'],cat:'Project Management',why:'Surfaces initiative and scope of responsibility'}
 ];
 
 function renderQBank(btn){
@@ -3339,25 +4564,72 @@ function renderQBank(btn){
   }
   var roleF=document.getElementById('qbRole').value;
   var catF=document.getElementById('qbCat').value;
-  var filtered=QB.filter(function(q){
-    if(roleF&&q.roles.indexOf(roleF)===-1) return false;
+  var container=document.getElementById('qBankContent');
+
+  if(!roleF){
+    container.innerHTML='<p style="font-size:.85rem;color:var(--text-light);">Select a job above to see all interview questions by stage.</p>';
+    return;
+  }
+
+  var roleName=document.getElementById('qbRole').options[document.getElementById('qbRole').selectedIndex].text;
+  var h='<h3 style="font-size:1rem;margin-bottom:1rem;color:var(--navy);">'+roleName+' — Interview Questions by Stage</h3>';
+
+  // STAGE_QUESTIONS sections: show all stages that have questions for this role
+  var stagesWithQs=STAGES.filter(function(s){
+    return STAGE_QUESTIONS[s.id]&&STAGE_QUESTIONS[s.id][roleF]&&STAGE_QUESTIONS[s.id][roleF].length;
+  });
+
+  if(stagesWithQs.length){
+    stagesWithQs.forEach(function(s,idx){
+      var qs=STAGE_QUESTIONS[s.id][roleF];
+      var openAttr=idx===0?' open':'';
+      h+='<details'+openAttr+' style="margin-bottom:.6rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;">';
+      h+='<summary style="cursor:pointer;padding:.75rem 1rem;background:var(--bg);font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:.5rem;list-style:none;">';
+      h+=s.icon+' '+s.label+' <span style="font-size:.75rem;font-weight:400;color:var(--text-light);margin-left:auto;">'+qs.length+' questions</span>';
+      h+='</summary>';
+      h+='<div style="padding:.5rem .75rem .75rem;">';
+      qs.forEach(function(q,i){
+        if(catF&&q.cat&&q.cat!==catF) return;
+        h+='<div class="screen-q">';
+        h+='<div class="question">'+(i+1)+'. '+q.q+'</div>';
+        if(q.why) h+='<div class="why">💡 '+q.why+'</div>';
+        if(q.followUp) h+='<div style="font-size:.75rem;color:var(--accent);margin-top:.2rem;">🔍 Follow-up: '+q.followUp+'</div>';
+        h+='<div style="text-align:right;margin-top:.25rem;">';
+        h+='<button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(\''+q.q.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\'  );showToast(\'📋 Copied!\')">Copy</button>';
+        h+='</div></div>';
+      });
+      h+='</div></details>';
+    });
+  }
+
+  // General QB questions for this role (categorised)
+  var qbFiltered=QB.filter(function(q){
+    if(q.roles.indexOf(roleF)===-1) return false;
     if(catF&&q.cat!==catF) return false;
     return true;
   });
-  var h='<p style="font-size:.83rem;color:var(--text-light);margin-bottom:.75rem;">Showing '+filtered.length+' questions</p>';
-  var curCat='';
-  filtered.forEach(function(q){
-    if(q.cat!==curCat){curCat=q.cat;h+='<h4 style="margin:1rem 0 .5rem;color:var(--accent-dark);">'+curCat+'</h4>';}
-    h+='<div class="screen-q">';
-    h+='<div class="question">'+q.q+'</div>';
-    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.25rem;">';
-    h+='<div class="why">'+q.why+'</div>';
-    h+='<div style="display:flex;gap:.25rem;align-items:center;">';
-    q.roles.forEach(function(r){h+='<span class="badge" style="background:var(--accent-light);color:var(--accent-dark);">'+r+'</span>'});
-    h+='<button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(\''+q.q.replace(/'/g,"\\'")+'\');showToast(\'📋 Copied!\')">Copy</button>';
-    h+='</div></div></div>';
-  });
-  document.getElementById('qBankContent').innerHTML=h;
+  if(qbFiltered.length){
+    h+='<details style="margin-bottom:.6rem;border:1px solid var(--border);border-radius:10px;overflow:hidden;">';
+    h+='<summary style="cursor:pointer;padding:.75rem 1rem;background:var(--bg);font-weight:700;font-size:.9rem;display:flex;align-items:center;gap:.5rem;list-style:none;">📚 General Question Bank <span style="font-size:.75rem;font-weight:400;color:var(--text-light);margin-left:auto;">'+qbFiltered.length+' questions</span></summary>';
+    h+='<div style="padding:.5rem .75rem .75rem;">';
+    var curCat='';
+    qbFiltered.forEach(function(q){
+      if(q.cat!==curCat){curCat=q.cat;h+='<h5 style="margin:.75rem 0 .4rem;color:var(--accent-dark);font-size:.8rem;text-transform:uppercase;letter-spacing:.05em;">'+curCat+'</h5>';}
+      h+='<div class="screen-q">';
+      h+='<div class="question">'+q.q+'</div>';
+      h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-top:.25rem;">';
+      h+='<div class="why">'+q.why+'</div>';
+      h+='<button class="btn btn-outline btn-sm" onclick="navigator.clipboard.writeText(\''+q.q.replace(/\\/g,'\\\\').replace(/'/g,"\\'")+'\');showToast(\'📋 Copied!\')">Copy</button>';
+      h+='</div></div>';
+    });
+    h+='</div></details>';
+  }
+
+  if(!stagesWithQs.length&&!qbFiltered.length){
+    h+='<p style="font-size:.85rem;color:var(--text-light);">No questions found for this role.</p>';
+  }
+
+  container.innerHTML=h;
 }
 
 // ===== LINKEDIN TRACKER =====
@@ -4047,6 +5319,10 @@ var TEMPLATES = {
     {title:'Outreach - LinkedIn (Generic)',content:'Hi [Name],\n\nI came across your profile and was impressed by your experience at [Company], especially [specific achievement/detail].\n\nAt Tiger Tracks, we are a performance marketing agency founded by former Google leaders. We are looking for a [Role] who can [key differentiator of the role].\n\nA few things that make this different:\n- You would own meaningful client relationships, not just execute\n- We are fully remote with a team that values quality over quantity\n- Inc. 5000 fastest-growing companies (2025)\n\nWould you be open to a brief conversation?\n\nBest,\n[Your Name]\nTiger Tracks'},
     {title:'Outreach - Director of Partnerships',content:'Hi [First Name],\n\nTiger Tracks is a fully remote performance marketing agency founded by former Google marketing leaders and recently ranked #123 on the 2025 Inc. 5000 list of America\'s fastest-growing private companies. As we enter our next phase of growth, we are looking for a Director of Partnerships to own the full revenue cycle: sourcing opportunities, building performance audits, leading pitch conversations, and closing retainers.\n\nThis is not a pure sales seat. It is a hybrid BD + technical role for someone who can build an audit, defend it in front of a CFO, and close the deal. You would own meaningful client relationships from first conversation to signed contract, with real autonomy and a direct line to leadership.\n\nI came across your profile and was impressed by your background. I would love to learn more about what you have built, what you have closed, and what you are interested in owning next.\n\nIf this feels aligned, schedule a quick call here: https://calendly.com/elizabeth-tigertracks/15min\n\nLooking forward to connecting,\nElizabeth Ogilvie\nTiger Tracks'},
     {title:'Outreach - Director, Client Success (Marketing)',content:'Hi [First Name],\n\nTiger Tracks is a fully remote performance marketing agency founded by former Google marketing leaders and recently ranked #123 on the 2025 Inc. 5000 list of America\'s fastest-growing private companies. As we enter our next phase of growth, we are looking for a Director, Client Success to own our inbound growth engine: content strategy, case studies, demand generation, LinkedIn presence, and the brand narrative that makes prospects come to us.\n\nWe want someone who has built and executed a marketing machine for an agency before and can point to the results. If you are a strong writer with design sensibility and creative instincts who loves turning strategy into content that actually drives pipeline, this could be a great fit.\n\nI came across your profile and was impressed by your background. I would love to learn more about what you have built and what kind of impact you are looking to make next.\n\nIf this feels aligned, schedule a quick call here: https://calendly.com/elizabeth-tigertracks/15min\n\nLooking forward to connecting,\nElizabeth Ogilvie\nTiger Tracks'},
+    {title:'Outreach - Senior Account Manager',content:'Hi [First Name],\n\nTiger Tracks is a fully remote performance marketing agency founded by former Google marketing leaders and recently ranked #123 on the 2025 Inc. 5000. We are building a best-in-class account management team and are looking for a Senior Account Manager who can own a portfolio of high-growth DTC and enterprise clients, lead a pod of specialists, and drive measurable results.\n\nThis is a senior, high-ownership role: you would manage $2M+ in annual media spend, mentor junior team members, and be accountable for client retention and growth. We are looking for someone who has done this before and can step into a portfolio immediately.\n\nI came across your background and was impressed by your experience. I would love to learn more about the accounts you have owned, the results you have driven, and what you are looking for next.\n\nIf this feels aligned, schedule a call here: https://calendly.com/elizabeth-tigertracks/15min\n\nLooking forward to connecting,\nElizabeth Ogilvie\nTiger Tracks'},
+    {title:'Outreach - Account Manager',content:'Hi [First Name],\n\nTiger Tracks is a fully remote performance marketing agency founded by former Google marketing leaders and recently ranked #123 on the 2025 Inc. 5000. We are growing our account management team and looking for an Account Manager to own a book of DTC and mid-market clients, manage cross-channel paid media performance, and serve as the primary point of contact for client relationships.\n\nThis is a hands-on role with real ownership: you would manage your own accounts, run optimization across Google, Meta, and supporting channels, and collaborate with a performance-focused pod to drive growth and retention.\n\nYour background stood out to me. I would love to learn more about the accounts you have managed, your approach to client relationships, and what you are looking to own next.\n\nIf this feels like a fit, schedule a call here: https://calendly.com/elizabeth-tigertracks/15min\n\nLooking forward to connecting,\nElizabeth Ogilvie\nTiger Tracks'},
+    {title:'Outreach - Account Coordinator',content:'Hi [First Name],\n\nTiger Tracks is a fully remote performance marketing agency founded by former Google marketing leaders and recently ranked #123 on the 2025 Inc. 5000. We are growing our team and looking for an Account Coordinator to join our performance marketing practice.\n\nThis is a great entry point into a high-growth agency: you would support our account team with campaign management, reporting, QA, and client communication. We invest heavily in training and career development, and our coordinators move up quickly.\n\nYour background caught my attention. I would love to learn more about your experience and what you are looking to build next in your career.\n\nIf this feels aligned, schedule a quick call here: https://calendly.com/elizabeth-tigertracks/15min\n\nLooking forward to connecting,\nElizabeth Ogilvie\nTiger Tracks'},
+    {title:'Outreach - Executive Assistant',content:'Hi [First Name],\n\nTiger Tracks is a fully remote performance marketing agency founded by former Google marketing leaders and recently ranked #123 on the 2025 Inc. 5000. We are looking for an Executive Assistant to serve as a true strategic partner to our CEO — managing his calendar, inbox, BD pipeline, invoicing, and operations.\n\nThis is not a "hold my calls" role. You would be the central hub connecting the CEO to his team, clients, and priorities. We are looking for someone who is highly organized, proactive, financially literate, and takes ownership without being asked.\n\nYour background stood out to me. I would love to learn more about your experience supporting executives and what kind of environment you thrive in.\n\nIf this feels like a fit, schedule a quick call here: https://calendly.com/elizabeth-tigertracks/15min\n\nLooking forward to connecting,\nElizabeth Ogilvie\nTiger Tracks'},
     {title:'Follow-Up Email',content:'Hi [Name],\n\nJust following up on my earlier message. I understand you are likely busy, but I did not want you to miss this opportunity.\n\nWe are specifically looking for someone with [their specific strength], which is exactly what stood out about your background.\n\nHappy to work around your schedule for a brief 15-minute call.\n\nBest,\n[Your Name]'},
     {title:'Interview Confirmation',content:'Hi [Name],\n\nGreat news - we would like to move forward with an interview!\n\nDetails:\n- Date: [Date]\n- Time: [Time] [Timezone]\n- Format: Video call via Google Meet\n- Duration: 60 minutes\n- Interviewer: [Name, Title]\n\nTopics we will cover:\n- Your career progression and experience\n- Strategic thinking and account ownership\n- Client management approach\n- Team leadership style (if applicable)\n\nNo preparation needed beyond reflecting on your experience. We want to hear about real situations, not rehearsed answers.\n\nPlease confirm this works or suggest alternatives.\n\nBest,\n[Your Name]'}
   ],
@@ -4078,6 +5354,489 @@ var TEMPLATES = {
     {title:'BD Hire Plan - Job Description (Full)',content:'ABOUT TIGER TRACKS\nTiger Tracks is a performance-driven digital marketing agency built for brands that expect accountability, rigor, and measurable growth. We specialize in paid media strategy and execution across Google, Meta, and emerging performance channels, serving high-growth DTC brands through established enterprise organizations. Our team is built from ex-Google leadership and we operate with a high bar for ownership, precision, and commercial impact.\n\nABOUT THE ROLE\nWe are hiring a Director of Partnerships, Performance to drive new revenue across our mid-market segment while contributing to enterprise pursuits. This is a full-cycle revenue role: you will source opportunities, conduct performance audits, lead pitch conversations with senior stakeholders, and close meaningful retainers.\n\nYou will independently own mid-market deals, running the entire sales cycle from first touch to signed contract. On larger enterprise opportunities, you will partner with our account specialists to deliver comprehensive, multi-channel pitches, bringing commercial leadership and closing acumen to technically complex deals.\n\nThis role reports to the VP of Partnerships & Growth.\n\nPIPELINE & REVENUE OWNERSHIP:\n- Own your sales cycle from discovery through close\n- Close retainers across mid-market and enterprise segments\n- Source new business opportunities through outbound and inbound efforts\n- Build and manage a healthy pipeline with clear forecasting\n\nAUDITS & PITCH LEADERSHIP:\n- Independently build and present performance audits using established frameworks\n- Identify performance gaps, budget allocation issues, and growth levers across Google, Meta, and supporting channels\n- Present findings confidently and defend recommendations with senior stakeholders\n- For larger opportunities, collaborate with account specialists for deeper technical assessments\n- Support enterprise pursuits as commercial lead alongside the specialist team\n\nCOMMERCIAL ACUMEN:\n- Speak fluently to CAC, ROAS, incrementality, and marketing efficiency metrics\n- Handle CFO and VP-level objections in real time\n- Connect paid media strategy to EBITDA and broader business outcomes\n- Position GEO and AI-driven growth narratives within performance strategy pitches\n- Model and articulate growth scenarios with clear assumptions\n\nEXPERIENCE:\n- 5+ years in selling professional services, marketing agency retainers, or B2B SaaS\n- Track record of closing meaningful deals full cycle with quota accountability\n- Can run a discovery call, present a performance audit, and handle objections in the room\n- Comfortable with marketing performance metrics (CAC, ROAS, LTV, budget allocation)\n- Strong discovery skills and a disciplined qualification process\n- Confident and composed in high-pressure conversations with data-driven stakeholders\n- HubSpot or equivalent CRM proficiency\n- Bonus: Agency experience, performance marketing background, or familiarity with Google Ads/Meta Ads'}
   ]
 };
+
+// ===== AI REVIEW =====
+var airResumeText='';
+
+var airQuickResumeFile=null;
+function airQuickResumeHandleFile(input){
+  if(input.files&&input.files[0]) airQuickResumeSetFile(input.files[0]);
+}
+function airQuickResumeHandleDrop(e){
+  if(e.dataTransfer.files&&e.dataTransfer.files[0]) airQuickResumeSetFile(e.dataTransfer.files[0]);
+}
+function airQuickResumeSetFile(file){
+  airQuickResumeFile=file;
+  document.getElementById('air-quick-resume-label').textContent='📎 '+file.name;
+  document.getElementById('air-quick-resume-drop').style.borderColor='var(--accent)';
+  // Auto-extract docx text into textarea
+  if(file.name.toLowerCase().endsWith('.docx')&&typeof mammoth!=='undefined'){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      mammoth.extractRawText({arrayBuffer:e.target.result}).then(function(r){
+        if(r.value) document.getElementById('air-quick-resume-text').value=r.value;
+      });
+    };
+    reader.readAsArrayBuffer(file);
+  }
+}
+
+function airQuickAdd(){
+  var name=document.getElementById('air-quick-name').value.trim();
+  var linkedin=document.getElementById('air-quick-linkedin').value.trim();
+  var roleKey=document.getElementById('air-quick-role').value;
+  var resumeText=document.getElementById('air-quick-resume-text').value.trim();
+  var statusEl=document.getElementById('air-quick-status');
+
+  if(!name){statusEl.innerHTML='<span style="color:var(--danger);">Please enter a candidate name.</span>';return;}
+  if(!roleKey){statusEl.innerHTML='<span style="color:var(--danger);">Please select a role.</span>';return;}
+
+  var role=ROLES[roleKey];
+  var candId='c_'+Date.now();
+  var cands=getData('candidates');
+  var notesBase='Added from AI Review quick add.';
+  if(linkedin) notesBase+=' LinkedIn: '+linkedin;
+  if(resumeText) notesBase+='\n\nResume:\n'+resumeText.substring(0,2000);
+  // Collect assigned interviewers
+  var assignedInterviewers=[];
+  document.querySelectorAll('#air-quick-interviewers input[type=checkbox]:checked').forEach(function(cb){
+    assignedInterviewers.push(cb.value);
+  });
+
+  var newCand={
+    id:candId,
+    name:name,
+    linkedin:linkedin,
+    email:'',phone:'',
+    position:role?role.title:roleKey,
+    roleKey:roleKey,
+    positionId:'pos_'+roleKey.toLowerCase(),
+    stage:'contacted',
+    source:'Elizabeth',
+    notes:notesBase,
+    interviewers:assignedInterviewers,
+    created:new Date().toISOString(),
+    updated:new Date().toISOString(),
+    history:[{stage:'contacted',date:new Date().toISOString(),note:'Added to pipeline — screen call pending'}]
+  };
+  cands.push(newCand);
+  setData('candidates',cands);
+
+  // Upload resume file to Blob if provided
+  if(airQuickResumeFile){
+    uploadCandResumePDF(candId, airQuickResumeFile);
+  }
+
+  statusEl.innerHTML='<span style="color:var(--success);">✅ '+name+' added to pipeline as '+newCand.position+'</span>';
+  document.getElementById('air-quick-name').value='';
+  document.getElementById('air-quick-linkedin').value='';
+  document.getElementById('air-quick-role').value='';
+  document.getElementById('air-quick-resume-text').value='';
+  document.getElementById('air-quick-resume-label').textContent='📎 Upload resume (PDF / DOCX)';
+  document.getElementById('air-quick-resume-drop').style.borderColor='var(--border)';
+  airQuickResumeFile=null;
+  document.querySelectorAll('#air-quick-interviewers input[type=checkbox]').forEach(function(cb){cb.checked=false;});
+
+  airReviewInit(); // refresh candidate dropdowns — will auto-populate Step 2 + Step 3
+  showToast(name+' added to pipeline ✅');
+}
+
+function airReviewInit(){
+  // Populate Step 1/2 pipeline candidate selector
+  var sel=document.getElementById('air-pipeline-cand');
+  if(sel){
+    var cands=getData('candidates').filter(function(c){return canSeeEA()||c.roleKey!=='EA';});
+    sel.innerHTML='<option value="">— Select candidate —</option>';
+    cands.forEach(function(c,i){
+      var opt=document.createElement('option');
+      opt.value=i;
+      opt.textContent=c.name+(c.role?' ('+c.role+')':'');
+      sel.appendChild(opt);
+    });
+  }
+  // Populate Step 2 + Step 3 candidate dropdowns
+  air2PopulateCandidates();
+  air3PopulateCandidates();
+}
+
+function handleAirResumeSelect(input){
+  if(input.files&&input.files[0]) airReadResume(input.files[0]);
+}
+function handleAirResumeDrop(e){
+  if(e.dataTransfer.files&&e.dataTransfer.files[0]) airReadResume(e.dataTransfer.files[0]);
+}
+function airReadResume(file){
+  document.getElementById('air-resume-label').textContent='📄 '+file.name;
+  document.getElementById('air-resume-drop').style.borderColor='var(--success)';
+  var reader=new FileReader();
+  reader.onload=function(e){
+    // For text-based files, store the text; for PDFs show a note
+    var text=e.target.result;
+    if(file.type==='text/plain'){
+      document.getElementById('air-resume-text').value=text;
+      airResumeText=text;
+    } else {
+      // PDF/DOC — reader will give binary, send as-is; server will handle
+      // For now, prompt user to paste text too
+      airResumeText='[File: '+file.name+']';
+      if(!document.getElementById('air-resume-text').value){
+        document.getElementById('air-resume-text').placeholder='PDF uploaded: '+file.name+'. Optionally paste text if Claude needs it.';
+      }
+    }
+  };
+  reader.readAsText(file);
+}
+
+function airGenerate(){
+  var name=document.getElementById('air-name').value.trim();
+  if(!name){showToast('Please select a candidate from the pipeline first.');return;}
+  var role=document.getElementById('air-role').value;
+  var stageVal=document.getElementById('air-stage').value;
+  var nextStep=document.getElementById('air-nextstep').value;
+  var resumeText=document.getElementById('air-resume-text').value.trim()||airResumeText;
+  var notes=document.getElementById('air-notes').value.trim();
+  var gpa=document.getElementById('air-gpa').value.trim();
+  var salary=document.getElementById('air-salary').value.trim();
+  var startDate=document.getElementById('air-startdate').value.trim();
+
+  // Append structured fields to notes
+  var extras=[];
+  if(gpa) extras.push('GPA: '+gpa);
+  if(salary) extras.push('Salary Expectations: '+salary);
+  if(startDate) extras.push('Start Date: '+startDate);
+  if(extras.length) notes=(notes?notes+'\n\n':'')+extras.join('\n');
+
+  if(!resumeText&&!notes){showToast('Please add resume text or interview notes first.');return;}
+
+  var btn=document.getElementById('air-generate-btn');
+  var out=document.getElementById('air-output');
+  btn.disabled=true;
+  btn.textContent='Generating...';
+  out.innerHTML='<span style="color:var(--text-light);font-style:italic;">Generating with Claude — this may take a few seconds...</span>';
+
+  var stageLabel2='';
+  var stageObj=STAGES.find(function(s){return s.id===stageVal;});
+  if(stageObj) stageLabel2=stageObj.label;
+
+  var nextStepMap={
+    advance_async:'Advance to Async Challenge',advance_phone:'Advance to Phone Screen',
+    advance_interview1:'Advance to Interview 1',advance_interview2:'Advance to Interview 2',
+    advance_exec:'Advance to Executive Interview',advance_panel:'Advance to Panel',
+    advance_offer:'Advance to Offer',hold:'Hold — Further Review',rejected:'Reject'
+  };
+
+  fetch('/api/generate-feedback',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      candidateName:name,
+      role:role,
+      stage:stageLabel2,
+      nextStep:nextStepMap[nextStep]||nextStep,
+      resumeText:resumeText,
+      interviewNotes:notes
+    })
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    btn.disabled=false;btn.textContent='✨ Generate with Claude';
+    if(data.error){out.innerHTML='<span style="color:var(--danger);">Error: '+data.error+'</span>';return;}
+    // Render markdown-style bold
+    var html=data.feedback
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    out.innerHTML=html;
+    document.getElementById('air-copy-btn').style.display='';
+    document.getElementById('air-apply-card').style.display='';
+    // Save AI overview to candidate profile
+    var candId=document.getElementById('air2-cand-select').value;
+    if(candId){
+      var cands=getData('candidates');
+      var c=cands.find(function(x){return x.id===candId;});
+      if(c){
+        c.aiOverview=data.feedback;
+        c.aiOverviewDate=new Date().toISOString();
+        setData('candidates',cands);
+        showToast('✅ Overview saved to '+c.name+'\'s profile');
+      }
+    }
+    airReviewInit(); // refresh candidate list
+  })
+  .catch(function(err){
+    btn.disabled=false;btn.textContent='✨ Generate with Claude';
+    out.innerHTML='<span style="color:var(--danger);">Request failed. Check that ANTHROPIC_API_KEY is configured in Vercel.</span>';
+  });
+}
+
+function airCopyFeedback(){
+  var out=document.getElementById('air-output');
+  var text=out.innerText||out.textContent;
+  navigator.clipboard.writeText(text).then(function(){showToast('Copied to clipboard!');});
+}
+
+function airApplyToCandidate(){
+  var sel=document.getElementById('air-pipeline-cand');
+  var idx=parseInt(sel.value);
+  var nextStep=document.getElementById('air-nextstep').value;
+  var statusEl=document.getElementById('air-apply-status');
+
+  if(isNaN(idx)){statusEl.innerHTML='<span style="color:var(--danger);">Please select a candidate.</span>';return;}
+  if(!nextStep){statusEl.innerHTML='<span style="color:var(--danger);">Please select a next step.</span>';return;}
+
+  var nextStageMap={
+    advance_phone:'phone',advance_interview1:'interview1',
+    advance_interview2:'interview2',advance_exec:'exec',advance_panel:'panel',
+    advance_offer:'offer',hold:'contacted',rejected:'rejected'
+  };
+  var newStage=nextStageMap[nextStep]||null;
+  if(!newStage){statusEl.innerHTML='<span style="color:var(--danger);">Unknown next step.</span>';return;}
+
+  var cands=getData('candidates');
+  if(!cands[idx]){statusEl.innerHTML='<span style="color:var(--danger);">Candidate not found.</span>';return;}
+
+  var oldStage=cands[idx].stage;
+  cands[idx].stage=newStage;
+  cands[idx].lastUpdated=new Date().toISOString();
+  setData('candidates',cands);
+
+  var stageObj=STAGES.find(function(s){return s.id===newStage;});
+  var stageDisp=stageObj?stageObj.icon+' '+stageObj.label:newStage;
+  statusEl.innerHTML='<span style="color:var(--success);">✅ '+cands[idx].name+' moved to <strong>'+stageDisp+'</strong></span>';
+  showToast(cands[idx].name+' → '+stageDisp);
+}
+
+// ===== STEP 3: INTERVIEW RECORDING =====
+var air3RecordingFile=null;
+
+function air2PopulateCandidates(){
+  var sel = document.getElementById('air2-cand-select');
+  if(!sel) return;
+  var cands = getData('candidates').filter(function(c){
+    if(c.stage==='rejected') return false;
+    if(!canSeeEA()&&c.roleKey==='EA') return false;
+    if(isInterviewer()) return c.interviewers&&c.interviewers.indexOf(CURRENT_EMAIL)>=0;
+    return true;
+  });
+  cands.sort(function(a,b){return a.name.localeCompare(b.name);});
+  var current = sel.value;
+  sel.innerHTML = '<option value="">— Select from pipeline —</option>';
+  cands.forEach(function(c){
+    var opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name + ' (' + (c.position||c.roleKey) + ' · ' + stageLabel(c.stage) + ')';
+    sel.appendChild(opt);
+  });
+  if(current) sel.value = current;
+}
+
+function air2SelectCandidate(id){
+  if(!id) return;
+  var c = getData('candidates').find(function(x){return x.id===id;});
+  if(!c) return;
+  document.getElementById('air-name').value = c.name;
+  var roleMap = {
+    AC:'Account Coordinator (AC)', AS:'Account Strategist (AS)', AM:'Account Manager (AM)',
+    SrAM:'Senior Account Manager (Sr AM)', BD:'Director of Partnerships',
+    MKT:'Director of Marketing', EA:'Executive Assistant to the CEO'
+  };
+  var roleEl = document.getElementById('air-role');
+  if(roleEl && roleMap[c.roleKey]) roleEl.value = roleMap[c.roleKey];
+  var stageEl = document.getElementById('air-stage');
+  if(stageEl && c.stage){
+    var validStages = ['contacted','phone','interview1','interview2','exec','panel'];
+    stageEl.value = validStages.indexOf(c.stage) >= 0 ? c.stage : '';
+  }
+}
+
+function air3PopulateCandidates(){
+  var sel = document.getElementById('air3-cand-select');
+  if(!sel) return;
+  var cands = getData('candidates').filter(function(c){
+    if(c.stage==='rejected') return false;
+    if(!canSeeEA()&&c.roleKey==='EA') return false;
+    if(isInterviewer()) return c.interviewers&&c.interviewers.indexOf(CURRENT_EMAIL)>=0;
+    return true;
+  });
+  cands.sort(function(a,b){return a.name.localeCompare(b.name);});
+  sel.innerHTML = '<option value="">— Select from pipeline —</option>';
+  cands.forEach(function(c){
+    var opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name + ' (' + (c.position||c.roleKey) + ' · ' + stageLabel(c.stage) + ')';
+    sel.appendChild(opt);
+  });
+}
+
+function air3SelectCandidate(id){
+  if(!id) return;
+  var c = getData('candidates').find(function(x){return x.id===id;});
+  if(!c) return;
+  // Fill name
+  document.getElementById('air3-name').value = c.name;
+  // Fill role
+  var roleMap = {
+    AC:'Account Coordinator (AC)', AS:'Account Strategist (AS)', AM:'Account Manager (AM)',
+    SrAM:'Senior Account Manager (Sr AM)', BD:'Director of Partnerships',
+    MKT:'Director of Marketing', EA:'Executive Assistant to the CEO'
+  };
+  var roleEl = document.getElementById('air3-role');
+  if(roleEl && roleMap[c.roleKey]) roleEl.value = roleMap[c.roleKey];
+  // Fill stage
+  var stageEl = document.getElementById('air3-stage');
+  if(stageEl){
+    var stageVal = ['phone','interview1','interview2','exec'].indexOf(c.stage)>=0 ? c.stage : 'phone';
+    stageEl.value = stageVal;
+  }
+}
+
+function air3HandleFile(input){
+  if(input.files&&input.files[0]) air3SetFile(input.files[0]);
+}
+function air3HandleDrop(e){
+  if(e.dataTransfer.files&&e.dataTransfer.files[0]) air3SetFile(e.dataTransfer.files[0]);
+}
+function air3IsDoc(file){
+  if(!file) return false;
+  var n=file.name.toLowerCase();
+  return n.endsWith('.docx')||n.endsWith('.doc')||n.endsWith('.pdf');
+}
+function air3SetFile(file){
+  air3RecordingFile=file;
+  var icon=air3IsDoc(file)?'📄':'🎙️';
+  document.getElementById('air3-file-label').textContent=icon+' '+file.name+' ('+Math.round(file.size/1024/1024*10)/10+' MB)';
+  document.getElementById('air3-drop').style.borderColor='#7c3aed';
+  // If it's a docx, auto-read as text and pre-fill the transcript field
+  if(file.name.toLowerCase().endsWith('.docx')){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      // Try mammoth if available, otherwise show file name as placeholder
+      if(typeof mammoth!=='undefined'){
+        mammoth.extractRawText({arrayBuffer:e.target.result}).then(function(r){
+          if(r.value) document.getElementById('air3-transcript').value=r.value;
+        });
+      }
+    };
+    reader.readAsArrayBuffer(file);
+  } else if(file.name.toLowerCase().endsWith('.pdf')){
+    // For PDF: notify user to paste transcript — browser can't reliably extract PDF text without a lib
+    showToast('📄 PDF attached — if it\'s a transcript, paste the text directly too for best results.');
+  }
+}
+
+function air3CopyFeedback(){
+  var out=document.getElementById('air3-output');
+  navigator.clipboard.writeText(out.innerText||out.textContent);
+  showToast('📋 Interview feedback copied!');
+}
+
+function air3Generate(){
+  var name=document.getElementById('air3-name').value.trim();
+  var role=document.getElementById('air3-role').value;
+  var stage=document.getElementById('air3-stage').value;
+  var transcript=document.getElementById('air3-transcript').value.trim();
+  var btn=document.getElementById('air3-generate-btn');
+  var out=document.getElementById('air3-output');
+  var statusEl=document.getElementById('air3-status');
+
+  if(!transcript&&!air3RecordingFile){
+    showToast('Please upload a recording, document, or paste a transcript first.');return;
+  }
+
+  btn.disabled=true;btn.textContent='Analyzing...';
+  out.innerHTML='<span style="color:var(--text-light);font-style:italic;">Processing...</span>';
+
+  // If doc file uploaded, prefer pasted transcript (already extracted); otherwise send file to transcribe endpoint
+  if(air3RecordingFile&&air3IsDoc(air3RecordingFile)&&!transcript){
+    statusEl.textContent='📄 Reading document...';
+    var fd=new FormData();
+    fd.append('file',air3RecordingFile);
+    fetch('/api/transcribe-interview',{method:'POST',body:fd})
+      .then(function(r){return r.json();})
+      .then(function(d){
+        if(d.transcript){runAnalysis(d.transcript);}
+        else{showToast('Could not extract text from document. Please paste transcript manually.');btn.disabled=false;btn.textContent='✨ Analyze with Claude';}
+      }).catch(function(){showToast('Document read error. Paste transcript manually.');btn.disabled=false;btn.textContent='✨ Analyze with Claude';});
+    return;
+  }
+
+  function runAnalysis(transcriptText){
+    statusEl.textContent='✨ Sending to Claude for analysis...';
+    fetch('/api/generate-feedback',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        candidateName:name||'Candidate',
+        role:role,
+        stage:stage,
+        nextStep:'',
+        resumeText:'',
+        interviewNotes:transcriptText,
+        isRecordingTranscript:true
+      })
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      btn.disabled=false;btn.textContent='✨ Analyze with Claude';
+      statusEl.textContent='';
+      if(data.error){out.innerHTML='<span style="color:var(--danger);">Error: '+data.error+'</span>';return;}
+      var html=data.feedback
+        .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+        .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+      out.innerHTML=html;
+      document.getElementById('air3-copy-btn').style.display='';
+      // Save interview analysis to candidate profile
+      var candId=document.getElementById('air3-cand-select').value;
+      if(candId){
+        var cands=getData('candidates');
+        var c=cands.find(function(x){return x.id===candId;});
+        if(c){
+          c.aiInterviewFeedback=data.feedback;
+          c.aiInterviewFeedbackDate=new Date().toISOString();
+          c.aiInterviewFeedbackStage=stage||c.stage;
+          setData('candidates',cands);
+          showToast('✅ Interview analysis saved to '+c.name+'\'s profile');
+        }
+      }
+    })
+    .catch(function(e){
+      btn.disabled=false;btn.textContent='✨ Analyze with Claude';
+      statusEl.textContent='';
+      out.innerHTML='<span style="color:var(--danger);">Error: '+e.message+'</span>';
+    });
+  }
+
+  if(transcript){
+    runAnalysis(transcript);
+  } else {
+    // Upload recording to Vercel Blob then transcribe
+    statusEl.textContent='⬆️ Uploading recording...';
+    var formData=new FormData();
+    formData.append('file',air3RecordingFile);
+    formData.append('candidateName',name||'Candidate');
+    formData.append('role',role);
+    formData.append('stage',stage);
+    fetch('/api/transcribe-interview',{method:'POST',body:formData})
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(data.error){
+        btn.disabled=false;btn.textContent='✨ Analyze with Claude';
+        statusEl.textContent='';
+        out.innerHTML='<span style="color:var(--danger);">Transcription error: '+data.error+'<br><br>Tip: Paste the transcript manually below and try again.</span>';
+        return;
+      }
+      if(data.transcript){
+        document.getElementById('air3-transcript').value=data.transcript;
+        statusEl.textContent='✅ Transcribed! Analyzing with Claude...';
+        runAnalysis(data.transcript);
+      }
+    })
+    .catch(function(e){
+      btn.disabled=false;btn.textContent='✨ Analyze with Claude';
+      statusEl.textContent='';
+      out.innerHTML='<span style="color:var(--danger);">Upload error: '+e.message+'<br><br>Tip: Paste the transcript manually below and try again.</span>';
+    });
+  }
+}
 
 function renderTemplates(btn){
   if(btn&&btn.parentNode){btn.parentNode.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});btn.classList.add('active');}
@@ -4223,8 +5982,91 @@ function exportAllData(){
 // ===== HELPERS =====
 function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
 
+// ===== BACKUP & RECOVERY =====
+function backupExportHTML(){
+  var html=document.documentElement.outerHTML;
+  var d=new Date().toISOString().slice(0,10);
+  var blob=new Blob([html],{type:'text/html'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='tt-recruiting_backup_'+d+'.html';a.click();
+  showToast('📦 Full backup downloaded');
+}
+
+function backupExportSource(){
+  fetch(window.location.pathname+(window.location.pathname.endsWith('/')? 'index.html':''))
+    .then(function(r){return r.text();}).catch(function(){return document.documentElement.outerHTML;})
+    .then(function(src){
+      var d=new Date().toISOString().slice(0,10);
+      var header='// Project: Tiger Tracks Recruiting\n// Description: Internal recruiting pipeline, AI review, interview question bank, candidate management\n// Last Modified: '+d+'\n// Dependencies: @vercel/blob, resend, formidable (API); Claude API (generate-feedback)\n// Setup: Deploy to Vercel with BLOB_READ_WRITE_TOKEN, RESEND_API_KEY, ANTHROPIC_API_KEY env vars\n//        Or open index.html directly for read-only local use\n\n';
+      var blob=new Blob([header+src],{type:'text/plain'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+      a.download='tt-recruiting_source_'+d+'.txt';a.click();
+      showToast('📄 Source code downloaded');
+    });
+}
+
+function backupExportData(){
+  var keys=['candidates','positions','linkedin','cand_votes','phantom_candidates','video_submissions'];
+  var out={_exported:new Date().toISOString(),_version:'tt-recruiting-v1'};
+  for(var i=0;i<localStorage.length;i++){
+    var k=localStorage.key(i);
+    if(k&&k.startsWith('ttrec_')){try{out[k]=JSON.parse(localStorage.getItem(k));}catch(e){out[k]=localStorage.getItem(k);}}
+  }
+  var blob=new Blob([JSON.stringify(out,null,2)],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='tt-recruiting_data_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  showToast('💾 Data exported');
+}
+
+function backupImportData(input){
+  if(!input.files||!input.files[0])return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      var count=0;
+      Object.keys(data).forEach(function(k){
+        if(k.startsWith('ttrec_')){localStorage.setItem(k,JSON.stringify(data[k]));count++;}
+      });
+      showToast('✅ Restored '+count+' data keys — refreshing...');
+      setTimeout(function(){window.location.reload();},1200);
+    }catch(err){showToast('❌ Invalid backup file');}
+  };
+  reader.readAsText(input.files[0]);
+}
+
 // ===== INIT =====
 renderDashboard();
+// Seed cloud on load if valid session + local candidates exist
+(function(){
+  var email=localStorage.getItem('ttrec_email');
+  var exp=parseInt(localStorage.getItem('ttrec_exp')||'0');
+  if(email&&AUTH_ALLOWLIST.indexOf(email)>=0&&Date.now()<exp){
+    var cands=getData('candidates');
+    if(cands.length) scheduleSyncPush('candidates',cands);
+  }
+})();
 </script>
+
+<!-- BACKUP & RECOVERY FOOTER -->
+<div style="border-top:1px solid #e2e8f0;margin-top:2rem;padding:0 1.5rem 2rem;">
+  <details id="backup-panel">
+    <summary style="cursor:pointer;padding:.75rem 0;font-size:.8rem;font-weight:700;color:#64748b;list-style:none;display:flex;align-items:center;gap:.5rem;user-select:none;">
+      ⚙️ Backup &amp; Recovery
+      <span style="font-size:.7rem;font-weight:400;margin-left:auto;color:#94a3b8;">v1.4 — 2026-03-13</span>
+    </summary>
+    <div style="display:flex;flex-wrap:wrap;gap:.6rem;padding:.5rem 0 .25rem;">
+      <button onclick="backupExportHTML()" style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:.45rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;color:#1e293b;">📦 Export Full Backup (.html)</button>
+      <button onclick="backupExportSource()" style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:.45rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;color:#1e293b;">📄 Export Source Code</button>
+      <button onclick="backupExportData()" style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:.45rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;color:#1e293b;">💾 Export Data (JSON)</button>
+      <label style="background:#f1f5f9;border:1px solid #e2e8f0;border-radius:8px;padding:.45rem .9rem;font-size:.78rem;font-weight:600;cursor:pointer;color:#1e293b;">
+        📂 Import Data
+        <input type="file" accept=".json" style="display:none;" onchange="backupImportData(this)">
+      </label>
+    </div>
+    <p style="font-size:.7rem;color:#94a3b8;margin-top:.35rem;">Export Full Backup = complete standalone file. Export Data = pipeline candidates + settings only.</p>
+  </details>
+</div>
+
 </body>
 </html>

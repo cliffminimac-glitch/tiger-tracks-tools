@@ -2,15 +2,33 @@
   "version": 2,
   "name": "tt-recruiting",
   "builds": [
-    { "src": "api/*.js", "use": "@vercel/node" },
+    { "src": "api/webhook/phantombuster.js", "use": "@vercel/node" },
+    { "src": "api/prospects/[id]/status.js", "use": "@vercel/node" },
+    { "src": "api/sync.js", "use": "@vercel/node" },
+    { "src": "api/generate-feedback.js", "use": "@vercel/node" },
+    { "src": "api/transcribe-interview.js", "use": "@vercel/node" },
+    { "src": "api/upload-resume.js", "use": "@vercel/node" },
+    { "src": "api/upload-video.js", "use": "@vercel/node" },
+    { "src": "api/screening-submit.js", "use": "@vercel/node" },
+    { "src": "api/webhook.js", "use": "@vercel/node" },
+    { "src": "api/prospects.js", "use": "@vercel/node" },
+    { "src": "import.html", "use": "@vercel/static" },
     { "src": "*.html", "use": "@vercel/static" },
     { "src": "*.js", "use": "@vercel/static" },
     { "src": "*.png", "use": "@vercel/static" },
-    { "src": "*.pdf", "use": "@vercel/static" },
-    { "src": "*.json", "use": "@vercel/static" }
+    { "src": "*.pdf", "use": "@vercel/static" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/api/prospects/([^/]+)/status", "dest": "/api/prospects/[id]/status.js" },
+    { "src": "/api/webhook/phantombuster", "dest": "/api/webhook/phantombuster.js" },
+    { "src": "/api/sync", "dest": "/api/sync.js" },
+    { "src": "/api/generate-feedback", "dest": "/api/generate-feedback.js" },
+    { "src": "/api/transcribe-interview", "dest": "/api/transcribe-interview.js" },
+    { "src": "/api/upload-resume", "dest": "/api/upload-resume.js" },
+    { "src": "/api/upload-video", "dest": "/api/upload-video.js" },
+    { "src": "/api/screening-submit", "dest": "/api/screening-submit.js" },
+    { "src": "/api/webhook", "dest": "/api/webhook.js" },
+    { "src": "/api/prospects", "dest": "/api/prospects.js" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }

@@ -1,0 +1,3352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiger Tracks — Performance Marketing. Proven at Scale.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,300;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:    #229FA1;
+      --teal-mid:#1F807E;
+      --teal-dk: #1A7477;
+      --ink:     #0A1119;
+      --charcoal:#1B2126;
+      --white:   #FFFFFF;
+      --gray:    #9E9E9E;
+      --bone:    #F4F1EB;
+
+      /* Derived */
+      --text:        rgba(255,255,255,.92);
+      --text-2:      rgba(255,255,255,.65);
+      --text-3:      rgba(255,255,255,.42);
+      --line:        rgba(255,255,255,.08);
+      --line-bright: rgba(34,159,161,.22);
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--ink);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: var(--ink); }
+    ::-webkit-scrollbar-thumb { background: var(--teal-dk); border-radius: 2px; }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 48px; height: 64px;
+      background: rgba(10,17,25,.8);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand {
+      font-weight: 800; font-size: .8rem;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--white);
+      display: flex; align-items: center; gap: 10px;
+    }
+    .brand-mark {
+      width: 28px; height: 28px; border-radius: 6px;
+      background: var(--teal);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .brand-mark svg { width: 16px; height: 16px; }
+    .nav-items {
+      display: flex; align-items: center;
+      gap: 2.25rem; list-style: none;
+    }
+    .nav-items a {
+      font-size: .84rem; font-weight: 500; color: var(--text-2);
+      transition: color .15s;
+    }
+    .nav-items a:hover { color: var(--white); }
+    .nav-audit {
+      font-size: .84rem; font-weight: 700;
+      background: var(--teal); color: var(--white) !important;
+      padding: .5rem 1.25rem; border-radius: 6px;
+      transition: background .15s !important;
+    }
+    .nav-audit:hover { background: var(--teal-mid) !important; }
+
+    /* ─── LAYOUT ─── */
+    .wrap { max-width: 1120px; margin: 0 auto; padding: 0 48px; }
+
+    section { padding: 112px 0; border-top: 1px solid var(--line); }
+    section:first-of-type { border-top: none; }
+
+    .overline {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; font-weight: 500;
+      letter-spacing: .16em; text-transform: uppercase;
+      color: var(--teal);
+      display: block; margin-bottom: .9rem;
+    }
+
+    h2.display {
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      font-weight: 800; letter-spacing: -.03em; line-height: 1.12;
+    }
+    h2.display em { font-style: italic; font-weight: 300; color: var(--text-2); }
+
+    .body-lg { font-size: 1.1rem; color: var(--text-2); line-height: 1.75; font-weight: 300; max-width: 540px; }
+    .body-md { font-size: .95rem; color: var(--text-2); line-height: 1.7; font-weight: 300; }
+
+    /* ─── HERO ─── */
+    #hero {
+      padding: 180px 0 120px; border-top: none;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; pointer-events: none;
+      top: -200px; left: 50%; transform: translateX(-50%);
+      width: 900px; height: 600px;
+      background: radial-gradient(ellipse at center, rgba(34,159,161,.09) 0%, transparent 70%);
+    }
+    .hero-grid-lines {
+      position: absolute; inset: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 80px 80px;
+      mask-image: radial-gradient(ellipse 70% 70% at 50% 0, black 0%, transparent 100%);
+    }
+    .hero-content { position: relative; z-index: 1; }
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: .75rem;
+      border: 1px solid var(--line-bright);
+      border-radius: 100px; padding: .35rem 1rem .35rem .55rem;
+      font-size: .78rem; font-weight: 500; color: var(--text-2);
+      margin-bottom: 2.5rem;
+    }
+    .hero-kicker-badge {
+      background: var(--teal); color: var(--white);
+      font-size: .62rem; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      border-radius: 100px; padding: .2rem .6rem;
+    }
+    .hero-h1 {
+      font-size: clamp(3rem, 6.5vw, 6rem);
+      font-weight: 900; letter-spacing: -.04em;
+      line-height: 1; margin-bottom: 2rem;
+    }
+    .hero-h1 span { color: var(--teal); }
+    .hero-h1 .light { font-weight: 300; font-style: italic; color: var(--text-2); }
+    .hero-sub {
+      font-size: clamp(.95rem, 1.5vw, 1.15rem);
+      color: var(--text-2); max-width: 560px;
+      line-height: 1.75; font-weight: 300; margin-bottom: 3rem;
+    }
+    .hero-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-cta {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--teal); color: var(--white);
+      font-weight: 700; font-size: .92rem;
+      padding: .85rem 1.75rem; border-radius: 8px;
+      transition: background .15s, transform .15s;
+      box-shadow: 0 0 40px rgba(34,159,161,.2);
+    }
+    .btn-cta:hover { background: var(--teal-mid); transform: translateY(-1px); box-shadow: 0 0 60px rgba(34,159,161,.3); }
+    .btn-soft {
+      display: inline-flex; align-items: center; gap: .5rem;
+      color: var(--text-2); font-weight: 500; font-size: .92rem;
+      padding: .85rem 1.75rem; border-radius: 8px;
+      border: 1px solid var(--line); transition: all .15s;
+    }
+    .btn-soft:hover { color: var(--white); border-color: rgba(255,255,255,.18); }
+
+    /* Hero stat bar */
+    .hero-stats {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border: 1px solid var(--line); border-radius: 12px;
+      overflow: hidden; margin-top: 5rem;
+      background: var(--charcoal);
+    }
+    .h-stat {
+      padding: 1.5rem; border-right: 1px solid var(--line);
+    }
+    .h-stat:last-child { border-right: none; }
+    .h-stat-val {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.75rem; font-weight: 700; line-height: 1;
+      color: var(--white); margin-bottom: .35rem;
+    }
+    .h-stat-val span { color: var(--teal); }
+    .h-stat-label { font-size: .72rem; color: var(--text-3); font-weight: 500; letter-spacing: .04em; }
+
+    /* ─── CLIENT LOGOS / TICKER ─── */
+    #clients {
+      padding: 56px 0; border-top: 1px solid var(--line);
+      background: var(--charcoal);
+    }
+    .clients-header {
+      text-align: center; font-size: .72rem; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--text-3); margin-bottom: 2rem;
+    }
+    .ticker-outer { overflow: hidden; position: relative; }
+    .ticker-outer::before, .ticker-outer::after {
+      content: ''; position: absolute; top: 0; bottom: 0;
+      width: 120px; z-index: 2; pointer-events: none;
+    }
+    .ticker-outer::before { left: 0; background: linear-gradient(90deg, var(--charcoal), transparent); }
+    .ticker-outer::after { right: 0; background: linear-gradient(-90deg, var(--charcoal), transparent); }
+    .ticker-track { display: flex; gap: 3rem; animation: run 32s linear infinite; width: max-content; }
+    @keyframes run { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+    .ticker-track .item {
+      font-size: .82rem; font-weight: 600; color: var(--text-3);
+      letter-spacing: .06em; text-transform: uppercase; white-space: nowrap;
+      transition: color .2s;
+    }
+    .ticker-track .item:hover { color: var(--text-2); }
+
+    /* ─── WHY TT ─── */
+    #why .why-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      border: 1px solid var(--line); border-radius: 12px;
+      overflow: hidden; background: var(--line);
+      margin-top: 4rem;
+    }
+    .why-cell {
+      background: var(--ink); padding: 2.5rem;
+      transition: background .2s;
+    }
+    .why-cell:hover { background: var(--charcoal); }
+    .why-cell-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; color: var(--teal);
+      letter-spacing: .1em; margin-bottom: 1rem; display: block;
+    }
+    .why-cell h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: .6rem; letter-spacing: -.01em; }
+    .why-cell p { font-size: .88rem; color: var(--text-2); line-height: 1.7; }
+
+    /* ─── ODOMETER ─── */
+    .odometer-val { display: inline-block; }
+    .h-stat-val { transition: opacity .3s; }
+    .h-stat-val.counting { opacity: .85; }
+
+    /* ─── BENTO GRID ─── */
+    .bento-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-auto-rows: auto;
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-top: 4rem;
+    }
+    .bento-tile {
+      background: var(--ink); padding: 2rem;
+      transition: background .2s;
+      transform-style: preserve-3d;
+      will-change: transform;
+      position: relative; overflow: hidden;
+    }
+    .bento-tile:hover { background: #0f1720; }
+    .bento-tile.wide { grid-column: span 2; }
+    .bento-tile.tall { grid-row: span 2; }
+    .bento-tile-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--teal); margin-bottom: .75rem; display: block;
+    }
+    .bento-tile h3 { font-size: 1rem; font-weight: 700; margin-bottom: .5rem; letter-spacing: -.01em; }
+    .bento-tile p { font-size: .84rem; color: var(--text-2); line-height: 1.65; }
+    .bento-tile .svc-chips { margin-top: 1rem; }
+    .bento-stat {
+      margin-top: 1.25rem; padding-top: 1.25rem;
+      border-top: 1px solid var(--line);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.6rem; font-weight: 700; color: var(--teal); line-height: 1;
+    }
+    .bento-stat-label { font-size: .68rem; color: var(--text-3); margin-top: .2rem; letter-spacing: .04em; }
+    .bento-tile-glow {
+      position: absolute; pointer-events: none;
+      border-radius: 50%; width: 200px; height: 200px;
+      background: radial-gradient(circle, rgba(34,159,161,.12) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      opacity: 0; transition: opacity .3s;
+    }
+    .bento-tile:hover .bento-tile-glow { opacity: 1; }
+
+    /* ─── CONVERSION PATH ─── */
+    .conv-path-wrap {
+      position: relative; overflow: hidden;
+      padding: 80px 0; border-top: 1px solid var(--line);
+      background: var(--charcoal);
+    }
+    .conv-path-svg {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 1120px; height: 100%;
+      pointer-events: none; overflow: visible;
+    }
+    .conv-path-line {
+      fill: none; stroke: var(--teal); stroke-width: 1.5;
+      stroke-dasharray: 2000; stroke-dashoffset: 2000;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1);
+      opacity: .5;
+    }
+    .conv-path-line.drawn { stroke-dashoffset: 0; }
+    .conv-node {
+      fill: var(--ink); stroke: var(--teal); stroke-width: 1.5;
+      opacity: 0; transition: opacity .3s;
+    }
+    .conv-node.visible { opacity: 1; }
+    .conv-path-steps {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 2rem; position: relative; z-index: 1;
+    }
+    .conv-step { text-align: center; }
+    .conv-step-num {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid var(--line-bright);
+      background: var(--ink);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto .85rem;
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      color: var(--teal); font-weight: 600;
+      transition: all .4s;
+    }
+    .conv-step.active .conv-step-num {
+      background: var(--teal); color: var(--white);
+      border-color: var(--teal);
+      box-shadow: 0 0 20px rgba(34,159,161,.4);
+    }
+    .conv-step h4 { font-size: .88rem; font-weight: 700; margin-bottom: .3rem; }
+    .conv-step p { font-size: .76rem; color: var(--text-3); }
+
+    /* ─── HERO SPLIT ─── */
+    .hero-content { display: grid; grid-template-columns: 1fr 480px; gap: 4rem; align-items: center; }
+    .hero-left { }
+    .hero-visual { position: relative; }
+    .hero-visual-float {
+      position: relative; transform: perspective(1200px) rotateY(-6deg) rotateX(3deg);
+      transition: transform .4s ease; filter: drop-shadow(0 40px 80px rgba(0,0,0,.5));
+    }
+    .hero-visual:hover .hero-visual-float { transform: perspective(1200px) rotateY(-2deg) rotateX(1deg); }
+    .browser-frame {
+      background: #0a1525; border: 1px solid var(--line);
+      border-radius: 12px; overflow: hidden;
+      box-shadow: 0 2px 0 rgba(255,255,255,.04) inset;
+    }
+    .browser-bar {
+      background: #091322; padding: .6rem .9rem;
+      display: flex; align-items: center; gap: .5rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .br-dot { width: 9px; height: 9px; border-radius: 50%; }
+    .br-dot.r { background: #FF5F56; } .br-dot.y { background: #FFBD2E; } .br-dot.g { background: #27C93F; }
+    .br-url {
+      flex: 1; background: rgba(255,255,255,.05); border-radius: 5px;
+      height: 20px; margin-left: .5rem;
+      display: flex; align-items: center; padding: 0 .6rem;
+      font-family: 'JetBrains Mono',monospace; font-size: .58rem;
+      color: var(--text-3); letter-spacing: .03em; gap: .3rem;
+    }
+    .br-url-lock { color: #27C93F; font-size: .55rem; }
+    .browser-site { padding: 0; overflow: hidden; height: 280px; position: relative; }
+
+    /* MINI SITE — inside hero browser */
+    .ms-nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .7rem 1.2rem; border-bottom: 1px solid rgba(255,255,255,.06);
+      background: rgba(9,19,34,.9);
+    }
+    .ms-nav-logo { font-family:'JetBrains Mono',monospace; font-size:.62rem; font-weight:700; color:var(--teal); letter-spacing:.08em; }
+    .ms-nav-links { display:flex; gap:.8rem; }
+    .ms-nav-links span { width:28px; height:6px; background:rgba(255,255,255,.12); border-radius:3px; }
+    .ms-nav-btn { width:56px; height:20px; background:var(--teal); border-radius:4px; opacity:.85; }
+    .ms-hero {
+      padding: 1.4rem 1.2rem 1rem;
+      background: linear-gradient(135deg, #0d1c30 0%, #0a1525 60%, #071020 100%);
+    }
+    .ms-hero-tag { width:80px; height:7px; background:rgba(34,159,161,.3); border-radius:3px; margin-bottom:.6rem; }
+    .ms-hero-h1 { }
+    .ms-hero-h1 span { display:block; height:14px; background:rgba(255,255,255,.85); border-radius:3px; margin-bottom:.35rem; }
+    .ms-hero-h1 span:nth-child(2) { width:70%; background:rgba(255,255,255,.5); }
+    .ms-hero-sub { margin-top:.6rem; }
+    .ms-hero-sub span { display:block; height:6px; background:rgba(255,255,255,.2); border-radius:2px; margin-bottom:.3rem; }
+    .ms-hero-sub span:nth-child(2) { width:80%; }
+    .ms-hero-sub span:nth-child(3) { width:60%; }
+    .ms-ctas { display:flex; gap:.5rem; margin-top:.9rem; }
+    .ms-cta-1 { width:72px; height:22px; background:var(--teal); border-radius:5px; }
+    .ms-cta-2 { width:60px; height:22px; background:rgba(255,255,255,.08); border-radius:5px; }
+    .ms-stats { display:grid; grid-template-columns:repeat(4,1fr); gap:0; border-top:1px solid rgba(255,255,255,.07); margin-top:1rem; }
+    .ms-stat { padding:.65rem .5rem; text-align:center; border-right:1px solid rgba(255,255,255,.07); }
+    .ms-stat:last-child { border-right:none; }
+    .ms-stat-v { height:10px; background:rgba(34,159,161,.5); border-radius:2px; margin:0 auto .3rem; }
+    .ms-stat-l { height:5px; background:rgba(255,255,255,.15); border-radius:2px; margin:0 auto; width:60%; }
+    /* floating metric badge on hero visual */
+    .hero-badge {
+      position: absolute; bottom: -1.5rem; left: -1.5rem;
+      background: var(--ink); border: 1px solid var(--line-bright);
+      border-radius: 10px; padding: .75rem 1.1rem;
+      display: flex; align-items: center; gap: .75rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+    .hero-badge-val { font-size: 1.5rem; font-weight: 900; color: var(--teal); letter-spacing: -.03em; }
+    .hero-badge-label { font-size: .72rem; color: var(--text-2); line-height: 1.4; max-width: 80px; }
+    .hero-badge-2 {
+      position: absolute; top: -1.5rem; right: -1rem;
+      background: var(--ink); border: 1px solid var(--line-bright);
+      border-radius: 10px; padding: .6rem 1rem;
+      display: flex; align-items: center; gap: .6rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.4);
+    }
+    .hero-badge-2-dot { width: 8px; height: 8px; border-radius: 50%; background: #27C93F; box-shadow: 0 0 8px #27C93F; flex-shrink:0; }
+    .hero-badge-2-text { font-size: .72rem; color: var(--text-2); }
+    .hero-badge-2-text strong { color: var(--white); display:block; }
+
+    /* ─── WEB PORTFOLIO ─── */
+    #web-work { background: var(--charcoal); }
+    .webwork-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem; margin-top: 3.5rem;
+    }
+    .ww-card {
+      border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--ink);
+      transition: transform .25s ease, box-shadow .25s ease;
+      cursor: default;
+    }
+    .ww-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 48px rgba(0,0,0,.4);
+    }
+    .ww-browser-bar {
+      background: #091322; padding: .5rem .75rem;
+      display: flex; align-items: center; gap: .4rem;
+      border-bottom: 1px solid var(--line);
+    }
+    .ww-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .ww-dot.r { background: #FF5F56; } .ww-dot.y { background: #FFBD2E; } .ww-dot.g { background: #27C93F; }
+    .ww-url-bar {
+      flex: 1; height: 16px; background: rgba(255,255,255,.06);
+      border-radius: 3px; margin-left: .4rem;
+    }
+    .ww-site { height: 180px; position: relative; overflow: hidden; }
+    .ww-footer { padding: 1rem 1.25rem 1.1rem; }
+    .ww-type { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--teal); margin-bottom:.3rem; }
+    .ww-name { font-size:.95rem; font-weight:700; margin-bottom:.25rem; }
+    .ww-stat { font-size:.78rem; color:var(--text-2); }
+    .ww-stat strong { color: var(--white); }
+
+    /* site 1 — fashion editorial */
+    .ws1 { background: linear-gradient(135deg,#0d0d0f 0%,#1a0a1f 100%); }
+    .ws1-nav { padding:.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(255,255,255,.06); }
+    .ws1-logo { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.15em; color:#e8d5b7; }
+    .ws1-links { display:flex;gap:.6rem; }
+    .ws1-links span { width:20px;height:5px;background:rgba(255,255,255,.15);border-radius:2px; }
+    .ws1-hero { padding:.8rem 1rem; }
+    .ws1-kicker { width:50px;height:5px;background:rgba(232,213,183,.3);border-radius:2px;margin-bottom:.5rem; }
+    .ws1-h { }
+    .ws1-h span { display:block;height:11px;background:rgba(232,213,183,.8);border-radius:2px;margin-bottom:.3rem; }
+    .ws1-h span:last-child { width:55%;background:rgba(232,213,183,.4); }
+    .ws1-grid { display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin-top:.8rem;padding:0 1rem; }
+    .ws1-img { height:45px;border-radius:4px;background:linear-gradient(135deg,rgba(232,213,183,.1) 0%,rgba(100,50,120,.2) 100%);border:1px solid rgba(255,255,255,.06); }
+
+    /* site 2 — health/wellness light */
+    .ws2 { background: linear-gradient(160deg,#f0faf5 0%,#e6f5ee 100%); }
+    .ws2-nav { padding:.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(0,100,60,.08); }
+    .ws2-logo { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:#00644a; }
+    .ws2-cta { width:48px;height:16px;background:#00a878;border-radius:4px; }
+    .ws2-hero { padding:.8rem 1rem; }
+    .ws2-h span { display:block;height:11px;background:rgba(0,80,50,.7);border-radius:2px;margin-bottom:.3rem; }
+    .ws2-h span:last-child { width:60%;background:rgba(0,80,50,.35); }
+    .ws2-sub span { display:block;height:5px;background:rgba(0,80,50,.2);border-radius:2px;margin-bottom:.25rem; }
+    .ws2-sub span:last-child { width:70%; }
+    .ws2-pills { display:flex;gap:.3rem;margin-top:.5rem; }
+    .ws2-pills span { padding:.15rem .5rem;background:rgba(0,168,120,.15);border-radius:20px;height:12px;width:36px; }
+    .ws2-cards { display:grid;grid-template-columns:repeat(3,1fr);gap:.4rem;margin:.7rem 1rem 0; }
+    .ws2-card { height:35px;background:white;border-radius:6px;border:1px solid rgba(0,100,60,.1);box-shadow:0 1px 4px rgba(0,0,0,.06); }
+
+    /* site 3 — SaaS/fintech dark */
+    .ws3 { background: linear-gradient(135deg,#0a0e1a 0%,#111827 100%); }
+    .ws3-nav { padding:.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(99,102,241,.15); }
+    .ws3-logo { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:#818cf8; }
+    .ws3-cta { width:48px;height:16px;background:#6366f1;border-radius:4px; }
+    .ws3-hero { padding:.8rem 1rem; }
+    .ws3-badge { width:60px;height:5px;background:rgba(99,102,241,.3);border-radius:20px;margin-bottom:.5rem; }
+    .ws3-h span { display:block;height:11px;background:rgba(255,255,255,.8);border-radius:2px;margin-bottom:.3rem; }
+    .ws3-h span:last-child { width:50%;background:rgba(255,255,255,.35); }
+    .ws3-sub span { display:block;height:5px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:.25rem; }
+    .ws3-grid { display:grid;grid-template-columns:repeat(2,1fr);gap:.4rem;margin:.7rem 1rem 0; }
+    .ws3-item { height:28px;background:rgba(99,102,241,.08);border-radius:6px;border:1px solid rgba(99,102,241,.15); }
+
+    /* site 4 — home services clean */
+    .ws4 { background: linear-gradient(160deg,#f8fbff 0%,#edf4ff 100%); }
+    .ws4-nav { padding:.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(37,99,235,.08); }
+    .ws4-logo { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:#1d4ed8; }
+    .ws4-cta { width:48px;height:16px;background:#2563eb;border-radius:4px; }
+    .ws4-hero { padding:.8rem 1rem; background:linear-gradient(180deg,#1e3a8a 0%,#1e40af 100%); height:90px; position:relative; overflow:hidden; }
+    .ws4-h span { display:block;height:11px;background:rgba(255,255,255,.85);border-radius:2px;margin-bottom:.3rem; }
+    .ws4-h span:last-child { width:55%;background:rgba(255,255,255,.5); }
+    .ws4-stars { display:flex;gap:.2rem;margin-top:.5rem; }
+    .ws4-star { width:8px;height:8px;background:#FCD34D;border-radius:1px; }
+    .ws4-form { margin:.5rem 1rem 0;background:white;border-radius:8px;padding:.4rem;border:1px solid rgba(37,99,235,.1);display:flex;gap:.3rem; }
+    .ws4-input { flex:1;height:18px;background:#f1f5f9;border-radius:4px; }
+    .ws4-submit { width:32px;height:18px;background:#2563eb;border-radius:4px; }
+
+    /* site 5 — restaurant/hospitality warm */
+    .ws5 { background: linear-gradient(135deg,#1c0f07 0%,#2d1a0a 100%); }
+    .ws5-nav { padding:.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(251,191,36,.1); }
+    .ws5-logo { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.12em; color:#f59e0b; }
+    .ws5-cta { width:52px;height:16px;background:#d97706;border-radius:4px; }
+    .ws5-hero { padding:.8rem 1rem; }
+    .ws5-h span { display:block;height:11px;background:rgba(251,191,36,.85);border-radius:2px;margin-bottom:.3rem; }
+    .ws5-h span:last-child { width:65%;background:rgba(251,191,36,.4); }
+    .ws5-sub span { display:block;height:5px;background:rgba(255,255,255,.2);border-radius:2px;margin-bottom:.25rem; }
+    .ws5-items { display:flex;gap:.5rem;margin:.7rem 1rem 0; }
+    .ws5-item { flex:1;height:38px;border-radius:6px;background:linear-gradient(135deg,rgba(217,119,6,.15) 0%,rgba(120,53,15,.2) 100%);border:1px solid rgba(251,191,36,.1); }
+
+    /* site 6 — CPG bold */
+    .ws6 { background: linear-gradient(135deg,#0a1a0a 0%,#0f2010 100%); }
+    .ws6-nav { padding:.5rem 1rem; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid rgba(52,211,153,.1); }
+    .ws6-logo { font-family:'JetBrains Mono',monospace; font-size:.6rem; font-weight:700; letter-spacing:.1em; color:#34d399; }
+    .ws6-cta { width:48px;height:16px;background:#059669;border-radius:4px; }
+    .ws6-hero { padding:.8rem 1rem; }
+    .ws6-h span { display:block;height:11px;background:rgba(255,255,255,.8);border-radius:2px;margin-bottom:.3rem; }
+    .ws6-h span:last-child { width:50%;background:rgba(255,255,255,.35); }
+    .ws6-features { display:flex;gap:.4rem;margin:.7rem 1rem 0; }
+    .ws6-feat { flex:1;padding:.4rem;background:rgba(52,211,153,.05);border-radius:6px;border:1px solid rgba(52,211,153,.12); }
+    .ws6-feat span { display:block;height:5px;background:rgba(52,211,153,.3);border-radius:2px;margin-bottom:.25rem; }
+    .ws6-feat span:last-child { background:rgba(255,255,255,.15); }
+
+    /* result chip */
+    .ww-result-chip {
+      position: absolute; bottom: .6rem; right: .6rem;
+      background: rgba(9,19,34,.85); backdrop-filter: blur(8px);
+      border: 1px solid var(--line-bright);
+      border-radius: 6px; padding: .3rem .6rem;
+      font-size: .68rem; font-family: 'JetBrains Mono', monospace;
+      color: var(--teal); font-weight: 700;
+    }
+
+    /* ─── TEAM PHOTO ─── */
+    .leader-photo {
+      width: 56px; height: 56px; border-radius: 50%;
+      object-fit: cover; border: 2px solid var(--line-bright);
+      flex-shrink: 0;
+    }
+
+    /* ─── WEB SERVICE SPOTLIGHT ─── */
+    #web-spotlight {
+      background: linear-gradient(180deg, var(--ink) 0%, var(--charcoal) 100%);
+    }
+    .web-spotlight-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .web-impact-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2rem;
+    }
+    .web-impact-card {
+      background: var(--ink); border: 1px solid var(--line);
+      border-radius: 12px; padding: 1.25rem;
+      transition: border-color .2s;
+    }
+    .web-impact-card:hover { border-color: var(--line-bright); }
+    .wi-val { font-size: 2rem; font-weight: 900; letter-spacing: -.04em; color: var(--teal); }
+    .wi-label { font-size: .8rem; color: var(--text-2); margin-top: .2rem; line-height: 1.5; }
+    .web-deliverables { list-style: none; display: flex; flex-direction: column; gap: .75rem; margin-top: 2rem; }
+    .web-deliverables li {
+      display: flex; align-items: flex-start; gap: .75rem;
+      font-size: .88rem; color: var(--text-2); line-height: 1.6;
+    }
+    .wd-num {
+      font-family: 'JetBrains Mono', monospace; font-size: .6rem; font-weight: 700;
+      color: var(--teal); background: rgba(34,159,161,.1); border: 1px solid var(--line-bright);
+      border-radius: 4px; padding: .2rem .4rem; flex-shrink: 0; margin-top: .15rem;
+    }
+
+    /* ─── TRUST BAR ─── */
+    .trust-bar {
+      border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+      background: var(--charcoal); padding: 1rem 0;
+    }
+    .trust-bar-inner {
+      display: flex; align-items: center; justify-content: center;
+      gap: 3rem; flex-wrap: wrap; padding: 0 48px;
+    }
+    .trust-item {
+      display: flex; align-items: center; gap: .6rem;
+      font-size: .78rem; font-weight: 600; color: var(--text-3);
+      letter-spacing: .04em;
+    }
+    .trust-item .badge {
+      font-family: 'JetBrains Mono', monospace; font-size: .62rem;
+      font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      background: rgba(34,159,161,.1); color: var(--teal);
+      border: 1px solid var(--line-bright); border-radius: 4px;
+      padding: .2rem .55rem;
+    }
+
+    /* ─── COMPETITIVE POSITIONING ─── */
+    .pos-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--line);
+      border: 1px solid var(--line); border-radius: 14px; overflow: hidden;
+      margin-top: 4rem;
+    }
+    .pos-cell {
+      background: var(--ink); padding: 2.25rem;
+      transition: background .2s;
+    }
+    .pos-cell:hover { background: #0d1520; }
+    .pos-cell-type {
+      font-family: 'JetBrains Mono', monospace; font-size: .65rem;
+      font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: 1rem; display: block;
+    }
+    .pos-cell-type.holding { color: #6B7280; }
+    .pos-cell-type.boutique { color: #A78BFA; }
+    .pos-cell-type.tt { color: var(--teal); }
+    .pos-cell h3 { font-size: 1rem; font-weight: 800; margin-bottom: .6rem; letter-spacing: -.01em; }
+    .pos-cell p { font-size: .85rem; color: var(--text-2); line-height: 1.65; margin-bottom: 1.1rem; }
+    .pos-pros { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+    .pos-pros li {
+      font-size: .8rem; color: var(--text-2); padding-left: 1.1rem;
+      position: relative;
+    }
+    .pos-pros li::before {
+      content: attr(data-sign); position: absolute; left: 0;
+      font-weight: 700; font-size: .72rem;
+    }
+    .pos-pros li[data-sign="+"]::before { color: var(--teal); }
+    .pos-pros li[data-sign="−"]::before { color: #EF4444; }
+    .pos-pros li[data-sign="~"]::before { color: #F59E0B; }
+
+    /* ─── CONTACT FORM ─── */
+    #contact { background: var(--charcoal); }
+    .contact-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start;
+    }
+    .contact-form {
+      background: var(--ink); border: 1px solid var(--line);
+      border-radius: 16px; padding: 2.5rem;
+    }
+    .contact-form h3 { font-size: 1.4rem; font-weight: 800; letter-spacing: -.025em; margin-bottom: .5rem; }
+    .contact-form .form-sub { font-size: .88rem; color: var(--text-2); margin-bottom: 2rem; line-height: 1.6; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+    .form-group { display: flex; flex-direction: column; gap: .4rem; margin-bottom: 1rem; }
+    .form-group label { font-size: .74rem; font-weight: 600; color: var(--text-2); letter-spacing: .04em; }
+    .form-group input, .form-group select, .form-group textarea {
+      background: var(--charcoal); border: 1px solid var(--line);
+      border-radius: 6px; padding: .7rem .9rem;
+      font-size: .88rem; color: var(--white);
+      font-family: 'Inter', sans-serif; outline: none; width: 100%;
+      transition: border-color .15s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      border-color: var(--teal);
+    }
+    .form-group select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%239E9E9E' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right .9rem center; padding-right: 2.5rem; }
+    .form-group textarea { resize: none; height: 100px; }
+    .form-submit {
+      width: 100%; background: var(--teal); color: var(--white);
+      border: none; padding: .9rem; border-radius: 8px;
+      font-weight: 700; font-size: .95rem; cursor: pointer;
+      transition: background .15s, transform .15s; font-family: 'Inter', sans-serif;
+    }
+    .form-submit:hover { background: var(--teal-mid); transform: translateY(-1px); }
+    .form-note { text-align: center; margin-top: 1rem; font-size: .74rem; color: var(--text-3); }
+    .contact-side { display: flex; flex-direction: column; gap: 2rem; }
+    .contact-point { border-bottom: 1px solid var(--line); padding-bottom: 2rem; }
+    .contact-point:last-child { border-bottom: none; padding-bottom: 0; }
+    .contact-point h4 { font-size: .95rem; font-weight: 700; margin-bottom: .4rem; }
+    .contact-point p { font-size: .86rem; color: var(--text-2); line-height: 1.65; }
+    #formSuccess {
+      display: none; text-align: center; padding: 3rem 1rem;
+    }
+    #formSuccess .success-icon {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: rgba(34,159,161,.1); border: 1px solid var(--line-bright);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.25rem;
+      font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+      color: var(--teal); font-weight: 700;
+    }
+
+    /* ─── FAQ ─── */
+    #faq { }
+    .faq-list { display: flex; flex-direction: column; gap: 0; margin-top: 3rem; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; }
+    .faq-item { border-bottom: 1px solid var(--line); }
+    .faq-item:last-child { border-bottom: none; }
+    .faq-q {
+      width: 100%; background: var(--charcoal); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.4rem 1.75rem; text-align: left;
+      font-family: 'Inter', sans-serif; font-size: .95rem; font-weight: 600;
+      color: var(--white); transition: background .15s; gap: 1rem;
+    }
+    .faq-q:hover { background: #1f2a34; }
+    .faq-icon {
+      font-family: 'JetBrains Mono', monospace; font-size: .8rem;
+      color: var(--teal); flex-shrink: 0; transition: transform .2s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height .3s cubic-bezier(.4,0,.2,1), padding .3s;
+      background: var(--ink);
+    }
+    .faq-item.open .faq-a { max-height: 400px; }
+    .faq-a-inner { padding: 1.25rem 1.75rem 1.5rem; font-size: .88rem; color: var(--text-2); line-height: 1.75; }
+
+    /* ─── STICKY CTA (mobile) ─── */
+    .sticky-cta {
+      display: none; position: fixed; bottom: 0; left: 0; right: 0;
+      z-index: 300; background: rgba(10,17,25,.92);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--line);
+      padding: 1rem 24px;
+    }
+    .sticky-cta a { display: block; text-align: center; }
+    @media (max-width: 768px) { .sticky-cta { display: block; } }
+
+    /* ─── NAV ACTIVE ─── */
+    .nav-items a.active { color: var(--white); }
+
+    /* ─── CASE STUDY MODAL ─── */
+    .cs-modal-backdrop {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(6,10,15,.85);
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s;
+    }
+    .cs-modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .cs-modal {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 501;
+      width: min(680px, 100vw);
+      background: var(--charcoal);
+      border-left: 1px solid var(--line);
+      overflow-y: auto;
+      transform: translateX(100%);
+      transition: transform .3s cubic-bezier(.4,0,.2,1);
+    }
+    .cs-modal.open { transform: translateX(0); }
+    .cs-modal-inner { padding: 2.5rem; }
+    .cs-modal-close {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2.5rem;
+      background: var(--charcoal);
+      border-bottom: 1px solid var(--line);
+      margin: -2.5rem -2.5rem 2rem;
+    }
+    .cs-modal-close-btn {
+      background: none; border: 1px solid var(--line); color: var(--text-2);
+      cursor: pointer; font-size: .8rem; font-family: 'JetBrains Mono', monospace;
+      letter-spacing: .08em; padding: .4rem .9rem; border-radius: 4px;
+      transition: all .15s;
+    }
+    .cs-modal-close-btn:hover { border-color: var(--text-2); color: var(--white); }
+    .cs-modal-overline {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      color: var(--teal); letter-spacing: .14em; text-transform: uppercase;
+    }
+    .cs-modal-title { font-size: 1.4rem; font-weight: 800; letter-spacing: -.025em; line-height: 1.2; margin: .75rem 0 .5rem; }
+    .cs-modal-client { font-size: .82rem; color: var(--text-2); margin-bottom: 2rem; }
+    .cs-modal-section { margin-bottom: 2rem; }
+    .cs-modal-section-label {
+      font-family: 'JetBrains Mono', monospace; font-size: .66rem;
+      color: var(--teal); letter-spacing: .14em; text-transform: uppercase;
+      margin-bottom: .85rem; display: block;
+    }
+    .cs-modal-challenge { font-size: .92rem; color: var(--text-2); line-height: 1.72; }
+    .cs-modal-approach { list-style: none; display: flex; flex-direction: column; gap: .6rem; }
+    .cs-modal-approach li {
+      display: flex; gap: .85rem; font-size: .88rem;
+      padding: .6rem 0; border-bottom: 1px solid var(--line);
+    }
+    .cs-modal-approach li:last-child { border-bottom: none; }
+    .cs-modal-approach li::before {
+      content: attr(data-n); font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; color: var(--teal); font-weight: 600;
+      min-width: 20px; padding-top: .15rem;
+    }
+    .cs-modal-results { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .cs-modal-result {
+      background: var(--ink); border: 1px solid var(--line);
+      border-radius: 10px; padding: 1.1rem 1.25rem;
+    }
+    .cs-modal-result-val {
+      font-family: 'JetBrains Mono', monospace; font-size: 1.5rem;
+      font-weight: 700; color: var(--teal); line-height: 1; margin-bottom: .3rem;
+    }
+    .cs-modal-result-label { font-size: .76rem; color: var(--text-2); line-height: 1.4; }
+    .cs-modal-testi {
+      background: var(--ink); border: 1px solid var(--line-bright);
+      border-radius: 10px; padding: 1.5rem;
+    }
+    .cs-modal-testi blockquote {
+      font-size: .9rem; color: var(--text); line-height: 1.72;
+      font-style: italic; margin-bottom: 1rem;
+    }
+    .cs-modal-testi blockquote::before { content: open-quote; color: var(--teal); font-size: 1.4rem; font-style: normal; font-weight: 900; line-height: 0; vertical-align: -.35rem; margin-right: .15rem; }
+    .cs-modal-testi cite { font-style: normal; }
+    .cs-modal-testi .t-name { font-weight: 700; font-size: .86rem; }
+    .cs-modal-testi .t-role { font-size: .76rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; margin-top: .15rem; }
+    .cs-card-full { cursor: pointer; }
+    .cs-card-full .cs-card-footer::after {
+      content: 'View full case study'; font-size: .72rem;
+      font-family: 'JetBrains Mono', monospace; color: var(--text-3);
+      letter-spacing: .06em; transition: color .2s;
+    }
+    .cs-card-full:hover .cs-card-footer::after { color: var(--teal); }
+
+    /* ─── BEFORE / AFTER SLIDER ─── */
+    .ba-section { padding: 96px 0; border-top: 1px solid var(--line); }
+    .ba-wrap { max-width: 900px; margin: 0 auto; }
+    .ba-container {
+      position: relative; border-radius: 14px; overflow: hidden;
+      border: 1px solid var(--line); user-select: none;
+      cursor: ew-resize; height: 420px;
+    }
+    .ba-panel {
+      position: absolute; top: 0; bottom: 0; overflow: hidden;
+    }
+    .ba-after { left: 0; right: 0; background: var(--charcoal); }
+    .ba-before {
+      left: 0; width: 50%;
+      background: #0A1119; border-right: 2px solid var(--teal);
+      transition: width 0s;
+    }
+    .ba-content {
+      padding: 2.5rem; height: 100%;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .ba-label {
+      font-family: 'JetBrains Mono', monospace; font-size: .68rem;
+      letter-spacing: .14em; text-transform: uppercase;
+      padding: .25rem .75rem; border-radius: 4px;
+      display: inline-block; margin-bottom: 1.5rem;
+    }
+    .ba-label.before { background: rgba(255,255,255,.06); color: var(--text-3); }
+    .ba-label.after { background: rgba(34,159,161,.12); color: var(--teal); }
+    .ba-headline { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--white); }
+    .ba-metrics { display: flex; flex-direction: column; gap: .75rem; }
+    .ba-metric { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+    .ba-m-label { font-size: .82rem; color: var(--text-2); }
+    .ba-m-val {
+      font-family: 'JetBrains Mono', monospace; font-size: .9rem;
+      font-weight: 600; flex-shrink: 0;
+    }
+    .ba-m-val.bad { color: #EF4444; }
+    .ba-m-val.good { color: var(--teal); }
+    .ba-handle {
+      position: absolute; top: 0; bottom: 0;
+      left: 50%; transform: translateX(-50%);
+      width: 44px; display: flex; align-items: center; justify-content: center;
+      z-index: 10; cursor: ew-resize;
+    }
+    .ba-handle-inner {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--teal); border: 2px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 20px rgba(34,159,161,.5);
+    }
+    .ba-handle-arrows { color: var(--white); font-size: .8rem; font-weight: 700; letter-spacing: -.1em; }
+    .ba-hint { text-align: center; margin-top: 1.25rem; font-size: .76rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; letter-spacing: .06em; }
+
+    /* ─── TEAM ─── */
+    #team { background: var(--charcoal); }
+    .team-intro {
+      display: grid; grid-template-columns: 5fr 4fr; gap: 6rem; align-items: start;
+      margin-bottom: 5rem;
+    }
+    .team-manifesto {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      font-weight: 300; line-height: 1.7; color: var(--text-2);
+    }
+    .team-manifesto strong { color: var(--white); font-weight: 700; }
+    .team-sidebar { display: flex; flex-direction: column; gap: 1.25rem; padding-top: .25rem; }
+    .team-credential {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; border-radius: 10px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .tc-icon { font-size: 1.25rem; margin-top: .1rem; }
+    .tc-val { font-family: 'JetBrains Mono', monospace; font-size: .82rem; font-weight: 600; color: var(--white); margin-bottom: .15rem; }
+    .tc-label { font-size: .78rem; color: var(--text-2); }
+
+    .leaders { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .leader-card {
+      border: 1px solid var(--line); border-radius: 14px;
+      overflow: hidden; transition: border-color .2s;
+    }
+    .leader-card:hover { border-color: var(--line-bright); }
+    .leader-top {
+      padding: 2rem 2rem 1.5rem;
+      border-bottom: 1px solid var(--line);
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 1rem;
+    }
+    .leader-avatar {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--teal-dk), var(--teal));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.6rem; font-weight: 900; color: var(--white);
+      letter-spacing: -.02em; flex-shrink: 0;
+    }
+    .leader-title-block { text-align: right; }
+    .leader-title-block .name { font-size: 1.35rem; font-weight: 800; letter-spacing: -.025em; }
+    .leader-title-block .role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; color: var(--teal); letter-spacing: .08em; margin-top: .2rem;
+    }
+    .leader-body { padding: 1.75rem 2rem; }
+    .leader-body p { font-size: .88rem; color: var(--text-2); line-height: 1.72; margin-bottom: 1.25rem; }
+    .leader-stats { display: flex; gap: 2rem; }
+    .ls-val { font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; font-weight: 600; color: var(--teal); }
+    .ls-label { font-size: .7rem; color: var(--text-3); margin-top: .15rem; }
+
+    /* ─── SERVICES ─── */
+    #services .svc-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+      border: 1px solid var(--line); border-radius: 12px;
+      overflow: hidden; background: var(--line); margin-top: 4rem;
+    }
+    .svc-item {
+      background: var(--ink); padding: 2rem;
+      transition: background .2s;
+    }
+    .svc-item:hover { background: var(--charcoal); }
+    .svc-item h3 { font-size: .98rem; font-weight: 700; margin-bottom: .5rem; letter-spacing: -.01em; }
+    .svc-item p { font-size: .84rem; color: var(--text-2); line-height: 1.65; margin-bottom: 1rem; }
+    .svc-chips { display: flex; flex-wrap: wrap; gap: .35rem; }
+    .chip {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .64rem; color: var(--text-3);
+      border: 1px solid var(--line); border-radius: 3px;
+      padding: .1rem .45rem;
+    }
+
+    /* ─── THE MACHINE ─── */
+    #machine { background: var(--charcoal); }
+    .machine-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: start; }
+    .machine-steps { display: flex; flex-direction: column; gap: 0; }
+    .m-step {
+      display: flex; gap: 1.5rem; padding: 2rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .m-step:first-child { padding-top: 0; }
+    .m-step:last-child { border-bottom: none; padding-bottom: 0; }
+    .m-step-n {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .68rem; color: var(--teal); font-weight: 600;
+      min-width: 24px; padding-top: .15rem; letter-spacing: .05em;
+    }
+    .m-step h4 { font-size: .95rem; font-weight: 700; margin-bottom: .35rem; }
+    .m-step p { font-size: .85rem; color: var(--text-2); line-height: 1.65; }
+    .m-step .mono {
+      display: block; margin-top: .6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .7rem; color: var(--teal-mid);
+    }
+    .code-window {
+      background: var(--ink); border: 1px solid var(--line);
+      border-radius: 12px; overflow: hidden; position: sticky; top: 88px;
+    }
+    .code-win-bar {
+      display: flex; align-items: center; gap: .5rem;
+      padding: .85rem 1.25rem; border-bottom: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .cw-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .cw-dot.r{background:#FF5F57} .cw-dot.y{background:#FFBD2E} .cw-dot.g{background:#28CA41}
+    .code-win-file {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem;
+      color: var(--text-3); margin-left: .5rem;
+    }
+    .code-win-body {
+      padding: 1.75rem; font-family: 'JetBrains Mono', monospace;
+      font-size: .77rem; line-height: 1.72; overflow-x: auto;
+    }
+    .kw{color:#C084FC} .fn{color:#93C5FD} .st{color:#86EFAC}
+    .cm{color:rgba(255,255,255,.22)} .tc{color:var(--teal)} .nm{color:#FCA5A5}
+
+    /* ─── AUDIT ─── */
+    #audit .audit-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem;
+      align-items: center;
+    }
+    .audit-checklist { list-style: none; display: flex; flex-direction: column; gap: .75rem; margin-top: 2.5rem; }
+    .audit-checklist li {
+      display: flex; align-items: flex-start; gap: .85rem;
+      font-size: .92rem; padding: .75rem 0; border-bottom: 1px solid var(--line);
+    }
+    .audit-checklist li:last-child { border-bottom: none; }
+    .audit-check {
+      width: 18px; height: 18px; border-radius: 50%;
+      background: rgba(34,159,161,.12); border: 1px solid var(--line-bright);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: .15rem;
+      font-size: .6rem; color: var(--teal); font-weight: 700;
+    }
+    .audit-panel {
+      background: var(--charcoal); border: 1px solid var(--line);
+      border-radius: 16px; padding: 2.5rem; position: relative;
+    }
+    .audit-panel::before {
+      content: ''; position: absolute; inset: -1px;
+      border-radius: 17px;
+      background: linear-gradient(160deg, var(--line-bright), transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+    .audit-panel > * { position: relative; z-index: 1; }
+    .audit-panel h3 { font-size: 1.5rem; font-weight: 800; letter-spacing: -.025em; margin-bottom: .75rem; }
+    .audit-panel p { font-size: .9rem; color: var(--text-2); line-height: 1.7; margin-bottom: 2rem; }
+
+    /* ─── CASE STUDIES ─── */
+    #results { background: var(--charcoal); }
+
+    /* Filter bar */
+    .cs-filters { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 2.5rem; }
+    .cs-filter {
+      font-family: 'JetBrains Mono', monospace; font-size: .72rem; font-weight: 500;
+      letter-spacing: .06em; color: var(--text-3);
+      border: 1px solid var(--line); border-radius: 4px;
+      padding: .35rem .85rem; background: none; cursor: pointer;
+      transition: all .15s;
+    }
+    .cs-filter:hover { color: var(--text-2); border-color: rgba(255,255,255,.18); }
+    .cs-filter.active { background: var(--teal); color: var(--white); border-color: var(--teal); }
+
+    /* Cards grid */
+    .cs-grid-full {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .cs-card-full {
+      background: var(--ink); border: 1px solid var(--line);
+      border-radius: 14px; overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: border-color .2s, transform .2s;
+    }
+    .cs-card-full:hover { border-color: var(--line-bright); transform: translateY(-2px); }
+    .cs-card-full.hidden { display: none; }
+    .cs-card-top { padding: 1.75rem 1.75rem 1.25rem; flex: 1; }
+    .cs-card-client {
+      font-family: 'JetBrains Mono', monospace; font-size: .66rem;
+      color: var(--text-3); letter-spacing: .1em; text-transform: uppercase;
+      margin-bottom: .4rem;
+    }
+    .cs-card-title { font-size: .95rem; font-weight: 700; margin-bottom: .75rem; letter-spacing: -.01em; line-height: 1.3; }
+    .cs-card-challenge { font-size: .82rem; color: var(--text-2); line-height: 1.62; }
+    .cs-card-metrics {
+      display: flex; flex-direction: column; gap: .35rem;
+      padding: 1.25rem 1.75rem;
+      border-top: 1px solid var(--line);
+      background: rgba(255,255,255,.02);
+    }
+    .cs-card-metric {
+      display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+    }
+    .cs-m-label { font-size: .76rem; color: var(--text-3); }
+    .cs-m-val {
+      font-family: 'JetBrains Mono', monospace; font-size: .88rem;
+      font-weight: 600; color: var(--teal); text-align: right; flex-shrink: 0;
+    }
+    .cs-card-footer {
+      padding: 1rem 1.75rem;
+      border-top: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .cs-service-tags { display: flex; gap: .35rem; flex-wrap: wrap; }
+    .cs-s-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: .62rem;
+      color: var(--text-3); border: 1px solid var(--line);
+      border-radius: 3px; padding: .1rem .45rem;
+    }
+    .cs-testi {
+      padding: 1.25rem 1.75rem; border-top: 1px solid var(--line);
+      background: rgba(34,159,161,.04);
+    }
+    .cs-testi blockquote {
+      font-size: .82rem; color: var(--text-2); line-height: 1.6;
+      font-style: italic; margin-bottom: .6rem;
+    }
+    .cs-testi cite { font-style: normal; font-size: .74rem; color: var(--text-3); font-family: 'JetBrains Mono', monospace; }
+
+    /* ─── TESTIMONIALS ─── */
+    #testimonials .testi-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem;
+      margin-top: 4rem;
+    }
+    .testi {
+      padding: 2rem; border: 1px solid var(--line); border-radius: 12px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      transition: border-color .2s;
+    }
+    .testi:hover { border-color: var(--line-bright); }
+    .testi blockquote {
+      font-size: .9rem; line-height: 1.72; color: var(--text-2);
+      font-style: italic; margin-bottom: 1.5rem;
+      quotes: "\201C""\201D";
+    }
+    .testi blockquote::before { content: open-quote; color: var(--teal); font-size: 1.5rem; line-height: 0; vertical-align: -.4rem; margin-right: .15rem; font-style: normal; font-weight: 900; }
+    .testi cite { display: block; font-style: normal; }
+    .testi cite .name { font-weight: 700; font-size: .88rem; }
+    .testi cite .role { font-size: .76rem; color: var(--text-3); margin-top: .15rem; font-family: 'JetBrains Mono', monospace; }
+
+    /* ─── PARTNERS ─── */
+    #partners .partner-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 1px; background: var(--line);
+      border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+      margin-top: 3rem;
+    }
+    .p-cell {
+      background: var(--charcoal); padding: 2rem 1.5rem; text-align: center;
+      transition: background .2s;
+    }
+    .p-cell:hover { background: #1f2a34; }
+    .p-cell .p-icon { font-size: 1.5rem; margin-bottom: .75rem; }
+    .p-cell h4 { font-size: .88rem; font-weight: 700; margin-bottom: .3rem; }
+    .p-cell p { font-size: .76rem; color: var(--text-2); line-height: 1.55; }
+    .partner-cta {
+      margin-top: 2rem; padding: 1.5rem 2rem;
+      border: 1px solid var(--line-bright); border-radius: 10px;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      background: rgba(34,159,161,.04);
+    }
+    .partner-cta p { font-size: .9rem; color: var(--text-2); max-width: 480px; }
+    .partner-cta strong { color: var(--white); }
+
+    /* ─── CAREERS ─── */
+    #careers { background: var(--charcoal); }
+    .careers-wrap {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+    }
+    .careers-values { display: flex; flex-direction: column; gap: .5rem; margin-top: 2rem; }
+    .cv-item {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .9rem 0; border-bottom: 1px solid var(--line);
+    }
+    .cv-item:last-child { border-bottom: none; }
+    .cv-num { font-family: 'JetBrains Mono', monospace; font-size: .68rem; color: var(--teal); min-width: 20px; }
+    .cv-text { font-size: .92rem; font-weight: 500; }
+    .careers-panel {
+      background: var(--ink); border: 1px solid var(--line); border-radius: 16px; padding: 2.5rem;
+    }
+    .careers-panel h3 { font-size: 1.6rem; font-weight: 800; letter-spacing: -.025em; margin-bottom: .75rem; }
+    .careers-panel p { font-size: .9rem; color: var(--text-2); line-height: 1.72; margin-bottom: 1.75rem; }
+    .open-roles { display: flex; flex-direction: column; gap: .5rem; margin-bottom: 2rem; }
+    .open-role {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .85rem 1rem; border-radius: 8px; border: 1px solid var(--line);
+      background: rgba(255,255,255,.02); font-size: .88rem; font-weight: 500;
+      transition: border-color .2s;
+    }
+    .open-role:hover { border-color: var(--line-bright); }
+    .open-role-tag {
+      font-family: 'JetBrains Mono', monospace; font-size: .64rem;
+      background: rgba(34,159,161,.1); color: var(--teal);
+      border-radius: 4px; padding: .15rem .5rem;
+    }
+
+    /* ─── CTA FINAL ─── */
+    #final-cta {
+      padding: 140px 0; text-align: center; border-top: 1px solid var(--line);
+      position: relative; overflow: hidden;
+    }
+    .cta-glow {
+      position: absolute; pointer-events: none;
+      top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 800px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(34,159,161,.08) 0%, transparent 65%);
+    }
+    #final-cta h2 {
+      font-size: clamp(2.5rem, 6vw, 5rem);
+      font-weight: 900; letter-spacing: -.04em; line-height: 1.05;
+      margin-bottom: 1.5rem; position: relative; z-index: 1;
+    }
+    #final-cta h2 span { color: var(--teal); }
+    #final-cta p { font-size: 1.05rem; color: var(--text-2); max-width: 460px; margin: 0 auto 3rem; font-weight: 300; line-height: 1.7; position: relative; z-index: 1; }
+    .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+    /* ─── FOOTER ─── */
+    footer {
+      border-top: 1px solid var(--line); padding: 3rem 0;
+      background: var(--charcoal);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-left .brand { margin-bottom: .35rem; }
+    .footer-left p { font-size: .78rem; color: var(--text-3); }
+    .footer-nav { display: flex; gap: 2rem; }
+    .footer-nav a { font-size: .8rem; color: var(--text-3); transition: color .15s; }
+    .footer-nav a:hover { color: var(--teal); }
+    .footer-right p { font-size: .78rem; color: var(--text-3); text-align: right; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 1024px) {
+      .wrap { padding: 0 32px; }
+      nav { padding: 0 32px; }
+      .hero-content { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .team-intro { grid-template-columns: 1fr; gap: 3rem; }
+      .leaders { grid-template-columns: 1fr; }
+      .machine-layout { grid-template-columns: 1fr; gap: 3rem; }
+      .code-window { position: static; }
+      .bento-grid { grid-template-columns: 1fr 1fr; }
+      .bento-tile.wide { grid-column: span 2; }
+      .cs-grid-full { grid-template-columns: 1fr 1fr; }
+      .testi-grid { grid-template-columns: 1fr 1fr; }
+      .pos-grid { grid-template-columns: 1fr; }
+      .contact-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .webwork-grid { grid-template-columns: 1fr 1fr; }
+      .web-spotlight-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .web-impact-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 768px) {
+      .wrap { padding: 0 24px; }
+      nav { padding: 0 24px; }
+      .nav-items { display: none; }
+      section { padding: 72px 0; }
+      .hero-stats { grid-template-columns: 1fr 1fr; }
+      .h-stat { border-right: none; border-bottom: 1px solid var(--line); }
+      .h-stat:nth-child(odd) { border-right: 1px solid var(--line); }
+      #why .why-grid { grid-template-columns: 1fr; }
+      #audit .audit-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .testi-grid { grid-template-columns: 1fr; }
+      .partner-grid { grid-template-columns: 1fr 1fr; }
+      .careers-wrap { grid-template-columns: 1fr; gap: 3rem; }
+      .bento-grid { grid-template-columns: 1fr; }
+      .bento-tile.wide { grid-column: span 1; }
+      .partner-cta { flex-direction: column; }
+      .cs-grid-full { grid-template-columns: 1fr; }
+      .webwork-grid { grid-template-columns: 1fr; }
+      .trust-bar-inner { gap: 1.25rem; justify-content: flex-start; padding: 0 24px; }
+      .form-row { grid-template-columns: 1fr; }
+      .cs-modal { width: 100vw; }
+      footer .wrap > div:first-child { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav>
+  <a href="#" class="brand">
+    <div class="brand-mark">
+      <svg viewBox="0 0 16 16" fill="none">
+        <path d="M2 5h12M5.5 5v7M10.5 5v7" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    Tiger Tracks
+  </a>
+  <ul class="nav-items">
+    <li><a href="#why">Why TT</a></li>
+    <li><a href="#team">Team</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#results">Case Studies</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#careers">Careers</a></li>
+    <li><a href="#contact" class="nav-audit">Get in Touch</a></li>
+  </ul>
+</nav>
+
+<!-- ─── HERO ─── -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="wrap hero-content">
+    <!-- LEFT -->
+    <div class="hero-left">
+      <div class="hero-kicker">
+        <span class="hero-kicker-badge">Inc. 5000</span>
+        Ranked Among America's Fastest-Growing Companies
+      </div>
+      <h1 class="hero-h1">
+        Performance<br>
+        marketing<br>
+        <span>proven</span> <span class="light">at scale.</span>
+      </h1>
+      <p class="hero-sub">
+        An ex-Google leadership team that has managed some of the world's largest ad budgets — now helping select partners compound growth across every digital channel.
+      </p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn-cta">Start with a free audit →</a>
+        <a href="#results" class="btn-soft">See client results</a>
+      </div>
+      <div class="hero-stats" id="heroStats">
+        <div class="h-stat">
+          <div class="h-stat-val"><span class="odometer-val" data-target="20" data-prefix="" data-suffix="+ yrs">20+ yrs</span></div>
+          <div class="h-stat-label">Google leadership experience</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-val"><span class="odometer-val" data-target="500" data-prefix="$" data-suffix="M+">$500M+</span></div>
+          <div class="h-stat-label">Client media managed</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-val"><span class="odometer-val" data-target="20" data-prefix="" data-suffix=" wins">20 wins</span></div>
+          <div class="h-stat-label">Documented case studies</div>
+        </div>
+        <div class="h-stat">
+          <div class="h-stat-val"><span class="odometer-val" data-target="16" data-prefix="" data-suffix="+ verticals">16+ verticals</span></div>
+          <div class="h-stat-label">Industries served</div>
+        </div>
+      </div>
+    </div>
+    <!-- RIGHT — browser mockup -->
+    <div class="hero-visual">
+      <div class="hero-badge-2">
+        <div class="hero-badge-2-dot"></div>
+        <div class="hero-badge-2-text"><strong>Live campaign · AG1</strong>Optimizing in real time</div>
+      </div>
+      <div class="hero-visual-float">
+        <div class="browser-frame">
+          <div class="browser-bar">
+            <div class="br-dot r"></div>
+            <div class="br-dot y"></div>
+            <div class="br-dot g"></div>
+            <div class="br-url"><span class="br-url-lock">&#9679;</span> tigertracks.ai/client-dashboard</div>
+          </div>
+          <div class="browser-site">
+            <div class="ms-nav">
+              <div class="ms-nav-logo">TT · GROWTH OS</div>
+              <div class="ms-nav-links"><span></span><span></span><span></span></div>
+              <div class="ms-nav-btn"></div>
+            </div>
+            <div class="ms-hero">
+              <div class="ms-hero-tag"></div>
+              <div class="ms-hero-h1">
+                <span></span><span></span>
+              </div>
+              <div class="ms-hero-sub">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="ms-ctas">
+                <div class="ms-cta-1"></div>
+                <div class="ms-cta-2"></div>
+              </div>
+            </div>
+            <div class="ms-stats">
+              <div class="ms-stat"><div class="ms-stat-v" style="width:70%"></div><div class="ms-stat-l"></div></div>
+              <div class="ms-stat"><div class="ms-stat-v" style="width:90%"></div><div class="ms-stat-l"></div></div>
+              <div class="ms-stat"><div class="ms-stat-v" style="width:55%"></div><div class="ms-stat-l"></div></div>
+              <div class="ms-stat"><div class="ms-stat-v" style="width:80%"></div><div class="ms-stat-l"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-badge">
+        <div class="hero-badge-val">+368%</div>
+        <div class="hero-badge-label">User growth · Monarch Money</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TRUST BAR ─── -->
+<div class="trust-bar">
+  <div class="trust-bar-inner">
+    <div class="trust-item"><span class="badge">Inc. 5000</span> America's Fastest-Growing Companies</div>
+    <div class="trust-item"><span class="badge">Google</span> Ex-Google Leadership Team</div>
+    <div class="trust-item"><span class="badge">20+ yrs</span> Managing the World's Largest Ad Accounts</div>
+    <div class="trust-item"><span class="badge">$500M+</span> Client Media Managed</div>
+    <div class="trust-item"><span class="badge">Remote</span> Fully Distributed Team</div>
+  </div>
+</div>
+
+<!-- ─── CLIENTS ─── -->
+<div id="clients">
+  <div class="wrap">
+    <div class="clients-header">Trusted by leading brands</div>
+  </div>
+  <div class="ticker-outer">
+    <div class="ticker-track">
+      <span class="item">Athletic Greens / AG1</span>
+      <span class="item">Paravel</span>
+      <span class="item">Anastasia Beverly Hills</span>
+      <span class="item">Monarch Money</span>
+      <span class="item">Capezio</span>
+      <span class="item">Aura Health</span>
+      <span class="item">Rho Nutrition</span>
+      <span class="item">Honeydew</span>
+      <span class="item">Online Labels</span>
+      <span class="item">Lightyear</span>
+      <span class="item">SPS Industrial</span>
+      <span class="item">Sovereign Laboratories</span>
+      <span class="item">Athletic Greens / AG1</span>
+      <span class="item">Paravel</span>
+      <span class="item">Anastasia Beverly Hills</span>
+      <span class="item">Monarch Money</span>
+      <span class="item">Capezio</span>
+      <span class="item">Aura Health</span>
+      <span class="item">Rho Nutrition</span>
+      <span class="item">Honeydew</span>
+      <span class="item">Online Labels</span>
+      <span class="item">Lightyear</span>
+      <span class="item">SPS Industrial</span>
+      <span class="item">Sovereign Laboratories</span>
+    </div>
+  </div>
+</div>
+
+<!-- ─── WHY TT ─── -->
+<section id="why">
+  <div class="wrap">
+    <span class="overline">// Why Tiger Tracks</span>
+    <h2 class="display">Great advertising<br><em>doesn't live in silos.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">
+      Our omni-channel approach coordinates messaging, audiences, and budgets across every platform into a single growth engine — and we build the data infrastructure that makes it compound.
+    </p>
+    <div class="why-grid">
+      <div class="why-cell">
+        <span class="why-cell-num">01</span>
+        <h3>Signal Engineering</h3>
+        <p>Meta and Google are algorithms that reward high-quality first-party signal. We architect the data inputs that teach them to find your highest-LTV customers — not just anyone who clicks.</p>
+      </div>
+      <div class="why-cell">
+        <span class="why-cell-num">02</span>
+        <h3>LTV/CAC Over ROAS</h3>
+        <p>Short-term ROAS is a vanity metric. We optimize for 90-day customer lifetime value — because the brands that win at scale are the ones that know what a customer is actually worth.</p>
+      </div>
+      <div class="why-cell">
+        <span class="why-cell-num">03</span>
+        <h3>Compounding Architecture</h3>
+        <p>Better creative lifts paid social. Better landing pages lift CVR. Better lifecycle raises LTV. Every service we add makes the others stronger — the whole outperforms the sum.</p>
+      </div>
+      <div class="why-cell">
+        <span class="why-cell-num">04</span>
+        <h3>AI-Native Execution</h3>
+        <p>We build agentic workflows connected to your CRM and ad platforms, run daily AI creative stack-tests, and use predictive LTV models to auto-adjust bids in real time.</p>
+      </div>
+      <div class="why-cell">
+        <span class="why-cell-num">05</span>
+        <h3>Tailor-made Strategies</h3>
+        <p>We don't believe in one-size-fits-all solutions. Every engagement is built around your data, your goals, and your specific growth trajectory — not a template.</p>
+      </div>
+      <div class="why-cell">
+        <span class="why-cell-num">06</span>
+        <h3>Full Accountability</h3>
+        <p>One team, one P&L, no finger-pointing between vendors. We own the entire funnel — from acquisition to retention — and are measured on the outcomes that matter.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── COMPETITIVE POSITIONING ─── -->
+<section id="positioning" style="background:var(--surface);">
+  <div class="wrap">
+    <span class="overline">// Where we fit</span>
+    <h2 class="display">Not all performance<br><em>agencies are the same.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">The agency market breaks into three camps. Tiger Tracks occupies a fourth: the credibility and rigor of the best performance shops, with the engineering sophistication and editorial confidence of a premium brand.</p>
+    <div class="pos-grid">
+      <div class="pos-cell">
+        <span class="pos-cell-type holding">The Holding Companies</span>
+        <h3>Big Name. Slow Machine.</h3>
+        <p>Global scale but structured for enterprise process — not speed, not personalization. Your account is managed by a junior team while the senior talent is on the pitch.</p>
+        <ul class="pos-pros">
+          <li data-sign="+">Brand recognition and credibility</li>
+          <li data-sign="+">Cross-media capabilities</li>
+          <li data-sign="−">Layers of management, slow to move</li>
+          <li data-sign="−">Rotation of junior staff on your account</li>
+          <li data-sign="−">Not built for DTC or growth-stage pace</li>
+        </ul>
+      </div>
+      <div class="pos-cell">
+        <span class="pos-cell-type boutique">The Boutique Creative Shops</span>
+        <h3>Award-Winning. Hard to Measure.</h3>
+        <p>Beautiful work and strong creative vision — but rarely grounded in media efficiency or ROI. Excellent for brand campaigns, difficult to tie to revenue outcomes.</p>
+        <ul class="pos-pros">
+          <li data-sign="+">Strong creative quality and narrative</li>
+          <li data-sign="+">Differentiated brand positioning</li>
+          <li data-sign="−">Limited performance marketing depth</li>
+          <li data-sign="−">Weak attribution and measurement rigor</li>
+          <li data-sign="−">Hard to scale beyond awareness</li>
+        </ul>
+      </div>
+      <div class="pos-cell" style="background:rgba(34,159,161,.03);border-left:1px solid var(--line-bright);">
+        <span class="pos-cell-type tt">Tiger Tracks</span>
+        <h3>Performance Rigor. Premium Execution.</h3>
+        <p>Ex-Google leadership, Inc. 5000 ranked, AI-native infrastructure, and a full-funnel stack that compounds results across every channel — without the overhead or the ego.</p>
+        <ul class="pos-pros">
+          <li data-sign="+">Ex-Google team, proven at scale</li>
+          <li data-sign="+">Data engineering and agentic AI workflows</li>
+          <li data-sign="+">Full-funnel ownership, one relationship</li>
+          <li data-sign="+">Documented outcomes across 20 case studies</li>
+          <li data-sign="+">Built for PE/VC-backed and growth-stage brands</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── TEAM ─── -->
+<section id="team">
+  <div class="wrap">
+    <span class="overline">// The team</span>
+    <div class="team-intro">
+      <div>
+        <h2 class="display">The team <em>is</em><br>the product.</h2>
+        <p class="team-manifesto" style="margin-top:1.5rem;">
+          Tiger Tracks was founded by leaders who built their careers at <strong>Google</strong> — managing the highest-spending ad accounts in the world before turning that expertise into an agency that <strong>helps select partners achieve the same results</strong>. The Google pedigree isn't a badge. It's the operating philosophy.
+        </p>
+      </div>
+      <div class="team-sidebar">
+        <div class="team-credential">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;text-transform:uppercase;min-width:36px;padding-top:.15rem;">INC</div>
+          <div>
+            <div class="tc-val">Inc. 5000 Ranked</div>
+            <div class="tc-label">Among America's fastest-growing private companies</div>
+          </div>
+        </div>
+        <div class="team-credential">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;text-transform:uppercase;min-width:36px;padding-top:.15rem;">RMT</div>
+          <div>
+            <div class="tc-val">Fully Remote</div>
+            <div class="tc-label">Top-tier talent, no geography constraint</div>
+          </div>
+        </div>
+        <div class="team-credential">
+          <div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;text-transform:uppercase;min-width:36px;padding-top:.15rem;">EX-G</div>
+          <div>
+            <div class="tc-val">Ex-Google DNA</div>
+            <div class="tc-label">20+ years managing the world's largest ad accounts</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="leaders">
+      <div class="leader-card">
+        <div class="leader-top">
+          <img class="leader-photo" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=120&h=120&fit=crop&crop=faces&auto=format" alt="Cliff Simmons">
+          <div class="leader-title-block">
+            <div class="name">Cliff Simmons</div>
+            <div class="role">// Founder & CEO</div>
+          </div>
+        </div>
+        <div class="leader-body">
+          <p>Cliff began his career at <strong style="color:var(--white)">Google</strong>, overseeing campaign design and management for Google's top client brands across Paid Search, YouTube, Shopping, and the full Google Ads product suite.</p>
+          <p>As <strong style="color:var(--white)">Chief Growth Officer of Ready</strong>, he managed over $250K per week in performance marketing spend — and his teams captured the demand responsible for over 90% of Ready's revenue, propelling the company from a $50M to a $500M+ valuation.</p>
+          <div class="leader-stats">
+            <div><div class="ls-val">$500M+</div><div class="ls-label">Valuation driven at Ready</div></div>
+            <div><div class="ls-val">$250K/wk</div><div class="ls-label">Peak media spend managed</div></div>
+            <div><div class="ls-val">Google</div><div class="ls-label">Career origin</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="leader-card">
+        <div class="leader-top">
+          <img class="leader-photo" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120&h=120&fit=crop&crop=faces&auto=format" alt="Henry Kittle">
+          <div class="leader-title-block">
+            <div class="name">Henry Kittle</div>
+            <div class="role">// Co-Founder & Head of Product</div>
+          </div>
+        </div>
+        <div class="leader-body">
+          <p>Henry brings deep technical authority across ad platform architecture, search strategy, and measurement infrastructure. His background combines hands-on expertise in high-spend search accounts with the product and systems thinking needed to build scalable performance operations.</p>
+          <p>As Tiger Tracks' technical lead, Henry sets the standards for ad account structure, tracking integrity, and the AI tooling the team uses to stay ahead of platform changes.</p>
+          <div class="leader-stats">
+            <div><div class="ls-val">Search</div><div class="ls-label">Technical platform lead</div></div>
+            <div><div class="ls-val">Product</div><div class="ls-label">Systems & tooling</div></div>
+            <div><div class="ls-val">Google</div><div class="ls-label">Pedigree</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── SERVICES ─── -->
+<section id="services">
+  <div class="wrap">
+    <span class="overline">// Services</span>
+    <h2 class="display">The full-funnel stack.</h2>
+    <p class="body-lg" style="margin-top:1.25rem;">Every service is designed to amplify the others. We deploy what your brand needs now, and layer in what it needs next.</p>
+    <div class="bento-grid" id="bentoGrid">
+
+      <div class="bento-tile wide" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">01 · Paid Search</span>
+        <h3>Capture high-intent demand at the moment it matters most.</h3>
+        <p>Disciplined keyword architecture, full-funnel Smart Bidding, and Performance Max — with Enhanced Conversions feeding first-party signal back to the algorithm.</p>
+        <div class="svc-chips"><span class="chip">Google Ads</span><span class="chip">Microsoft</span><span class="chip">pMax</span><span class="chip">Shopping</span></div>
+        <div class="bento-stat">5.39<div class="bento-stat-label">ROAS · Rho Nutrition</div></div>
+      </div>
+
+      <div class="bento-tile" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">02 · Paid Social</span>
+        <h3>Creative as targeting. Signal as strategy.</h3>
+        <p>Audience-driven creative testing on Meta, TikTok, and Snap. CAPI integration for server-side matching. Advantage+ for algorithmic scale.</p>
+        <div class="svc-chips"><span class="chip">Meta CAPI</span><span class="chip">TikTok</span><span class="chip">Advantage+</span></div>
+        <div class="bento-stat">+94%<div class="bento-stat-label">Meta ROAS YoY · Supplement Leader</div></div>
+      </div>
+
+      <div class="bento-tile" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">03 · Retail Media</span>
+        <h3>Incremental revenue across every retail network.</h3>
+        <p>Amazon, Walmart, Instacart, Target — strategic product visibility, seasonal bidding, and measurable performance attribution.</p>
+        <div class="svc-chips"><span class="chip">Amazon DSP</span><span class="chip">Roundel</span><span class="chip">Instacart</span></div>
+        <div class="bento-stat">$5.54<div class="bento-stat-label">ROAS · Footwear Brand</div></div>
+      </div>
+
+      <div class="bento-tile" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">04 · Connected TV</span>
+        <h3>Upper-funnel reach, lower-funnel attribution.</h3>
+        <p>CTV and OTT campaigns with cross-channel attribution connecting brand awareness to downstream conversion. 99% completion rates across premium inventory.</p>
+        <div class="svc-chips"><span class="chip">CTV</span><span class="chip">OTT</span><span class="chip">Brand Lift</span></div>
+      </div>
+
+      <div class="bento-tile wide" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">05 · Creative & Gen-AI</span>
+        <h3>Find the winning hook before scaling spend behind it.</h3>
+        <p>Image, video, UGC, and AI-generated creative systematically tested with daily $50 model experiments across Veo, Sora, and Kling. Performance data feeds the next brief automatically.</p>
+        <div class="svc-chips"><span class="chip">Video</span><span class="chip">UGC</span><span class="chip">Sora</span><span class="chip">Veo</span><span class="chip">Kling</span></div>
+      </div>
+
+      <div class="bento-tile wide" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">06 · Website Development & CRO</span>
+        <h3>Better website. Better campaign performance. Lower blended CPA.</h3>
+        <p>Conversion-focused web builds, landing page A/B testing, and UX optimization. Every improvement feeds back into campaign efficiency — a better site means better ROAS on the same spend.</p>
+        <div class="svc-chips"><span class="chip">Web Dev</span><span class="chip">CRO</span><span class="chip">A/B Testing</span><span class="chip">UX</span></div>
+      </div>
+
+      <div class="bento-tile" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">07 · SEO + ASO + GEO</span>
+        <h3>Organic discovery — including the AI-powered kind.</h3>
+        <p>Web, app, and generative engine optimization for search experiences that exist beyond the ten blue links. More organic traffic lowers blended CaC across all paid channels.</p>
+        <div class="svc-chips"><span class="chip">SEO</span><span class="chip">ASO</span><span class="chip">GEO</span><span class="chip">AI Search</span></div>
+      </div>
+
+      <div class="bento-tile" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">08 · Lifecycle Marketing</span>
+        <h3>Higher LTV means more room to acquire.</h3>
+        <p>Email + SMS built on behavioral triggers and predictive segmentation. Every retained customer raises your CaC tolerance — and your ability to outspend competitors at the same margin.</p>
+        <div class="svc-chips"><span class="chip">Klaviyo</span><span class="chip">Attentive</span><span class="chip">Flows</span></div>
+      </div>
+
+      <div class="bento-tile wide" data-tilt>
+        <div class="bento-tile-glow"></div>
+        <span class="bento-tile-tag">09 · Analytics & Media Mix Modeling</span>
+        <h3>Every budget decision, defensible with data.</h3>
+        <p>Clean tracking architecture, server-side attribution, and advanced MMM — so you know which channels are actually driving revenue and which are taking credit for conversions that would have happened anyway.</p>
+        <div class="svc-chips"><span class="chip">GA4</span><span class="chip">GTM</span><span class="chip">MMM</span><span class="chip">SQL</span><span class="chip">Python</span></div>
+        <div class="bento-stat">−42%<div class="bento-stat-label">CAC · Monarch Money</div></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ─── WEB PORTFOLIO ─── -->
+<section id="web-work">
+  <div class="wrap">
+    <span class="overline">// Website design & development</span>
+    <h2 class="display">We don't just run ads<br><em>to broken websites.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">Tiger Tracks builds and redesigns the websites those ads send people to — and measures how every UX change flows through to campaign efficiency. Six examples below. Each one is a Tiger Tracks build.</p>
+    <div class="webwork-grid">
+
+      <!-- Card 1 — Fashion editorial -->
+      <div class="ww-card">
+        <div class="ww-browser-bar">
+          <div class="ww-dot r"></div><div class="ww-dot y"></div><div class="ww-dot g"></div>
+          <div class="ww-url-bar"></div>
+        </div>
+        <div class="ww-site ws1">
+          <div class="ws1-nav">
+            <div class="ws1-logo">JOURNEE</div>
+            <div class="ws1-links"><span></span><span></span><span></span></div>
+          </div>
+          <div class="ws1-hero">
+            <div class="ws1-kicker"></div>
+            <div class="ws1-h"><span></span><span></span></div>
+          </div>
+          <div class="ws1-grid">
+            <div class="ws1-img"></div><div class="ws1-img"></div><div class="ws1-img"></div>
+          </div>
+          <div class="ww-result-chip">−32% mobile load time</div>
+        </div>
+        <div class="ww-footer">
+          <div class="ww-type">Fashion eCommerce · CRO + Speed</div>
+          <div class="ww-name">Journee</div>
+          <div class="ww-stat">Site speed overhaul → <strong>+13% conversion rate</strong></div>
+        </div>
+      </div>
+
+      <!-- Card 2 — Health/wellness -->
+      <div class="ww-card">
+        <div class="ww-browser-bar">
+          <div class="ww-dot r"></div><div class="ww-dot y"></div><div class="ww-dot g"></div>
+          <div class="ww-url-bar"></div>
+        </div>
+        <div class="ww-site ws2">
+          <div class="ws2-nav">
+            <div class="ws2-logo">HONEYDEW</div>
+            <div class="ws2-cta"></div>
+          </div>
+          <div class="ws2-hero">
+            <div class="ws2-h"><span></span><span></span></div>
+            <div class="ws2-sub"><span></span><span></span></div>
+            <div class="ws2-pills"><span></span><span></span><span></span></div>
+          </div>
+          <div class="ws2-cards">
+            <div class="ws2-card"></div><div class="ws2-card"></div><div class="ws2-card"></div>
+          </div>
+          <div class="ww-result-chip">+105% purchases in 6 mo</div>
+        </div>
+        <div class="ww-footer">
+          <div class="ww-type">Healthcare · Landing Page CRO</div>
+          <div class="ww-name">Honeydew</div>
+          <div class="ww-stat">Booking flow optimization → <strong>+25% conversion rate</strong></div>
+        </div>
+      </div>
+
+      <!-- Card 3 — SaaS/Fintech -->
+      <div class="ww-card">
+        <div class="ww-browser-bar">
+          <div class="ww-dot r"></div><div class="ww-dot y"></div><div class="ww-dot g"></div>
+          <div class="ww-url-bar"></div>
+        </div>
+        <div class="ww-site ws3">
+          <div class="ws3-nav">
+            <div class="ws3-logo">MONARCH·M</div>
+            <div class="ws3-cta"></div>
+          </div>
+          <div class="ws3-hero">
+            <div class="ws3-badge"></div>
+            <div class="ws3-h"><span></span><span></span></div>
+            <div class="ws3-sub"><span></span><span></span></div>
+          </div>
+          <div class="ws3-grid">
+            <div class="ws3-item"></div><div class="ws3-item"></div>
+            <div class="ws3-item"></div><div class="ws3-item"></div>
+          </div>
+          <div class="ww-result-chip">−42% CAC · +368% users</div>
+        </div>
+        <div class="ww-footer">
+          <div class="ww-type">Fintech SaaS · Full Redesign</div>
+          <div class="ww-name">Monarch Money</div>
+          <div class="ww-stat">Full-funnel rebuild → <strong>+400% revenue</strong></div>
+        </div>
+      </div>
+
+      <!-- Card 4 — Home services -->
+      <div class="ww-card">
+        <div class="ww-browser-bar">
+          <div class="ww-dot r"></div><div class="ww-dot y"></div><div class="ww-dot g"></div>
+          <div class="ww-url-bar"></div>
+        </div>
+        <div class="ww-site ws4">
+          <div class="ws4-nav">
+            <div class="ws4-logo">HOME·SVC</div>
+            <div class="ws4-cta"></div>
+          </div>
+          <div class="ws4-hero">
+            <div class="ws4-h"><span></span><span></span></div>
+            <div class="ws4-stars">
+              <div class="ws4-star"></div><div class="ws4-star"></div><div class="ws4-star"></div><div class="ws4-star"></div><div class="ws4-star"></div>
+            </div>
+          </div>
+          <div class="ws4-form">
+            <div class="ws4-input"></div><div class="ws4-submit"></div>
+          </div>
+          <div class="ww-result-chip" style="bottom:3.5rem;">+37% form conversion</div>
+        </div>
+        <div class="ww-footer">
+          <div class="ww-type">Home Services · UX + CRO</div>
+          <div class="ww-name">Multi-Location Brand</div>
+          <div class="ww-stat">Form redesign + A/B testing → <strong>−46% qualified lead cost</strong></div>
+        </div>
+      </div>
+
+      <!-- Card 5 — Restaurant/hospitality -->
+      <div class="ww-card">
+        <div class="ww-browser-bar">
+          <div class="ww-dot r"></div><div class="ww-dot y"></div><div class="ww-dot g"></div>
+          <div class="ww-url-bar"></div>
+        </div>
+        <div class="ww-site ws5">
+          <div class="ws5-nav">
+            <div class="ws5-logo">BISTRO·CO</div>
+            <div class="ws5-cta"></div>
+          </div>
+          <div class="ws5-hero">
+            <div class="ws5-h"><span></span><span></span></div>
+            <div class="ws5-sub"><span></span><span></span></div>
+          </div>
+          <div class="ws5-items">
+            <div class="ws5-item"></div><div class="ws5-item"></div><div class="ws5-item"></div>
+          </div>
+          <div class="ww-result-chip">+13% total conversions</div>
+        </div>
+        <div class="ww-footer">
+          <div class="ww-type">Hospitality · UX/UI Redesign</div>
+          <div class="ww-name">Regional Restaurant Group</div>
+          <div class="ww-stat">Reservation flow redesign → <strong>−7% CPA</strong></div>
+        </div>
+      </div>
+
+      <!-- Card 6 — CPG/DTC -->
+      <div class="ww-card">
+        <div class="ww-browser-bar">
+          <div class="ww-dot r"></div><div class="ww-dot y"></div><div class="ww-dot g"></div>
+          <div class="ww-url-bar"></div>
+        </div>
+        <div class="ww-site ws6">
+          <div class="ws6-nav">
+            <div class="ws6-logo">CPG·CO</div>
+            <div class="ws6-cta"></div>
+          </div>
+          <div class="ws6-hero">
+            <div class="ws6-h"><span></span><span></span></div>
+          </div>
+          <div class="ws6-features">
+            <div class="ws6-feat"><span></span><span></span></div>
+            <div class="ws6-feat"><span></span><span></span></div>
+            <div class="ws6-feat"><span></span><span></span></div>
+          </div>
+          <div class="ww-result-chip">+31% revenue</div>
+        </div>
+        <div class="ww-footer">
+          <div class="ww-type">CPG / DTC · Product Page CRO</div>
+          <div class="ww-name">Consumer Brand</div>
+          <div class="ww-stat">PDP + checkout redesign → <strong>+24% ROAS</strong></div>
+        </div>
+      </div>
+
+    </div>
+    <div style="text-align:center;margin-top:2.5rem;">
+      <p class="body-md" style="color:var(--text-2);margin-bottom:1.25rem;">Every website Tiger Tracks builds is designed to improve campaign efficiency — not just to look good.</p>
+      <a href="#contact" class="btn-cta">Request a site audit →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── WEB SPOTLIGHT ─── -->
+<section id="web-spotlight">
+  <div class="wrap">
+    <div class="web-spotlight-wrap">
+      <div>
+        <span class="overline">// Website design as a growth lever</span>
+        <h2 class="display">A better site makes<br><em>every ad more efficient.</em></h2>
+        <p class="body-md" style="margin-top:1.25rem;max-width:480px;">Most agencies stop at the click. Tiger Tracks owns what happens after — because a 13% conversion rate lift on the same ad spend is the same as cutting your CPA by 13%. We've built and redesigned dozens of sites, and we instrument everything we touch.</p>
+        <div class="web-impact-grid">
+          <div class="web-impact-card">
+            <div class="wi-val">+13%</div>
+            <div class="wi-label">Conversion rate lift — hospitality brand, UX/UI redesign</div>
+          </div>
+          <div class="web-impact-card">
+            <div class="wi-val">−32%</div>
+            <div class="wi-label">Mobile load time — Journee, site speed overhaul</div>
+          </div>
+          <div class="web-impact-card">
+            <div class="wi-val">+37%</div>
+            <div class="wi-label">Form conversion rate — multi-location brand, A/B testing</div>
+          </div>
+          <div class="web-impact-card">
+            <div class="wi-val">$170K</div>
+            <div class="wi-label">Single website rebuild engagement — enterprise brand</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="body-md" style="color:var(--text-2);margin-bottom:1.5rem;">Every Tiger Tracks web engagement includes:</p>
+        <ul class="web-deliverables">
+          <li><span class="wd-num">01</span> Conversion-focused architecture — messaging hierarchy, CTA placement, and user flow designed around your highest-intent visitors</li>
+          <li><span class="wd-num">02</span> Performance-first build — Core Web Vitals, mobile speed, render-blocking script audit, and tracking tag management</li>
+          <li><span class="wd-num">03</span> Full tracking implementation — GA4, GTM, platform pixels, server-side CAPI, and conversion action configuration across all ad platforms</li>
+          <li><span class="wd-num">04</span> A/B test roadmap — post-launch experimentation on highest-impact elements (hero, form, pricing, social proof placement)</li>
+          <li><span class="wd-num">05</span> Campaign integration — landing pages and ad creative briefed together so every visitor lands in the right context</li>
+          <li><span class="wd-num">06</span> Ongoing CRO — monthly reporting on site performance against campaign KPIs, with hypothesis-driven iteration</li>
+        </ul>
+        <div style="margin-top:2rem;">
+          <a href="#contact" class="btn-cta">Get a site audit →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── THE MACHINE ─── -->
+<section id="machine">
+  <div class="wrap">
+    <span class="overline">// Growth OS · Tier 1–2</span>
+    <h2 class="display">We build the machine<br><em>that runs the marketing.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">For our top-tier clients, we go beyond media management — we build the infrastructure that lets AI ingest your proprietary data and output high-performance actions autonomously.</p>
+    <div class="machine-layout" style="margin-top:4rem;">
+      <div class="machine-steps">
+        <div class="m-step">
+          <div class="m-step-n">01</div>
+          <div>
+            <h4>Real-Time Data Ingestion</h4>
+            <p>Python pipelines pull margin and cohort data from Shopify, Stripe, and your CRM every 6 hours — normalized and ready for LTV modeling.</p>
+            <span class="mono">shopify.margins → ltv_pipeline → warehouse</span>
+          </div>
+        </div>
+        <div class="m-step">
+          <div class="m-step-n">02</div>
+          <div>
+            <h4>AI Creative Intelligence</h4>
+            <p>An LLM agent connected via MCP analyzes which creative hooks are performing across 500+ ad variations in real time — surfacing patterns before humans can.</p>
+            <span class="mono">creative_db → llm_agent → hook_signals</span>
+          </div>
+        </div>
+        <div class="m-step">
+          <div class="m-step-n">03</div>
+          <div>
+            <h4>Predictive LTV Scoring</h4>
+            <p>Every morning cohort is scored against a 90-day LTV model trained on your historical data — before a single bid is placed.</p>
+            <span class="mono">new_cohort → ltv_model.predict() → bid_targets</span>
+          </div>
+        </div>
+        <div class="m-step">
+          <div class="m-step-n">04</div>
+          <div>
+            <h4>Automated Bid Adjustment</h4>
+            <p>Bid caps in Meta and Google are automatically updated based on predicted 90-day LTV — so you always bid what a customer is actually worth.</p>
+            <span class="mono">bid_targets → meta_api.update_bid_cap()</span>
+          </div>
+        </div>
+        <div class="m-step">
+          <div class="m-step-n">05</div>
+          <div>
+            <h4>Daily AI Creative Stack-Tests</h4>
+            <p>$50/day experiments on AI video models (Veo, Sora, Kling) — TikTok performance data fed back into the next creative brief automatically.</p>
+            <span class="mono">ai_video_model → tiktok_test → brief_update</span>
+          </div>
+        </div>
+      </div>
+      <div class="code-window">
+        <div class="code-win-bar">
+          <div class="cw-dot r"></div><div class="cw-dot y"></div><div class="cw-dot g"></div>
+          <div class="code-win-file">growth_os.py</div>
+        </div>
+        <div class="code-win-body">
+<span class="cm"># Tiger Tracks Growth OS — Daily 06:00 AM</span>
+<span class="kw">from</span> <span class="tc">tigertracks</span> <span class="kw">import</span> shopify, meta_api, ltv
+
+<span class="cm"># 1. Pull today's margin + cohort data</span>
+cohort = <span class="fn">shopify.get_new_customers</span>(<span class="st">"today"</span>)
+margins = <span class="fn">shopify.get_margins</span>(<span class="st">"last_24h"</span>)
+
+<span class="cm"># 2. Score cohort by predicted 90-day LTV</span>
+scores = <span class="fn">ltv.predict</span>(
+  cohort,
+  features=[<span class="st">"channel"</span>, <span class="st">"creative_hook"</span>, <span class="st">"aov"</span>, <span class="st">"device"</span>]
+)
+
+<span class="cm"># 3. Segment by LTV tier</span>
+high = scores[scores.ltv_p90 > <span class="nm">120</span>]
+mid  = scores[scores.ltv_p90.between(<span class="nm">60</span>, <span class="nm">120</span>)]
+
+<span class="cm"># 4. Auto-adjust bid caps in Meta API</span>
+<span class="kw">for</span> adset <span class="kw">in</span> <span class="fn">meta_api.active_adsets</span>():
+  bid = <span class="fn">calc_target_bid</span>(
+    ltv_score=scores.get(adset.id),
+    target_cac=<span class="nm">42.00</span>, margin=margins.avg
+  )
+  <span class="fn">meta_api.set_bid_cap</span>(adset.id, bid)
+
+<span class="tc">print</span>(<span class="st">f"✓ {len(adsets)} adsets updated · 06:02 AM"</span>)
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONVERSION PATH ─── -->
+<div class="conv-path-wrap" id="convPath">
+  <div class="wrap">
+    <span class="overline" style="text-align:center;display:block;margin-bottom:2.5rem;">// The path of a conversion</span>
+    <div class="conv-path-steps" id="convSteps">
+      <div class="conv-step" data-step="0">
+        <div class="conv-step-num">01</div>
+        <h4>Signal</h4>
+        <p>First-party data fed to the algorithm</p>
+      </div>
+      <div class="conv-step" data-step="1">
+        <div class="conv-step-num">02</div>
+        <h4>Reach</h4>
+        <p>Right audience, right moment, right platform</p>
+      </div>
+      <div class="conv-step" data-step="2">
+        <div class="conv-step-num">03</div>
+        <h4>Creative</h4>
+        <p>Hook tested and proven before scale</p>
+      </div>
+      <div class="conv-step" data-step="3">
+        <div class="conv-step-num">04</div>
+        <h4>Convert</h4>
+        <p>Landing page optimized, friction removed</p>
+      </div>
+      <div class="conv-step" data-step="4">
+        <div class="conv-step-num">05</div>
+        <h4>Retain</h4>
+        <p>Lifecycle raises LTV, compounds the model</p>
+      </div>
+    </div>
+    <svg class="conv-path-svg" viewBox="0 0 1120 80" preserveAspectRatio="none" aria-hidden="true">
+      <path class="conv-path-line" id="convLine"
+        d="M112,40 C224,40 224,40 336,40 C448,40 448,40 560,40 C672,40 672,40 784,40 C896,40 896,40 1008,40"/>
+      <circle class="conv-node" id="cn0" cx="112" cy="40" r="5"/>
+      <circle class="conv-node" id="cn1" cx="336" cy="40" r="5"/>
+      <circle class="conv-node" id="cn2" cx="560" cy="40" r="5"/>
+      <circle class="conv-node" id="cn3" cx="784" cy="40" r="5"/>
+      <circle class="conv-node" id="cn4" cx="1008" cy="40" r="5"/>
+    </svg>
+  </div>
+</div>
+
+
+<!-- ─── FREE AUDIT ─── -->
+<section id="audit">
+  <div class="wrap">
+    <div class="audit-wrap">
+      <div>
+        <span class="overline">// Start here</span>
+        <h2 class="display">Discover where you're<br><em>leaving money behind.</em></h2>
+        <p class="body-lg" style="margin-top:1.25rem;">
+          Our free performance audit analyzes your paid search and social campaigns to identify quick wins and long-term growth opportunities — written by an ex-Google specialist, not an automated tool.
+        </p>
+        <ul class="audit-checklist">
+          <li><div class="audit-check">✓</div> Account health assessment across all platforms</li>
+          <li><div class="audit-check">✓</div> Wasted spend identification and recovery plan</li>
+          <li><div class="audit-check">✓</div> ROAS / CPA optimization recommendations</li>
+          <li><div class="audit-check">✓</div> Competitor benchmarking and gap analysis</li>
+          <li><div class="audit-check">✓</div> First-party data and attribution health check</li>
+          <li><div class="audit-check">✓</div> AI & automation opportunity assessment</li>
+        </ul>
+      </div>
+      <div class="audit-panel">
+        <h3>Your Free Performance Audit</h3>
+        <p>No cost. No commitment. A real analysis from a team that has managed some of the world's largest ad budgets — now applied to yours.</p>
+        <a href="https://tigertracks.ai" class="btn-cta" target="_blank" rel="noopener" style="width:100%;justify-content:center;">Get my free audit →</a>
+        <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid var(--line);font-size:.8rem;color:var(--text-3);line-height:1.6;">
+          Typically delivered within 48 hours. We've completed audits for brands spending from $10K to $5M+ per month.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CASE STUDIES ─── -->
+<section id="results">
+  <div class="wrap">
+    <span class="overline">// Client results</span>
+    <h2 class="display">Our team has worked with<br><em>some of the biggest brands in the world.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">20 documented case studies across 16+ verticals. Real clients, real numbers, real impact.</p>
+
+    <div class="cs-filters" style="margin-top:2.5rem;">
+      <button class="cs-filter active" onclick="filterCS(this,'all')">All</button>
+      <button class="cs-filter" onclick="filterCS(this,'paid-search')">Paid Search</button>
+      <button class="cs-filter" onclick="filterCS(this,'paid-social')">Paid Social</button>
+      <button class="cs-filter" onclick="filterCS(this,'retail-media')">Retail Media</button>
+      <button class="cs-filter" onclick="filterCS(this,'ctv')">CTV</button>
+      <button class="cs-filter" onclick="filterCS(this,'website')">Website</button>
+      <button class="cs-filter" onclick="filterCS(this,'creative')">Creative</button>
+      <button class="cs-filter" onclick="filterCS(this,'measurement')">Analytics</button>
+    </div>
+
+    <div class="cs-grid-full">
+
+      <!-- AG1 -->
+      <div class="cs-card-full" data-services="paid-social paid-search" data-cs="ag1" onclick="openCS('ag1')" tabindex="0" role="button">
+        <div class="cs-card-top">
+          <div class="cs-card-client">AG1 · Health & Wellness</div>
+          <div class="cs-card-title">Full-Funnel Meta + Brand Search Optimization</div>
+          <div class="cs-card-challenge">Meta performance had plateaued under legacy campaign structure. Heavy brand search investment overstated channel effectiveness and limited budget for incremental growth.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Monthly acquired customers YoY</span><span class="cs-m-val">+51%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Brand Search CAC reduction</span><span class="cs-m-val">−31%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">BFCM purchases (ABS campaigns)</span><span class="cs-m-val">+26%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">BFCM CAC vs. standard campaigns</span><span class="cs-m-val">−14%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Meta</span><span class="cs-s-tag">Google</span><span class="cs-s-tag">Full-Funnel</span></div>
+        </div>
+      </div>
+
+      <!-- Anastasia Beverly Hills -->
+      <div class="cs-card-full" data-cs="anastasia" onclick="openCS('anastasia')" tabindex="0" role="button" data-services="paid-social creative">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Anastasia Beverly Hills · Beauty</div>
+          <div class="cs-card-title">Scaling Cross-Platform Revenue Without TikTok Shop</div>
+          <div class="cs-card-challenge">ABH sought to scale TikTok Ads as a discovery channel without relying on TikTok Shop, which had reduced margins and hurt premium brand perception.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Meta ROAS (while increasing spend +278%)</span><span class="cs-m-val">+22%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Google Brand Search ROAS</span><span class="cs-m-val">+36%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">TikTok</span><span class="cs-s-tag">Meta</span><span class="cs-s-tag">UGC</span><span class="cs-s-tag">Creative</span></div>
+        </div>
+      </div>
+
+      <!-- Monarch Money -->
+      <div class="cs-card-full" data-cs="monarch" onclick="openCS('monarch')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Monarch Money · Fintech</div>
+          <div class="cs-card-title">Full Funnel Restructuring for Efficient User Growth</div>
+          <div class="cs-card-challenge">CAC trended high and channel performance had plateaued. Monarch wanted to scale subscriber growth while maintaining profitability.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">CAC reduction</span><span class="cs-m-val">−42%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">User growth</span><span class="cs-m-val">+368%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Revenue growth</span><span class="cs-m-val">+400%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Smart Bidding</span><span class="cs-s-tag">LTV</span></div>
+        </div>
+      </div>
+
+      <!-- Rho Nutrition -->
+      <div class="cs-card-full" data-cs="rho" onclick="openCS('rho')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Rho Nutrition · CPG / DTC</div>
+          <div class="cs-card-title">Challenger Brand Doubles Revenue Using Paid Search</div>
+          <div class="cs-card-challenge">Increasing competition and escalating digital advertising costs reduced customer acquisition efficiency and repeat purchases.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Revenue vs. prior period</span><span class="cs-m-val">+78%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">ROAS (vs. 1.78 on other channels)</span><span class="cs-m-val">5.39</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Overall revenue contribution</span><span class="cs-m-val">14%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Google</span><span class="cs-s-tag">Feed Optimization</span></div>
+        </div>
+      </div>
+
+      <!-- Aura Health -->
+      <div class="cs-card-full" data-cs="aura" onclick="openCS('aura')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Aura Health · Health Tech / SaaS</div>
+          <div class="cs-card-title">Performance Growth Through Strategic Restructuring</div>
+          <div class="cs-card-challenge">Aura aimed to expand reach while maintaining strong performance across US and global markets with clear CAC goals.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Cost per start trial (YoY)</span><span class="cs-m-val">−37%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Conversion rate (YoY)</span><span class="cs-m-val">+75%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">CTR (QoQ)</span><span class="cs-m-val">+51%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Smart Bidding</span><span class="cs-s-tag">Broad Match</span></div>
+        </div>
+      </div>
+
+      <!-- Supplement Leader -->
+      <div class="cs-card-full" data-cs="supplement" onclick="openCS('supplement')" tabindex="0" role="button" data-services="paid-social">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Supplement Leader · Health & Wellness</div>
+          <div class="cs-card-title">Supplement Leader Improves ROI Using Full Funnel Meta Strategy</div>
+          <div class="cs-card-challenge">Lacked a cohesive full-funnel strategy with increasing competition in their category driving up acquisition costs.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Meta ROAS (YoY)</span><span class="cs-m-val">+94%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Meta</span><span class="cs-s-tag">Full-Funnel</span><span class="cs-s-tag">Video Creative</span></div>
+        </div>
+      </div>
+
+      <!-- Honeydew -->
+      <div class="cs-card-full" data-cs="honeydew" onclick="openCS('honeydew')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Honeydew · Healthcare / Dermatology</div>
+          <div class="cs-card-title">Honeydew Fuels Growth</div>
+          <div class="cs-card-challenge">Google Search strategy was heavily segmented, limiting growth. Tight CAC goals with ambitious growth targets in a competitive healthcare vertical.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Purchase volume (first 6 months)</span><span class="cs-m-val">+105%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Booking-to-purchase CVR</span><span class="cs-m-val">+25%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Campaign Consolidation</span></div>
+        </div>
+        <div class="cs-testi">
+          <blockquote>"The Tiger Tracks team has been a true partner in our company's growth. They're collaborative, nimble, and thoughtful — really acting as an extension of our own team."</blockquote>
+          <cite>Connor Kreutz · Head of Growth</cite>
+        </div>
+      </div>
+
+      <!-- MedSpa -->
+      <div class="cs-card-full" data-cs="medspa" onclick="openCS('medspa')" tabindex="0" role="button" data-services="paid-search paid-social ctv measurement">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Regional MedSpa Group · Healthcare</div>
+          <div class="cs-card-title">Scaling Smarter for MedSpas</div>
+          <div class="cs-card-challenge">Sought to scale paid marketing across Google and Meta without seeing a rise in CPA as they expanded into new locations.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Cost-per-qualified lead (90 days)</span><span class="cs-m-val">−46%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Meta cost-per-lead</span><span class="cs-m-val">−36%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Spend increase without CPA increase</span><span class="cs-m-val">+32%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">SQLs via CRM integration (60 days)</span><span class="cs-m-val">+45%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Google</span><span class="cs-s-tag">Meta</span><span class="cs-s-tag">YouTube</span><span class="cs-s-tag">CTV</span><span class="cs-s-tag">CRM</span></div>
+        </div>
+      </div>
+
+      <!-- Lightyear -->
+      <div class="cs-card-full" data-cs="lightyear" onclick="openCS('lightyear')" tabindex="0" role="button" data-services="paid-search measurement">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Lightyear.ai · B2B SaaS</div>
+          <div class="cs-card-title">Lightyear Slashes Lead Costs</div>
+          <div class="cs-card-challenge">Had run Google Ads with another agency for over a year with limited success — struggling to leverage digital marketing to deliver qualified leads at scale.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Cost per qualified lead</span><span class="cs-m-val">−68%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Qualified leads per month</span><span class="cs-m-val">+246%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Campaign Architecture</span><span class="cs-s-tag">Tracking</span></div>
+        </div>
+      </div>
+
+      <!-- Snap NHD -->
+      <div class="cs-card-full" data-cs="snap" onclick="openCS('snap')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Snap NHD · Real Estate</div>
+          <div class="cs-card-title">Snap NHD Acquisition Overhaul</div>
+          <div class="cs-card-challenge">Growth had decelerated due to ineffective digital marketing management and rising customer acquisition costs in a competitive real estate category.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Customer acquisition cost</span><span class="cs-m-val">−47%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Monthly customers acquired</span><span class="cs-m-val">+213%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Lead conversion rate</span><span class="cs-m-val">3.5×</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Google Ads</span><span class="cs-s-tag">Smart Bidding</span><span class="cs-s-tag">Audience Targeting</span></div>
+        </div>
+      </div>
+
+      <!-- Online Labels -->
+      <div class="cs-card-full" data-cs="online-labels" onclick="openCS('online-labels')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Online Labels · B2B eCommerce</div>
+          <div class="cs-card-title">Online Labels Profit Growth</div>
+          <div class="cs-card-challenge">Google Ads performance regressed post-COVID with declining profitability across 18,000 keywords, 15,000 ads, and 11,000 products.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Monthly profit (30 days)</span><span class="cs-m-val">+52%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Monthly profit (90 days)</span><span class="cs-m-val">+151%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Automated Bidding</span><span class="cs-s-tag">Custom Audiences</span></div>
+        </div>
+      </div>
+
+      <!-- SPS -->
+      <div class="cs-card-full" data-cs="sps" onclick="openCS('sps')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">SPS · B2B Industrial</div>
+          <div class="cs-card-title">SPS Maximizes Revenue</div>
+          <div class="cs-card-challenge">A B2B industrial retailer needed to increase online revenue with a smaller ad budget but large overall revenue goals.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Revenue YoY at −43% lower cost</span><span class="cs-m-val">+56%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Google Shopping</span><span class="cs-s-tag">GMC Optimization</span><span class="cs-s-tag">Segmentation</span></div>
+        </div>
+        <div class="cs-testi">
+          <blockquote>"Tiger Tracks has been instrumental in helping us navigate the Google Marketing ecosystem. We continue to discover new strategies to improve our overall imprint in digital commerce."</blockquote>
+          <cite>Sara Loving · Operations and Marketing Manager</cite>
+        </div>
+      </div>
+
+      <!-- Dovetail Furniture -->
+      <div class="cs-card-full" data-cs="dovetail" onclick="openCS('dovetail')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Dovetail Furniture · B2B Wholesale</div>
+          <div class="cs-card-title">Dovetail Doubles Leads</div>
+          <div class="cs-card-challenge">A leading B2B wholesale furniture retailer faced rising CAC and stagnating conversion rates while trying to scale online sales.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Leads at −46% lower cost (2 months)</span><span class="cs-m-val">+103%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Paid Search</span><span class="cs-s-tag">Bid Strategy</span><span class="cs-s-tag">Conversion Optimization</span></div>
+        </div>
+        <div class="cs-testi">
+          <blockquote>"Working with Tiger Tracks has been exceptional from the start! Their team has taken the time to deeply understand our business model and customer base."</blockquote>
+          <cite>Marco Mazzoni · Director of Technology and Digital Marketing</cite>
+        </div>
+      </div>
+
+      <!-- Capezio -->
+      <div class="cs-card-full" data-cs="capezio" onclick="openCS('capezio')" tabindex="0" role="button" data-services="paid-search">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Capezio · Apparel / International</div>
+          <div class="cs-card-title">Export Market Moves</div>
+          <div class="cs-card-challenge">Needed to improve export market performance while prioritizing US dominance, with limited spend allocated to international markets.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">EU ROAS improvement</span><span class="cs-m-val">+54%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Australia ROAS improvement</span><span class="cs-m-val">+23%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">UK ROAS improvement</span><span class="cs-m-val">+10%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">International</span><span class="cs-s-tag">pMax</span><span class="cs-s-tag">Paid Search</span></div>
+        </div>
+      </div>
+
+      <!-- Footwear Retail Media -->
+      <div class="cs-card-full" data-cs="footwear" onclick="openCS('footwear')" tabindex="0" role="button" data-services="retail-media">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Footwear Brand · Retail Media</div>
+          <div class="cs-card-title">RMN Product Ads Can Scale Profitably</div>
+          <div class="cs-card-challenge">Struggled with limited product visibility, overstock issues, and low ROI in a competitive retail market — needed a scalable retail media strategy.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Impressions delivered</span><span class="cs-m-val">680M</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">ROAS</span><span class="cs-m-val">$5.54</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">CTR</span><span class="cs-m-val">0.10%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Target Plus</span><span class="cs-s-tag">Roundel</span><span class="cs-s-tag">Seasonal Strategy</span></div>
+        </div>
+      </div>
+
+      <!-- Home Service CTV -->
+      <div class="cs-card-full" data-cs="home-ctv" onclick="openCS('home-ctv')" tabindex="0" role="button" data-services="ctv">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Home Service Brand · CTV</div>
+          <div class="cs-card-title">Home Service Brand Generates Quality Household Reach Using CTV</div>
+          <div class="cs-card-challenge">Expand upper-funnel reach in competitive local markets while giving leadership confidence the investment would drive meaningful brand exposure.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Completed views</span><span class="cs-m-val">1.5M</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Completion rate</span><span class="cs-m-val">99%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">CTV</span><span class="cs-s-tag">Premium Streaming</span><span class="cs-s-tag">Frequency Control</span></div>
+        </div>
+      </div>
+
+      <!-- CPG Creative -->
+      <div class="cs-card-full" data-cs="cpg" onclick="openCS('cpg')" tabindex="0" role="button" data-services="paid-search paid-social creative">
+        <div class="cs-card-top">
+          <div class="cs-card-client">CPG Food & Beverage Brand · Creative</div>
+          <div class="cs-card-title">CPG Client Creative Testing Framework</div>
+          <div class="cs-card-challenge">Needed to win in a crowded national auction while maintaining profitable growth — existing creative approach wasn't generating differentiated performance.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">ROAS improvement</span><span class="cs-m-val">+24%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Clicks & impressions</span><span class="cs-m-val">+67%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">CPC reduction</span><span class="cs-m-val">−37%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Purchases & revenue</span><span class="cs-m-val">+31%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Creative Framework</span><span class="cs-s-tag">Paid Social</span><span class="cs-s-tag">Paid Search</span></div>
+        </div>
+      </div>
+
+      <!-- Multi-Location Home Services -->
+      <div class="cs-card-full" data-cs="multi-loc" onclick="openCS('multi-loc')" tabindex="0" role="button" data-services="paid-search paid-social creative measurement">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Multi-Location Home Services · Expansion</div>
+          <div class="cs-card-title">Multi-Location Home Services Scale</div>
+          <div class="cs-card-challenge">A high-end home services brand expanding into new states found existing ad creative and messaging failed to resonate with new local audiences.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">New locations launched under target CPA</span><span class="cs-m-val">5 in 6 mo.</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Lead volume per location (no budget increase)</span><span class="cs-m-val">+33%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Qualified leads (first 3 months)</span><span class="cs-m-val">+42%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Form conversion rate via A/B tests</span><span class="cs-m-val">+37%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">pMax</span><span class="cs-s-tag">Geo-Bidding</span><span class="cs-s-tag">CRO</span><span class="cs-s-tag">Localization</span></div>
+        </div>
+      </div>
+
+      <!-- Journee -->
+      <div class="cs-card-full" data-cs="journee" onclick="openCS('journee')" tabindex="0" role="button" data-services="website measurement">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Journee · eCommerce / Apparel</div>
+          <div class="cs-card-title">Improving Journee Site Speed & Conversion Tracking</div>
+          <div class="cs-card-challenge">Slow website performance led to high bounce rates, poor mobile usability, and underperforming campaigns. Conversion tracking was inconsistently implemented.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Mobile loading time reduction</span><span class="cs-m-val">−32%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Desktop loading time reduction</span><span class="cs-m-val">−26%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">Site Speed</span><span class="cs-s-tag">GTM</span><span class="cs-s-tag">Tracking Overhaul</span></div>
+        </div>
+        <div class="cs-testi">
+          <blockquote>"We truly value our partnership with TigerTracks, and don't view them as just a vendor, but more as an extension of our team."</blockquote>
+          <cite>Jim Weinberg · SVP of Merchandising & Ecommerce Marketing</cite>
+        </div>
+      </div>
+
+      <!-- Hospitality Brand -->
+      <div class="cs-card-full" data-cs="hospitality" onclick="openCS('hospitality')" tabindex="0" role="button" data-services="website">
+        <div class="cs-card-top">
+          <div class="cs-card-client">Hospitality Brand · Food & Beverage</div>
+          <div class="cs-card-title">Hospitality Brand Boosts Conversions With UX/UI Upgrades</div>
+          <div class="cs-card-challenge">Improve the website's ability to convert high-intent traffic — reducing friction across booking flow, mobile experience, and social proof elements.</div>
+        </div>
+        <div class="cs-card-metrics">
+          <div class="cs-card-metric"><span class="cs-m-label">Conversions</span><span class="cs-m-val">+13%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">CPA reduction</span><span class="cs-m-val">−7%</span></div>
+          <div class="cs-card-metric"><span class="cs-m-label">Conversion rate</span><span class="cs-m-val">+5%</span></div>
+        </div>
+        <div class="cs-card-footer">
+          <div class="cs-service-tags"><span class="cs-s-tag">UX/UI</span><span class="cs-s-tag">Mobile</span><span class="cs-s-tag">CRO</span><span class="cs-s-tag">Booking Flow</span></div>
+        </div>
+      </div>
+
+    </div><!-- end cs-grid-full -->
+  </div>
+</section>
+
+
+
+<!-- ─── TESTIMONIALS ─── -->
+<section id="testimonials">
+  <div class="wrap">
+    <span class="overline">// What clients say</span>
+    <h2 class="display">Strategic partners,<br><em>not just a vendor.</em></h2>
+    <div class="testi-grid">
+      <div class="testi">
+        <blockquote>Partnering with Tiger Tracks has been nothing short of amazing. They work fast, execute flawlessly, and apply specialized knowledge of ad platforms with a relentless focus on hitting growth goals.</blockquote>
+        <cite><span class="name">Jason Marshall</span><span class="role">Chief Growth Officer</span></cite>
+      </div>
+      <div class="testi">
+        <blockquote>Through their deep sophistication in analytics, funnel attribution, and campaign execution, Tiger Tracks took our performance marketing to the next level.</blockquote>
+        <cite><span class="name">Matt McGill</span><span class="role">VP of Performance Marketing · Lightyear</span></cite>
+      </div>
+      <div class="testi">
+        <blockquote>The Tiger Tracks team's deep expertise in customer acquisition further establishes them as an invaluable partner.</blockquote>
+        <cite><span class="name">Steven Leung</span><span class="role">Director of Marketing · Online Labels</span></cite>
+      </div>
+      <div class="testi">
+        <blockquote>Partnering with Tiger Tracks was a game-changer for our business, and helped our patients get the support they need.</blockquote>
+        <cite><span class="name">Julia Simmons</span><span class="role">Founder & CEO · Integrative Therapy & Coaching</span></cite>
+      </div>
+      <div class="testi">
+        <blockquote>The Tiger Tracks team's deep expertise in customer acquisition makes them an asset to work with.</blockquote>
+        <cite><span class="name">Jeremy Ratcliff</span><span class="role">VP of Marketing · Suited Connector</span></cite>
+      </div>
+      <div class="testi" style="background:rgba(34,159,161,.04);border-color:var(--line-bright);align-items:center;justify-content:center;text-align:center;">
+        <div style="font-size:2.5rem;font-weight:900;letter-spacing:-.04em;color:var(--teal);margin-bottom:.4rem;">Inc. 5000</div>
+        <div style="font-weight:700;font-size:.95rem;margin-bottom:.4rem;">America's Fastest-Growing Companies</div>
+        <div style="font-size:.82rem;color:var(--text-3);">Recognized for sustained growth, client outcomes, and team excellence.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── PARTNERS ─── -->
+<section id="partners">
+  <div class="wrap">
+    <span class="overline">// Partner ecosystem</span>
+    <h2 class="display">Growing together<br><em>with the right partners.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">Referral-sourced opportunities produce higher quality clients, shorter sales cycles, and stronger long-term relationships. We invest heavily in this ecosystem.</p>
+    <div class="partner-grid">
+      <div class="p-cell"><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;">PE/VC</div><h4>PE / VC Firms</h4><p>Portfolio companies needing performance marketing at a critical growth stage</p></div>
+      <div class="p-cell"><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;">AGY</div><h4>Strategic Agencies</h4><p>Non-performance agencies referring media buying and growth work</p></div>
+      <div class="p-cell"><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;">ADV</div><h4>Consultants & Advisors</h4><p>Advisors working with growth-stage brands on GTM and scaling strategy</p></div>
+      <div class="p-cell"><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;">CMO</div><h4>Fractional CMOs</h4><p>Marketing leaders who need a world-class execution layer</p></div>
+      <div class="p-cell"><div style="font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--teal);font-weight:700;letter-spacing:.1em;margin-bottom:.5rem;">TEC</div><h4>Tech Partners</h4><p>Martech and analytics platforms serving shared client bases</p></div>
+    </div>
+    <div class="partner-cta">
+      <p><strong>Become a referral partner.</strong> Earn 100% of the first month's fee for every qualified referral that closes. If you work with growth-stage brands that need performance marketing at scale, let's build something.</p>
+      <a href="https://tigertracks.ai" class="btn-cta" target="_blank" rel="noopener" style="white-space:nowrap;">Partner with us →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CAREERS ─── -->
+<section id="careers">
+  <div class="wrap">
+    <span class="overline">// Join us</span>
+    <div class="careers-wrap">
+      <div>
+        <h2 class="display">Create a future with<br><em>limitless possibilities.</em></h2>
+        <p class="body-md" style="margin-top:1.25rem;max-width:480px;">We're on the lookout for passionate leaders. If you're eager to make a difference and be part of a team that values honesty, hard work, and a relentless pursuit of excellence — we want to hear from you.</p>
+        <div class="careers-values">
+          <div class="cv-item"><span class="cv-num">01</span><span class="cv-text">Honesty — always</span></div>
+          <div class="cv-item"><span class="cv-num">02</span><span class="cv-text">Hard work, done right</span></div>
+          <div class="cv-item"><span class="cv-num">03</span><span class="cv-text">Relentless pursuit of excellence</span></div>
+          <div class="cv-item"><span class="cv-num">04</span><span class="cv-text">Data over opinion</span></div>
+          <div class="cv-item"><span class="cv-num">05</span><span class="cv-text">High performance with humanity</span></div>
+        </div>
+      </div>
+      <div class="careers-panel">
+        <h3>Open Roles</h3>
+        <p>We're actively growing across client success, partnerships, and creative. Fully remote — the best talent, wherever they are.</p>
+        <div class="open-roles">
+          <div class="open-role"><span>Director of Partnerships</span><span class="open-role-tag">BD</span></div>
+          <div class="open-role"><span>Senior Account Manager</span><span class="open-role-tag">Client Success</span></div>
+          <div class="open-role"><span>Account Manager</span><span class="open-role-tag">Client Success</span></div>
+          <div class="open-role"><span>Account Coordinator</span><span class="open-role-tag">Client Success</span></div>
+        </div>
+        <a href="https://tigertracks.ai" class="btn-cta" target="_blank" rel="noopener" style="width:100%;justify-content:center;">View all open roles →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FAQ ─── -->
+<section id="faq">
+  <div class="wrap">
+    <span class="overline">// Common questions</span>
+    <h2 class="display">Questions we hear<br><em>from every prospect.</em></h2>
+    <p class="body-lg" style="margin-top:1.25rem;">Answered honestly — because the right fit matters more than the fast close.</p>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How is Tiger Tracks different from other ex-Google agencies?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">There are a handful of ex-Google-founded agencies. The difference is in what we've built on top of that foundation: a proprietary AI infrastructure for agentic bidding and creative testing, a documented expansion playbook across 20 case studies, and a team that operates like a growth engineering firm — not a traditional media buyer. We also have the discipline to take fewer clients and go deeper, rather than scaling headcount at the expense of quality.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What does the free audit actually include?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">A real analysis — not a PDF generated by an automated tool. An ex-Google specialist reviews your active accounts and delivers a written assessment covering: account health across all platforms, wasted spend identification and recovery plan, ROAS/CPA optimization recommendations, competitor benchmarking, first-party data and attribution gaps, and an AI and automation opportunity assessment. Typical turnaround is 48 hours. No commitment required.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What monthly ad spend do we need to work with Tiger Tracks?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">We work with brands at all stages — from emerging brands spending under $100K/month to enterprise clients managing $1M–$5M+/month. Our team and process tiers are designed to match the complexity and scale of your business. The free audit is the right starting point regardless of where you are today.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          Do you only do paid media, or can we bring you in for one service?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">We can absolutely start with a single channel or service — paid search, paid social, creative, analytics, website development. Many of our strongest client relationships began with one channel and expanded as results compounded. A $60K/month creative retainer (one of our top accounts by revenue) started as a media-only engagement. We build for the long run, not the full contract upfront.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          How does the referral program work?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Referral partners earn 100% of the first month's management fee for any qualified referral that closes. There's no formal agreement required — just an introduction. We work with PE/VC investors, fractional CMOs, strategic agencies, consultants, and tech partners. If you work with growth-stage brands that need performance marketing at scale, the fit is usually obvious within the first conversation.</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" onclick="toggleFaq(this)">
+          What does onboarding look like — how long until we see results?
+          <span class="faq-icon">+</span>
+        </button>
+        <div class="faq-a"><div class="faq-a-inner">Onboarding is structured around a fast time-to-value. Week 1: account access, kickoff, intake documentation. Week 2–3: audit, structural recommendations, campaign architecture. Week 4: first campaigns live. Optimization velocity accelerates through month 2–3 as the algorithms accumulate data. Most clients see material improvement within 60–90 days of launch.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-wrap">
+      <div class="contact-side">
+        <div>
+          <span class="overline">// Get in touch</span>
+          <h2 class="display" style="margin-bottom:1rem;">Let's find out what you're<br><em>leaving on the table.</em></h2>
+          <p class="body-md" style="max-width:440px;">Start with a free performance audit — or just tell us what you're working on. Either way, the first conversation costs you nothing.</p>
+        </div>
+        <div class="contact-point">
+          <h4>Free Performance Audit</h4>
+          <p>An ex-Google specialist reviews your accounts and delivers a written assessment — wasted spend, ROAS gaps, attribution issues, and automation opportunities. 48-hour turnaround.</p>
+        </div>
+        <div class="contact-point">
+          <h4>Referral Partnership</h4>
+          <p>Work with growth-stage brands? We'd love to be your performance marketing referral. Earn 100% of the first month's fee. No formal agreement needed.</p>
+        </div>
+        <div class="contact-point">
+          <h4>General Inquiry</h4>
+          <p>Not sure where you fit yet? Tell us where you are and what you're building. We'll tell you honestly whether we're a good fit — and who you should talk to if we're not.</p>
+        </div>
+      </div>
+      <div class="contact-form" id="contactFormWrap">
+        <h3>Start the conversation.</h3>
+        <p class="form-sub">Fill out the form below and an ex-Google specialist will reach out within one business day.</p>
+        <form id="contactForm" onsubmit="handleFormSubmit(event)">
+          <div class="form-row">
+            <div class="form-group"><label>First name</label><input type="text" placeholder="Jane" required></div>
+            <div class="form-group"><label>Last name</label><input type="text" placeholder="Smith" required></div>
+          </div>
+          <div class="form-group"><label>Work email</label><input type="email" placeholder="jane@company.com" required></div>
+          <div class="form-group"><label>Company</label><input type="text" placeholder="Acme Inc." required></div>
+          <div class="form-group">
+            <label>Monthly ad spend</label>
+            <select required>
+              <option value="" disabled selected>Select range</option>
+              <option>Under $50K/month</option>
+              <option>$50K – $100K/month</option>
+              <option>$100K – $500K/month</option>
+              <option>$500K – $1M/month</option>
+              <option>$1M+/month</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Active channels</label>
+            <select>
+              <option value="" disabled selected>Primary channel</option>
+              <option>Paid Search (Google/Microsoft)</option>
+              <option>Paid Social (Meta/TikTok)</option>
+              <option>Retail Media (Amazon/Walmart)</option>
+              <option>Multiple channels</option>
+              <option>Not yet running paid media</option>
+            </select>
+          </div>
+          <div class="form-group"><label>What are you trying to solve? (optional)</label><textarea placeholder="E.g. CAC is climbing, creative is stale, we're scaling into new channels..."></textarea></div>
+          <button type="submit" class="form-submit">Request My Free Audit →</button>
+        </form>
+        <div id="formSuccess">
+          <div class="success-icon">TT</div>
+          <h3 style="font-size:1.25rem;font-weight:800;margin-bottom:.5rem;">You're in the queue.</h3>
+          <p style="font-size:.88rem;color:var(--text-2);">An ex-Google specialist will review your account and reach out within one business day.</p>
+        </div>
+        <p class="form-note">No commitment. No sales pressure. Just a real audit from people who've done this at Google scale.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FINAL CTA ─── -->
+<section id="final-cta">
+  <div class="cta-glow"></div>
+  <div class="wrap">
+    <h2>Ready to unlock<br><span>hidden growth?</span></h2>
+    <p>Start with a free performance audit. We'll show you exactly where your current stack is leaving money on the table.</p>
+    <div class="cta-row">
+      <a href="https://tigertracks.ai" class="btn-cta" target="_blank" rel="noopener">Get my free audit →</a>
+      <a href="https://tigertracks.ai" class="btn-soft" target="_blank" rel="noopener">Contact the team</a>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CASE STUDY MODAL ─── -->
+<div class="cs-modal-backdrop" id="csBackdrop" onclick="closeCS()" aria-hidden="true"></div>
+<div class="cs-modal" id="csModal" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="cs-modal-inner">
+    <div class="cs-modal-close">
+      <span class="cs-modal-overline" id="csModalOverline"></span>
+      <button class="cs-modal-close-btn" onclick="closeCS()">Close ✕</button>
+    </div>
+    <div id="csModalBody"></div>
+  </div>
+</div>
+
+<!-- ─── FOOTER ─── -->
+<footer style="background:var(--charcoal);border-top:1px solid var(--line);padding:4rem 0 2rem;">
+  <div class="wrap">
+    <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3rem;">
+      <div>
+        <div class="brand" style="margin-bottom:1rem;">
+          <div class="brand-mark">
+            <svg viewBox="0 0 16 16" fill="none"><path d="M2 5h12M5.5 5v7M10.5 5v7" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
+          </div>
+          Tiger Tracks
+        </div>
+        <p style="font-size:.85rem;color:var(--text-2);line-height:1.7;max-width:280px;margin-bottom:1.25rem;">Performance marketing for the age of AI. Ex-Google leadership, Inc. 5000 ranked, fully remote.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:.5rem;">
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;background:rgba(34,159,161,.1);color:var(--teal);border:1px solid var(--line-bright);border-radius:4px;padding:.2rem .55rem;">Inc. 5000</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;background:rgba(34,159,161,.1);color:var(--teal);border:1px solid var(--line-bright);border-radius:4px;padding:.2rem .55rem;">Ex-Google</span>
+          <span style="font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.1em;background:rgba(34,159,161,.1);color:var(--teal);border:1px solid var(--line-bright);border-radius:4px;padding:.2rem .55rem;">Fully Remote</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:1rem;">Company</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <a href="#why" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Why TT</a>
+          <a href="#team" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Our Team</a>
+          <a href="#positioning" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">How We Differ</a>
+          <a href="#careers" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Careers</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:1rem;">Services</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <a href="#services" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Paid Search</a>
+          <a href="#services" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Paid Social</a>
+          <a href="#services" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Retail Media & CTV</a>
+          <a href="#services" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Analytics & MMM</a>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-bottom:1rem;">Get Started</div>
+        <div style="display:flex;flex-direction:column;gap:.6rem;">
+          <a href="#audit" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Free Performance Audit</a>
+          <a href="#contact" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Contact Us</a>
+          <a href="#results" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">Case Studies</a>
+          <a href="#faq" style="font-size:.85rem;color:var(--text-2);transition:color .15s;" onmouseover="this.style.color='var(--teal)'" onmouseout="this.style.color='rgba(255,255,255,.55)'">FAQ</a>
+        </div>
+      </div>
+    </div>
+    <div style="border-top:1px solid var(--line);padding-top:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;">
+      <p style="font-size:.78rem;color:var(--text-3);">© 2026 Tiger Tracks. All rights reserved.</p>
+      <a href="https://tigertracks.ai" target="_blank" rel="noopener" style="font-size:.78rem;color:var(--teal);font-family:'JetBrains Mono',monospace;letter-spacing:.06em;">tigertracks.ai</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── STICKY MOBILE CTA ─── -->
+<div class="sticky-cta">
+  <a href="#contact" class="btn-cta">Get a free performance audit →</a>
+</div>
+
+<script>
+// ─── 1. ODOMETER COUNTER ───────────────────────────────────────────
+function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+
+function animateOdometer(el) {
+  const target = parseInt(el.dataset.target, 10);
+  const prefix = el.dataset.prefix || '';
+  const suffix = el.dataset.suffix || '';
+  const duration = 1600;
+  const start = performance.now();
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = easeOutCubic(progress);
+    const current = Math.round(eased * target);
+    el.textContent = prefix + current + suffix;
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+const statsObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.odometer-val').forEach(animateOdometer);
+      statsObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.4 });
+
+const heroStats = document.getElementById('heroStats');
+if (heroStats) statsObserver.observe(heroStats);
+
+// ─── 2. BENTO GRID 3D TILT ─────────────────────────────────────────
+document.querySelectorAll('[data-tilt]').forEach(tile => {
+  const glow = tile.querySelector('.bento-tile-glow');
+
+  tile.addEventListener('mousemove', (e) => {
+    const rect = tile.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rotX = ((y - cy) / cy) * 5;
+    const rotY = ((cx - x) / cx) * 5;
+    tile.style.transform = `perspective(800px) rotateX(${rotX}deg) rotateY(${rotY}deg) translateY(-3px)`;
+    tile.style.transition = 'transform .05s linear';
+    if (glow) {
+      glow.style.left = x + 'px';
+      glow.style.top = y + 'px';
+    }
+  });
+
+  tile.addEventListener('mouseleave', () => {
+    tile.style.transform = '';
+    tile.style.transition = 'transform .4s cubic-bezier(.4,0,.2,1)';
+  });
+});
+
+// ─── 3. CONVERSION PATH ────────────────────────────────────────────
+const convLine = document.getElementById('convLine');
+const convSteps = document.querySelectorAll('.conv-step');
+const convNodes = [0,1,2,3,4].map(i => document.getElementById('cn' + i));
+
+const convObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      if (convLine) convLine.classList.add('drawn');
+      convNodes.forEach((node, i) => {
+        setTimeout(() => {
+          if (node) node.classList.add('visible');
+          if (convSteps[i]) convSteps[i].classList.add('active');
+        }, i * 280);
+      });
+      convObserver.disconnect();
+    }
+  });
+}, { threshold: 0.4 });
+
+const convWrap = document.getElementById('convPath');
+if (convWrap) convObserver.observe(convWrap);
+
+
+// ─── 5. FAQ TOGGLE ─────────────────────────────────────────────────
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+// ─── 6. CONTACT FORM ───────────────────────────────────────────────
+function handleFormSubmit(e) {
+  e.preventDefault();
+  document.getElementById('contactForm').style.display = 'none';
+  document.getElementById('formSuccess').style.display = 'block';
+}
+
+// ─── 7. NAV SCROLL HIGHLIGHT ───────────────────────────────────────
+const navSections = ['why','positioning','team','services','machine','results','testimonials','partners','faq','contact','careers'];
+const navLinks = {};
+navSections.forEach(id => {
+  const el = document.querySelector(`.nav-items a[href="#${id}"]`);
+  if (el) navLinks[id] = el;
+});
+
+const scrollObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    const id = entry.target.id;
+    if (navLinks[id]) {
+      if (entry.isIntersecting) navLinks[id].classList.add('active');
+      else navLinks[id].classList.remove('active');
+    }
+  });
+}, { threshold: 0.3, rootMargin: '-60px 0px 0px 0px' });
+
+navSections.forEach(id => {
+  const el = document.getElementById(id);
+  if (el) scrollObserver.observe(el);
+});
+
+// ─── 8. CASE STUDY DATA & MODAL ────────────────────────────────────
+const CS_DATA = {
+  'ag1': {
+    client: 'AG1 / Athletic Greens',
+    vertical: 'Health & Wellness · DTC',
+    title: 'Full-Funnel Meta + Brand Search Optimization for a Leading Health Supplement',
+    services: ['Paid Social', 'Paid Search', 'Full-Funnel Strategy'],
+    challenge: 'Meta performance had plateaued under a legacy campaign structure that limited learning velocity and creative impact. Heavy investment in brand search was overstating channel effectiveness and leaving budget unavailable for incremental growth. AG1 needed a strategy that would actually grow the customer base — not just attribute existing demand.',
+    approach: [
+      'Rebuilt Meta campaign structure end-to-end for full-funnel optimization',
+      'Moved creative testing to mid-funnel to shorten learning phases and find winners faster',
+      'Implemented data-driven creative analysis to scale winning assets and pause poor performers',
+      'Audited brand search to identify overinvestment, then reallocated budget to higher-incrementality channels',
+      'Deployed Meta Amplified Budget Strategy (ABS) for BFCM with daily bid optimizations'
+    ],
+    results: [
+      { metric: 'Monthly acquired customers YoY', value: '+51%' },
+      { metric: 'CAC reduction YoY', value: '−5%' },
+      { metric: 'Brand search CAC reduction', value: '−31%' },
+      { metric: 'Sales campaign CTR increase', value: '+14%' },
+      { metric: 'BFCM purchases (ABS campaigns)', value: '+26%' },
+      { metric: 'BFCM CAC vs. standard campaigns', value: '−14%' }
+    ],
+    impact: 'AG1 grew monthly customer acquisition 51% year-over-year by restructuring Meta full-funnel — not by spending more. The brand search audit freed significant budget that was redeployed into channels actually driving incremental growth.'
+  },
+  'anastasia': {
+    client: 'Anastasia Beverly Hills',
+    vertical: 'Beauty & Cosmetics · DTC',
+    title: 'Scaling Cross-Platform Revenue Without Sacrificing Premium Brand Perception',
+    services: ['Paid Social', 'TikTok', 'Creative Strategy', 'UGC'],
+    challenge: 'ABH sought to scale TikTok Ads as a discovery channel without relying on TikTok Shop, which had been reducing margins and hurting the premium brand perception they had spent years building. The challenge was driving qualified traffic to ABH\'s own website without the discount mechanics that TikTok Shop incentivizes.',
+    approach: [
+      'Built a UGC-first TikTok creative system rooted in beauty-native behaviors and trends',
+      'Optimized TikTok campaigns for reach, engagement, and qualified website traffic — not TikTok Shop conversions',
+      'Used TikTok as the upper-funnel discovery engine to introduce newness, education, and social proof early in the journey',
+      'Kept all conversion activity off-platform, directing qualified traffic to ABH\'s own site',
+      'Coordinated TikTok upper-funnel activity with Meta retargeting and Google brand search to capture demand downstream'
+    ],
+    results: [
+      { metric: 'Meta ROAS while increasing Meta spend +278%', value: '+22%' },
+      { metric: 'Google Brand Search ROAS period-over-period', value: '+36%' }
+    ],
+    impact: 'By using TikTok as the upper funnel discovery layer — not as a transactional channel — ABH was able to scale spend aggressively while improving ROAS downstream on both Meta and Google. The cross-platform ecosystem did the work that a single channel strategy never could.'
+  },
+  'monarch': {
+    client: 'Monarch Money',
+    vertical: 'Fintech / SaaS',
+    title: 'Full Funnel Restructuring for Efficient Subscriber Growth',
+    services: ['Paid Search', 'Smart Bidding', 'LTV Modeling'],
+    challenge: 'Monarch wanted to scale subscriber growth while maintaining profitability. CAC had been trending higher, channel performance had plateaued, and the existing account structure was fragmented — limiting the algorithm\'s ability to optimize effectively. The brand needed a structural overhaul, not incremental tweaks.',
+    approach: [
+      'Rebuilt paid search account structure around high-intent theme groupings to improve signal quality',
+      'Implemented automated bidding strategies to stabilize CAC at scale',
+      'Paused low-performing themes and reallocated spend to highest-ROI segments',
+      'Developed tailored channel and creative strategy for core audience segments',
+      'Expanded broad match targeting with smart exclusions to increase reach without wasting spend',
+      'Added new high-intent keywords and a conquesting strategy targeting competitors'
+    ],
+    results: [
+      { metric: 'Customer acquisition cost', value: '−42%' },
+      { metric: 'Monthly user growth', value: '+368%' },
+      { metric: 'Revenue growth', value: '+400%' }
+    ],
+    impact: 'This is one of TT\'s flagship restructuring case studies. The same budget produced 4x the users and 5x the revenue — not by spending more, but by eliminating structural inefficiencies that were actively suppressing the algorithm\'s performance.'
+  },
+  'rho': {
+    client: 'Rho Nutrition',
+    vertical: 'CPG / DTC Supplements',
+    title: 'Challenger Brand Doubles Revenue Using Paid Search',
+    services: ['Paid Search', 'Google Ads', 'Product Feed Optimization'],
+    challenge: 'Increasing competition and escalating digital advertising costs were eroding customer acquisition efficiency. A fragmented account structure was sending incorrect signals to Google\'s bidding algorithms, causing misallocation of spend. Repeat purchase rates were also declining, putting pressure on LTV metrics.',
+    approach: [
+      'Performed a full-funnel audit identifying campaign signals misleading the algorithm',
+      'Proposed and implemented improved campaign structure with cleaner theme segmentation',
+      'Rebuilt bid strategies to better align with actual conversion value',
+      'Optimized product feed quality to improve Shopping ad relevance and conversion rates',
+      'Drove incremental conversions at a significantly higher ROAS versus other active channels'
+    ],
+    results: [
+      { metric: 'Revenue vs. prior period', value: '+78%' },
+      { metric: 'ROAS on TT-managed Google campaigns', value: '5.39' },
+      { metric: 'ROAS on non-TT channels (comparison)', value: '1.78' },
+      { metric: 'Overall revenue contribution', value: '14%' }
+    ],
+    impact: 'The 5.39 ROAS on Tiger Tracks-managed Google campaigns was 3× what the brand was achieving across all other digital channels. The restructure proved that the platform wasn\'t the problem — the structure was.'
+  },
+  'aura': {
+    client: 'Aura Health',
+    vertical: 'Health Tech / Consumer App',
+    title: 'Performance Growth Through Strategic Account Restructuring',
+    services: ['Paid Search', 'Smart Bidding', 'Geo-Targeting', 'App Acquisition'],
+    challenge: 'Aura Health aimed to expand reach while maintaining strong performance across US and global markets. The account had accumulated structural debt over time — over-segmentation, inconsistent geo performance, and underutilized smart bidding capabilities that limited growth.',
+    approach: [
+      'Rebuilt account structure around high-performing keyword themes, eliminating redundancy',
+      'Leveraged Smart Bidding more effectively with cleaner conversion signals feeding the algorithms',
+      'Audited and paused low-ROI geographies and themes to refocus investment on highest-return areas',
+      'Aligned ad copy more closely with user intent at each stage of the funnel',
+      'Expanded broad match with smart negative exclusions to increase qualified reach efficiently'
+    ],
+    results: [
+      { metric: 'Cost per start trial YoY', value: '−37%' },
+      { metric: 'Conversion rate YoY', value: '+75%' },
+      { metric: 'CTR quarter-over-quarter', value: '+51%' }
+    ],
+    impact: 'A 75% improvement in conversion rate and 37% reduction in trial cost simultaneously — achieved through structural cleanup and better signal quality, not increased spend. The CTR improvement confirmed that better ad-to-intent alignment was driving more qualified clicks.'
+  },
+  'supplement': {
+    client: 'Leading Supplement Brand',
+    vertical: 'Health & Wellness · DTC',
+    title: 'Supplement Leader Nearly Doubles Meta ROAS With Full-Funnel Video Strategy',
+    services: ['Paid Social', 'Meta Ads', 'Full-Funnel Strategy', 'Video Creative'],
+    challenge: 'The brand lacked a cohesive full-funnel social strategy. Increasing category competition was driving up CPMs and acquisition costs. Campaigns were optimized in isolation without coordinated messaging across awareness, consideration, and conversion stages.',
+    approach: [
+      'Designed and launched a comprehensive full-funnel Meta strategy to maximize reach, engagement, and purchase intent sequentially',
+      'Deployed multiple campaigns centered around compelling vertical video creative',
+      'Coordinated upper-funnel awareness campaigns with mid-funnel engagement and lower-funnel conversion campaigns',
+      'Built audience architecture that moved prospects through the funnel systematically'
+    ],
+    results: [
+      { metric: 'Meta ROAS year-over-year', value: '+94%' }
+    ],
+    impact: 'Nearly doubling ROAS on Meta — the most competitive digital auction in consumer goods — required a fundamentally different strategy architecture, not incremental optimization. The full-funnel approach changed how the algorithm valued the brand\'s audiences.'
+  },
+  'honeydew': {
+    client: 'Honeydew',
+    vertical: 'Healthcare / Dermatology',
+    title: 'Honeydew Fuels Growth With Campaign Consolidation and Intent Focus',
+    services: ['Paid Search', 'Campaign Consolidation', 'Smart Bidding'],
+    challenge: 'Honeydew\'s Google Search strategy was heavily over-segmented, which was fragmenting budget and limiting the algorithm\'s ability to learn effectively. Tight CAC targets combined with ambitious growth goals created a difficult optimization environment.',
+    approach: [
+      'Performed a full-funnel audit to identify consolidation opportunities across the fragmented account structure',
+      'Restructured campaigns to concentrate budget and improve keyword coverage quality over quantity',
+      'Aligned geo-targeting with provider availability on an ongoing basis to eliminate wasted geographic spend',
+      'Expanded into peripheral service offerings to capture additional revenue streams with existing infrastructure'
+    ],
+    results: [
+      { metric: 'Purchase volume (first 6 months)', value: '+105%' },
+      { metric: 'Booking-to-purchase conversion rate', value: '+25%' }
+    ],
+    testimonial: {
+      quote: 'The Tiger Tracks team has been a true partner in our company\'s growth. They\'re collaborative, nimble, and thoughtful — really acting as an extension of our own team.',
+      author: 'Connor Kreutz',
+      role: 'Head of Growth, Honeydew'
+    },
+    impact: 'Doubling purchase volume in six months while improving conversion rate demonstrates that the structural issues — not budget — were the primary growth constraint. Consolidation gave the algorithm what it needed to optimize effectively.'
+  },
+  'medspa': {
+    client: 'Regional MedSpa Group',
+    vertical: 'Healthcare / Medical Aesthetics',
+    title: 'Scaling Smarter: Multi-Location MedSpa Cuts CPL 46% While Growing Spend',
+    services: ['Paid Search', 'Paid Social', 'CTV', 'Analytics & CRM Integration'],
+    challenge: 'A regional medical spa group sought to scale paid marketing through Google and Meta Ads without seeing a rise in CPA as they expanded locations. The existing structure had weak conversion tracking, imprecise lead qualification, and no upper-funnel strategy for emerging markets.',
+    approach: [
+      'Performed a full-funnel audit identifying campaign signals misleading bidding algorithms',
+      'Proposed and implemented improved campaign structure and bid strategies aligned with qualified lead goals',
+      'Refined conversion action optimizations to prioritize highest-intent actions',
+      'Launched YouTube and CTV for upper-funnel awareness in emerging markets to build brand demand ahead of performance investment',
+      'Integrated CRM data to track and optimize toward sales-qualified leads, not just form fills'
+    ],
+    results: [
+      { metric: 'Cost per qualified lead (first 90 days)', value: '−46%' },
+      { metric: 'Meta cost-per-lead', value: '−36%' },
+      { metric: 'Spend increase without CPA increase (60 days)', value: '+32%' },
+      { metric: 'Sales-qualified leads via CRM integration', value: '+45%' }
+    ],
+    impact: 'Scaling spend 32% while simultaneously cutting qualified lead cost 46% is only possible when the optimization signal is right. CRM integration was the unlock — optimizing toward actual SQLs rather than raw form submissions changed everything about how the algorithm allocated budget.'
+  },
+  'lightyear': {
+    client: 'Lightyear.ai',
+    vertical: 'B2B SaaS / Telecom',
+    title: 'Lightyear Slashes Lead Costs After a Year of Underperformance',
+    services: ['Paid Search', 'Campaign Architecture', 'Conversion Tracking'],
+    challenge: 'Lightyear had run Google Ads with another agency for over a year with limited success. The account had poor keyword segmentation, fragmented campaign architecture, and critically — broken conversion tracking that was preventing the algorithm from learning effectively. The team was flying blind.',
+    approach: [
+      'Completely revamped campaign architecture to align with business intent and funnel stage',
+      'Improved keyword segmentation to reduce irrelevant spend and improve signal quality',
+      'Overhauled conversion tracking setup to provide clean, accurate signals for Smart Bidding',
+      'Restructured ad groups and match types to improve relevance scores and reduce CPCs'
+    ],
+    results: [
+      { metric: 'Cost per qualified lead', value: '−68%' },
+      { metric: 'Qualified leads per month', value: '+246%' }
+    ],
+    impact: 'A year of underperformance reversed in months — not because of a new strategy, but because the fundamentals (tracking, structure, signal) were finally correct. Cutting CPL by 68% while increasing lead volume 246% is the clearest example of what proper account infrastructure enables.'
+  },
+  'snap': {
+    client: 'Snap NHD',
+    vertical: 'Real Estate Services',
+    title: 'Snap NHD Acquisition Overhaul: −47% CAC, +213% Customers',
+    services: ['Paid Search', 'Google Ads', 'Smart Bidding', 'Audience Strategy'],
+    challenge: 'Growth had decelerated due to ineffective digital marketing management and rising customer acquisition costs. The existing account structure was not leveraging Google\'s automation capabilities, and ad creative had stagnated without fresh copy or audience targeting refreshes.',
+    approach: [
+      'Overhauled the full Google Ads program to maximize new customer acquisition while eliminating wasted spend',
+      'Launched brand new ad copy across the entire account with intent-matched messaging',
+      'Shifted targeting strategies to focus on highest-converting audience segments',
+      'Implemented Google\'s most advanced automated bidding capabilities with properly configured conversion signals'
+    ],
+    results: [
+      { metric: 'Customer acquisition cost', value: '−47%' },
+      { metric: 'Monthly customers acquired', value: '+213%' },
+      { metric: 'Lead conversion rate improvement', value: '3.5×' }
+    ],
+    impact: 'Cutting CAC in half while tripling customer volume is a structural achievement — better architecture plus Smart Bidding with clean signals compounds in both directions simultaneously. The 3.5× lead conversion improvement demonstrates the impact of intent-matched copy.'
+  },
+  'online-labels': {
+    client: 'Online Labels',
+    vertical: 'B2B eCommerce',
+    title: 'Online Labels Profit Growth: +151% Monthly Profit in 90 Days',
+    services: ['Paid Search', 'Google Shopping', 'Automated Bidding', 'Audience Strategy'],
+    challenge: 'Google Ads performance had regressed post-COVID with declining sales volume and falling profitability on non-branded queries. The account managed 18,000 keywords, 15,000 ads, and 11,000 products — significant complexity that required a disciplined, prioritized approach.',
+    approach: [
+      'Conducted pre-launch strategy sessions covering product differentiation and the competitive landscape',
+      'Defined two primary KPIs — revenue growth and profit uplift — and aligned all optimization decisions to both simultaneously',
+      'Expanded keyword targeting through deep industry research and search-term mining',
+      'Leveraged Google\'s advanced automated bidding capabilities with enhanced conversion signals',
+      'Developed new ad copy with stronger product differentiation messaging',
+      'Uploaded custom audiences from CRM data to improve targeting precision'
+    ],
+    results: [
+      { metric: 'Monthly profit growth (30 days)', value: '+52%' },
+      { metric: 'Monthly profit growth (90 days)', value: '+151%' }
+    ],
+    testimonial: {
+      quote: 'The Tiger Tracks team\'s deep expertise in customer acquisition further establishes them as an invaluable partner.',
+      author: 'Steven Leung',
+      role: 'Director of Marketing, Online Labels'
+    },
+    impact: 'Growing monthly profit 151% in 90 days — across an 18,000-keyword account — by running toward both revenue and profit simultaneously. Most accounts optimize one at the expense of the other; the dual-KPI framework was the strategic differentiator.'
+  },
+  'sps': {
+    client: 'SPS Industrial',
+    vertical: 'B2B Industrial / eCommerce',
+    title: 'SPS Maximizes Revenue: +56% at −43% Lower Cost',
+    services: ['Paid Search', 'Google Shopping', 'GMC Optimization', 'Campaign Segmentation'],
+    challenge: 'SPS needed to increase online revenue with a smaller advertising budget while hitting large overall revenue goals. The existing Shopping campaign structure was undifferentiated — mixing high and low-margin products in the same campaigns and preventing effective budget allocation.',
+    approach: [
+      'Conducted a full audit on Google campaigns and Google Merchant Center setup',
+      'Restructured Shopping campaigns into distinct upper and lower funnel campaigns to improve algorithmic efficiency',
+      'Optimized product titles in GMC to improve relevance and ad quality scores',
+      'Removed low-AOV items from Shopping campaigns to concentrate budget on highest-value products'
+    ],
+    results: [
+      { metric: 'Revenue growth year-over-year', value: '+56%' },
+      { metric: 'Cost reduction year-over-year', value: '−43%' },
+      { metric: 'Timeline', value: 'First 3 months' }
+    ],
+    testimonial: {
+      quote: 'Tiger Tracks has been instrumental in helping us navigate the Google Marketing ecosystem. We continue to discover new strategies to improve our overall imprint in digital commerce.',
+      author: 'Sara Loving',
+      role: 'Operations and Marketing Manager, SPS'
+    },
+    impact: 'Growing revenue 56% while cutting spend 43% — simultaneously — in the first 90 days. Shopping campaign segmentation by funnel stage is a structural lever that most accounts never fully exploit. This case study demonstrates the compound effect of structural and feed-level improvements working together.'
+  },
+  'dovetail': {
+    client: 'Dovetail Furniture',
+    vertical: 'B2B Wholesale / Furniture',
+    title: 'Dovetail Doubles Leads at −46% Cost in Two Months',
+    services: ['Paid Search', 'Bid Strategy', 'Conversion Optimization'],
+    challenge: 'A leading B2B wholesaler in furniture was experiencing rising CAC and stagnating conversion rates while trying to scale online sales. A fragmented account structure with incorrect conversion optimization signals was preventing the algorithm from finding qualified business buyers.',
+    approach: [
+      'Performed a comprehensive full-funnel audit identifying misleading campaign signals',
+      'Proposed and executed improved campaign structure and bid strategy',
+      'Refined conversion action optimizations to prioritize high-intent business purchase signals',
+      'Drove incremental conversions at a significantly lower CAC through structural improvements'
+    ],
+    results: [
+      { metric: 'Lead volume increase (2 months)', value: '+103%' },
+      { metric: 'Cost reduction (2 months)', value: '−46%' }
+    ],
+    testimonial: {
+      quote: 'Working with Tiger Tracks has been exceptional from the start! Their team has taken the time to deeply understand our business model and customer base.',
+      author: 'Marco Mazzoni',
+      role: 'Director of Technology and Digital Marketing, Dovetail'
+    },
+    impact: 'Doubling qualified leads while cutting cost nearly in half — in just two months. The B2B use case demonstrates that the structural principles that work in DTC apply equally to wholesale and industrial categories when conversion signals are properly configured.'
+  },
+  'capezio': {
+    client: 'Capezio',
+    vertical: 'Dance Apparel & Footwear / International',
+    title: 'Export Market Moves: +54% EU ROAS With International Expansion Strategy',
+    services: ['International Paid Search', 'Performance Max', 'Audience Strategy'],
+    challenge: 'Capezio needed to improve export market performance across UK, EU, and Australia while prioritizing US market dominance. Budget available for international markets was limited, requiring a high-efficiency approach that could improve performance without simply spending more.',
+    approach: [
+      'Performed a full-funnel audit across international markets identifying keyword restrictions hindering growth',
+      'Launched a revamped Performance Max strategy with refreshed audience signals and creative assets',
+      'Rebuilt search campaigns to capture high-intent down-funnel demand in each market',
+      'Applied market-specific optimizations rather than treating all international markets uniformly'
+    ],
+    results: [
+      { metric: 'EU ROAS improvement', value: '+54%' },
+      { metric: 'Australia ROAS improvement', value: '+23%' },
+      { metric: 'UK ROAS improvement', value: '+10%' }
+    ],
+    impact: 'Growing EU ROAS 54% without increasing international budget demonstrates that creative and structural improvements compound across markets. The layered approach — fixing keyword restrictions, refreshing audiences, and rebuilding search structure — delivered results across all three export markets simultaneously.'
+  },
+  'footwear': {
+    client: 'National Footwear Brand',
+    vertical: 'Apparel & Footwear · Retail Media',
+    title: 'Retail Media Scales to 680M Impressions at $5.54 ROAS on Target Plus',
+    services: ['Retail Media', 'Target Plus', 'Roundel Media Studio', 'Seasonal Strategy'],
+    challenge: 'The brand struggled with limited product visibility, overstock issues, and low ROI in a competitive retail market. Retail media was underutilized relative to its potential, and existing spend lacked the seasonal and category precision needed to drive meaningful revenue.',
+    approach: [
+      'Established a strategic partnership with Target Plus and Roundel Media Studio to access premium retail inventory',
+      'Ramped investment strategically — promoting key product categories during periods of highest seasonal demand',
+      'Aligned product promotions precisely with real-time demand shifts across categories',
+      'Optimized toward completed sales and conversion metrics, not impressions or clicks'
+    ],
+    results: [
+      { metric: 'Total impressions delivered', value: '680M' },
+      { metric: 'Return on ad spend', value: '$5.54' },
+      { metric: 'Click-through rate', value: '0.10%' }
+    ],
+    impact: '680 million impressions at a $5.54 ROAS demonstrates that retail media — when executed with the right seasonal precision and platform partnerships — is one of the highest-return channels available to brands with retail distribution. This case study established the blueprint for TT\'s retail media practice.'
+  },
+  'home-ctv': {
+    client: 'Regional Home Service Brand',
+    vertical: 'Home Services / Local',
+    title: 'Home Service Brand Generates 1.5M Quality Completed Views on CTV',
+    services: ['Connected TV', 'OTT', 'Premium Streaming Inventory', 'Frequency Management'],
+    challenge: 'Expand upper-funnel reach in competitive local markets while providing leadership with confidence that the investment was generating meaningful brand exposure among genuine households — not just accumulating low-quality impressions.',
+    approach: [
+      'Activated campaigns across premium Connected TV inventory in high-attention streaming environments',
+      'Applied market-level targeting aligned to actual service availability geographies',
+      'Implemented frequency controls to balance reach and message retention without ad fatigue',
+      'Continuously optimized toward completed video views as the primary success metric — not cheap impressions'
+    ],
+    results: [
+      { metric: 'Completed video views', value: '1.5M' },
+      { metric: 'Completion rate', value: '99%' }
+    ],
+    impact: 'A 99% completion rate at 1.5M views in a brand-safe premium streaming environment. This case study proved to a traditionally skeptical home services brand that CTV could deliver provable, high-quality brand exposure — not just vanity metrics. The success established the model for TT\'s CTV practice in local and regional markets.'
+  },
+  'cpg': {
+    client: 'CPG Food & Beverage Brand',
+    vertical: 'CPG / Consumer Packaged Goods',
+    title: 'CPG Creative Testing Framework Drives +31% Revenue at −37% CPC',
+    services: ['Paid Search', 'Paid Social', 'Creative Strategy', 'Creative Testing Framework'],
+    challenge: 'A CPG client in food and beverage needed to compete and win in a crowded national digital auction while maintaining profitable growth. Generic creative was blending into the category, and a fragmented campaign structure was sending mixed signals to bidding algorithms.',
+    approach: [
+      'Conducted a full-funnel performance audit identifying structural inefficiencies',
+      'Identified that campaign signals were actively misleading the bidding algorithm',
+      'Rebuilt campaign structure and bid strategy for maximum efficiency',
+      'Optimized product feed quality to improve conversion relevance',
+      'Implemented Tiger Tracks\' proprietary creative testing framework — systematic hook testing before scale'
+    ],
+    results: [
+      { metric: 'ROAS improvement', value: '+24%' },
+      { metric: 'Clicks and impressions growth', value: '+67%' },
+      { metric: 'CPC reduction', value: '−37%' },
+      { metric: 'Purchases and revenue growth', value: '+31%' }
+    ],
+    impact: 'Cutting CPC 37% while growing clicks 67% simultaneously — that\'s the compound effect of structural improvement plus better creative signals. The creative testing framework is now standard TT methodology: find the hook at $50, then scale with confidence.'
+  },
+  'multi-loc': {
+    client: 'Multi-Location Home Services Brand',
+    vertical: 'Home Services / Multi-Location Expansion',
+    title: 'Five New Locations Launched in 6 Months — All Under Target CPA',
+    services: ['Paid Search', 'Paid Social', 'Creative Localization', 'Analytics & CRM', 'Performance Max'],
+    challenge: 'A high-end home services brand expanding into new states found that existing ad creative and messaging failed to resonate with new geographic audiences. A single national campaign approach was underperforming in expansion markets, and conversion tracking wasn\'t capturing location-level performance data.',
+    approach: [
+      'Segmented campaigns by performance tier and location to enable customized messaging control',
+      'Developed market-specific ad copy tailored for local resonance and trust signals',
+      'Localized Performance Max assets per expansion market to improve algorithmic targeting quality',
+      'Implemented geo-adjusted Smart Bidding to account for market-level conversion rate differences',
+      'Enhanced conversion tracking with location-level signals to enable true per-market optimization'
+    ],
+    results: [
+      { metric: 'New locations launched under target CPA', value: '5 in 6 months' },
+      { metric: 'Lead volume per location (no budget increase)', value: '+33%' },
+      { metric: 'Qualified leads (first 3 months)', value: '+42%' },
+      { metric: 'Form conversion rate via A/B testing', value: '+37%' }
+    ],
+    impact: 'Launching five new markets in six months — all under target CPA — while simultaneously growing lead volume 33% per location. The localization framework became TT\'s standard playbook for any multi-location brand running geographic expansion campaigns.'
+  },
+  'journee': {
+    client: 'Journee',
+    vertical: 'eCommerce / Apparel & Fashion',
+    title: 'Site Speed & Tracking Overhaul Unlocks Campaign Performance',
+    services: ['Website Performance', 'Conversion Tracking', 'GTM', 'Audience Optimization'],
+    challenge: 'Slow website performance was causing high bounce rates, poor mobile usability, and underperforming digital campaigns. Conversion tracking was inconsistently implemented, which meant that bidding algorithms were optimizing toward incomplete and inaccurate signals — effectively optimizing for the wrong outcomes.',
+    approach: [
+      'Conducted a Site Speed Audit identifying tracking tags and third-party scripts contributing to delayed page load times',
+      'Prioritized optimization of render-blocking scripts and problematic third-party app behavior',
+      'Implemented a unified tracking architecture through a Tagging & Tracking Overhaul',
+      'Refined audience targeting to align with higher-intent user segments now properly tracked'
+    ],
+    results: [
+      { metric: 'Desktop page loading time reduction', value: '−26%' },
+      { metric: 'Mobile page loading time reduction', value: '−32%' }
+    ],
+    testimonial: {
+      quote: 'We truly value our partnership with TigerTracks, and don\'t view them as just a vendor, but more as an extension of our team.',
+      author: 'Jim Weinberg',
+      role: 'SVP of Merchandising & Ecommerce Marketing, Journee'
+    },
+    impact: 'Every campaign immediately performs better when the site loads faster and tracking is clean. The 32% mobile load time reduction and tracking overhaul were preconditions for campaign success — and a reminder that performance marketing starts before the first ad is served.'
+  },
+  'hospitality': {
+    client: 'Regional Hospitality Brand',
+    vertical: 'Food, Beverage & Hospitality',
+    title: 'Hospitality Brand Boosts Conversions +13% With UX/UI Redesign',
+    services: ['Website Development', 'CRO', 'UX Design', 'Mobile Optimization'],
+    challenge: 'The brand needed to improve the website\'s ability to convert high-intent traffic from their paid campaigns. Excessive visual complexity was creating friction on mobile, and the booking and reservation flow had unnecessary steps reducing completion rates.',
+    approach: [
+      'Redesigned the homepage and location pages using hospitality-specific UX insights and conversion best practices',
+      'Reduced visual noise and unnecessary animations to significantly improve the mobile experience',
+      'Elevated menus, core offerings, and social proof elements (reviews, FAQs, testimonials) to prominent positions',
+      'Rebuilt the reservation and booking flow to minimize friction and reduce drop-off'
+    ],
+    results: [
+      { metric: 'Total conversion uplift', value: '+13%' },
+      { metric: 'CPA reduction', value: '−7%' },
+      { metric: 'Conversion rate improvement', value: '+5%' }
+    ],
+    impact: 'A better website made every paid campaign more efficient — the same ad spend converted 13% better. This case study demonstrates TT\'s full-funnel model: when Creative, Media, and Website work together, each amplifies the other\'s performance.'
+  }
+};
+
+function openCS(id) {
+  const data = CS_DATA[id];
+  if (!data) return;
+
+  document.getElementById('csModalOverline').textContent = data.vertical;
+
+  let resultsHTML = data.results.map(r =>
+    `<div class="cs-modal-result">
+      <div class="cs-modal-result-val">${r.value}</div>
+      <div class="cs-modal-result-label">${r.metric}</div>
+    </div>`
+  ).join('');
+
+  let approachHTML = data.approach.map((step, i) =>
+    `<li data-n="0${i+1}">${step}</li>`
+  ).join('');
+
+  let serviceChips = data.services.map(s =>
+    `<span class="chip" style="margin-right:.35rem;margin-bottom:.35rem;">${s}</span>`
+  ).join('');
+
+  let testiHTML = '';
+  if (data.testimonial) {
+    testiHTML = `
+      <div class="cs-modal-section">
+        <span class="cs-modal-section-label">Client testimonial</span>
+        <div class="cs-modal-testi">
+          <blockquote>${data.testimonial.quote}</blockquote>
+          <cite>
+            <div class="t-name">${data.testimonial.author}</div>
+            <div class="t-role">${data.testimonial.role}</div>
+          </cite>
+        </div>
+      </div>`;
+  }
+
+  document.getElementById('csModalBody').innerHTML = `
+    <h2 class="cs-modal-title">${data.title}</h2>
+    <div class="cs-modal-client">${data.client} &nbsp;·&nbsp; ${data.vertical}</div>
+    <div style="display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:2rem;">${serviceChips}</div>
+
+    <div class="cs-modal-section">
+      <span class="cs-modal-section-label">The challenge</span>
+      <p class="cs-modal-challenge">${data.challenge}</p>
+    </div>
+
+    <div class="cs-modal-section">
+      <span class="cs-modal-section-label">How Tiger Tracks approached it</span>
+      <ol class="cs-modal-approach">${approachHTML}</ol>
+    </div>
+
+    <div class="cs-modal-section">
+      <span class="cs-modal-section-label">Results</span>
+      <div class="cs-modal-results">${resultsHTML}</div>
+    </div>
+
+    ${testiHTML}
+
+    <div class="cs-modal-section" style="margin-bottom:0;">
+      <span class="cs-modal-section-label">The impact</span>
+      <p class="cs-modal-challenge">${data.impact}</p>
+    </div>
+  `;
+
+  const m = document.getElementById('csModal');
+  const b = document.getElementById('csBackdrop');
+  m.classList.add('open'); m.setAttribute('aria-hidden','false');
+  b.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  setTimeout(() => m.querySelector('.cs-modal-close-btn')?.focus(), 50);
+}
+
+function closeCS() {
+  const m = document.getElementById('csModal');
+  const b = document.getElementById('csBackdrop');
+  m.classList.remove('open'); m.setAttribute('aria-hidden','true');
+  b.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCS(); });
+
+// ─── 9. CASE STUDY FILTER ──────────────────────────────────────────
+function filterCS(btn, svc) {
+  document.querySelectorAll('.cs-filter').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.cs-card-full').forEach(card => {
+    if (svc === 'all') { card.classList.remove('hidden'); return; }
+    const services = card.dataset.services || '';
+    card.classList.toggle('hidden', !services.includes(svc));
+  });
+}
+</script>
+</body>
+</html>

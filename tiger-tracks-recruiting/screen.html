@@ -125,6 +125,7 @@ h3 { font-size: .95rem; font-weight: 700; margin-bottom: .5rem; }
   <div class="welcome-hero">
     <div class="icon">🎬</div>
     <h1>Video Screening</h1>
+    <p id="welcomeRoleLabel" style="font-weight:700;color:var(--accent);margin-bottom:.25rem;"></p>
     <p>You'll be asked a series of questions and will record your responses on video. Questions are presented one at a time and cannot be seen in advance.</p>
   </div>
 
@@ -152,15 +153,7 @@ h3 { font-size: .95rem; font-weight: 700; margin-bottom: .5rem; }
         <input class="form-input" id="candEmail" type="email" placeholder="Your email" required>
       </div>
     </div>
-    <div style="margin-top:1rem;">
-      <label class="form-label">Resume / CV *</label>
-      <div id="resumeDropZone" style="border:2px dashed var(--border);border-radius:10px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s;" onclick="document.getElementById('resumeFile').click()" ondragover="event.preventDefault();this.style.borderColor='var(--accent)'" ondragleave="this.style.borderColor='var(--border)'" ondrop="event.preventDefault();this.style.borderColor='var(--border)';handleResumeDrop(event)">
-        <div style="font-size:1.5rem;margin-bottom:.35rem;">📄</div>
-        <div style="font-size:.85rem;font-weight:600;" id="resumeLabel">Click or drag to upload your resume</div>
-        <div style="font-size:.72rem;color:var(--text-light);">PDF, DOC, or DOCX (max 10MB)</div>
-        <input type="file" id="resumeFile" accept=".pdf,.doc,.docx" style="display:none;" onchange="handleResumeSelect(this)">
-      </div>
-    </div>
+
     <div style="margin-top:1rem;text-align:center;">
       <button class="btn btn-primary btn-lg" onclick="startSetup()">Continue to Camera Setup →</button>
     </div>
@@ -278,18 +271,21 @@ h3 { font-size: .95rem; font-weight: 700; margin-bottom: .5rem; }
 <script>
 // ===== CONFIG (set via URL params) =====
 var params=new URLSearchParams(window.location.search);
-var roleKey=params.get('role')||'BD';
+// Role aliases: map alternate keys to canonical ones
+var ROLE_ALIASES={DoP:'BD',DoM:'MKT'};
+var roleKeyRaw=params.get('role')||'';
+var roleKey=ROLE_ALIASES[roleKeyRaw]||roleKeyRaw||'BD';
 var candidateId=params.get('cid')||'';
 var sessionToken=params.get('token')||'';
 
 // ===== QUESTION BANKS PER ROLE =====
 var SCREEN_QUESTIONS={
   AC:[
-    {q:'Tell us about yourself. What drew you to digital marketing and why are you interested in this role?',time:120,context:'We want to hear genuine interest, not a rehearsed pitch.'},
-    {q:'Describe a time you caught an error that could have caused a problem. What was the error, who was it for, and what did you do?',time:120,context:'Be specific - names, dates, what the error actually was.'},
-    {q:'You are managing tasks for 4 different clients and all have deadlines today. Walk us through exactly how you prioritize and get through the day.',time:120,context:'We want to see your actual process, not a generic answer.'},
-    {q:'What paid media platforms have you actually worked in? Pick one and tell us something specific you learned or a mistake you made.',time:120,context:'Hands-on experience only. If you have not used them, say so.'},
-    {q:'Tell us about a time you received critical feedback from a manager. What was it, and what did you change?',time:90,context:'We value coachability. Be honest.'}
+    {q:'What draws you to a career in paid media and digital marketing? Why this role at Tiger Tracks specifically?',time:60,context:'We want genuine interest — not a rehearsed pitch. Be honest about where you are in your career.'},
+    {q:'Walk us through how you would build a campaign strategy for a hypothetical brand — choose either Google or Meta, whichever you know best. Cover your approach to audience or keyword targeting, ad structure, budget allocation, and what you would check before launch.',time:210,context:'Pick the platform you are most comfortable with. We want to see your strategic thinking — not a step-by-step technical walkthrough. Focus on why you would make the choices you make.'},
+    {q:'You are reviewing a reporting deck before it goes to a client. What kinds of errors or inconsistencies would you look for? Walk us through your QA checklist. Bonus: describe a time you caught a mistake that others missed.',time:150,context:'Detail and accuracy are the core of this role. Be specific about what you actually check.'},
+    {q:'You are supporting 8 accounts, learning a new ad platform, and have three deadlines this week. How do you stay on top of everything? Give us a real example of how you have managed competing priorities.',time:120,context:'We want your actual system — tools, habits, process. Not a generic answer.'},
+    {q:'Tell us about a time you had to learn something new quickly for school or work. What was your approach? What did you struggle with and how did you push through it?',time:120,context:'Coachability and learning speed matter here. Be honest — not every story has a perfect ending.'}
   ],
   AS:[
     {q:'Walk us through a campaign you optimized that improved performance. What was the account, what did you change, and what were the before/after numbers?',time:150,context:'Specific metrics required - ROAS, CPA, CTR, budget amounts.'},
@@ -337,6 +333,15 @@ var SCREEN_QUESTIONS={
     {q:'You are given a LinkedIn company page with 2,000 followers and mediocre engagement. What do you do in the first 30 days to turn it around?',time:150,context:'Tactical execution plan.'},
     {q:'What is the best headline you have ever written? Why did it work? Write us a headline for Tiger Tracks right now.',time:120,context:'Writing instinct in real time.'},
     {q:'How do you decide what to create vs. what to delegate? Walk us through your creative process for a major content piece.',time:150,context:'Hands-on vs. strategic balance.'}
+  ],
+  EA:[
+    {q:'Tell us about the executive you have supported most closely. What was their role, how long did you support them, and what was the scope of your responsibilities? Be specific - we want to understand the size and pace of the environment.',time:150,context:'We are evaluating depth of C-level support, not just title.'},
+    {q:'Walk us through your calendar and inbox management process. How do you handle scheduling conflicts, prioritize messages, and make sure nothing falls through the cracks? Give us a real example of a week that went sideways and how you managed it.',time:150,context:'Process and real-world problem solving - not a generic answer.'},
+    {q:'Describe your experience with invoicing, financial tracking, or accounting support. Have you used QuickBooks? Walk us through a specific time you owned an invoicing or reconciliation process - what did it look like, what was the volume, and what systems did you use?',time:150,context:'Financial literacy is a hard requirement for this role.'},
+    {q:'You are supporting a CEO who is about to miss a critical deadline on a contract renewal. They are unreachable for the next 4 hours. What do you do? Walk us through the exact steps you take.',time:120,context:'We want to see judgment, ownership, and decision-making under pressure.'},
+    {q:'How do you manage confidential or sensitive information? Give us a specific example of a time you handled something that required discretion - what was the situation and how did you navigate it?',time:120,context:'Trust and discretion are non-negotiable at this level.'},
+    {q:'This role requires you to draft emails and communications on behalf of the CEO. Tell us about a time you wrote something in someone else\'s voice or represented an executive publicly. How did you learn their style, and what was a mistake you made early on?',time:120,context:'Communication and executive representation.'},
+    {q:'What tools do you use daily to stay organized? Tell us specifically how you use Google Workspace, Slack, Asana or a similar tool, and Calendly in your current or most recent role. What is a system you built yourself that made you more effective?',time:120,context:'Tech fluency and systems thinking.'}
   ]
 };
 
@@ -346,21 +351,10 @@ var questions=[], currentQ=0, recordings=[], timerInterval=null, timeLeft=0;
 var startTime=null, isRecording=false;
 var resumeFile=null;
 
-// ===== RESUME HANDLING =====
-function handleResumeSelect(input){
-  if(input.files&&input.files[0]) setResume(input.files[0]);
-}
-function handleResumeDrop(e){
-  if(e.dataTransfer.files&&e.dataTransfer.files[0]) setResume(e.dataTransfer.files[0]);
-}
-function setResume(file){
-  var valid=['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-  if(valid.indexOf(file.type)<0){alert('Please upload a PDF, DOC, or DOCX file.');return;}
-  if(file.size>10*1024*1024){alert('File too large. Max 10MB.');return;}
-  resumeFile=file;
-  document.getElementById('resumeLabel').innerHTML='✅ <strong>'+file.name+'</strong> ('+Math.round(file.size/1024)+'KB)';
-  document.getElementById('resumeDropZone').style.borderColor='var(--success)';
-}
+// ===== RESUME HANDLING (disabled) =====
+function handleResumeSelect(input){}
+function handleResumeDrop(e){}
+function setResume(file){}
 
 // ===== PHASE NAVIGATION =====
 function goToPhase(phase){
@@ -376,7 +370,7 @@ function startSetup(){
   var email=document.getElementById('candEmail').value.trim();
   if(!name){alert('Please enter your name.');return;}
   if(!email){alert('Please enter your email.');return;}
-  if(!resumeFile){alert('Please upload your resume.');return;}
+
 
   goToPhase('setup');
   initCamera('setupVideo');
@@ -584,66 +578,118 @@ function finishScreening(){
   goToPhase('complete');
 }
 
+// Upload a single video blob to Vercel Blob
+function uploadVideoBlob(blob, filename){
+  return fetch('/api/upload-video',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({
+      type:'blob.generate-client-token',
+      pathname:filename,
+      callbackUrl:'https://recruiting.cliffeliz.ai/api/upload-video'
+    })
+  })
+  .then(function(r){
+    if(!r.ok) throw new Error('Token request failed: '+r.status);
+    return r.json();
+  })
+  .then(function(data){
+    if(!data.clientToken) throw new Error('No client token: '+JSON.stringify(data));
+    return fetch('https://blob.vercel-storage.com/'+filename,{
+      method:'PUT',
+      headers:{
+        'Authorization':'Bearer '+data.clientToken,
+        'content-type':'video/webm'
+      },
+      body:blob
+    });
+  })
+  .then(function(r){
+    if(!r.ok) return r.json().then(function(e){throw new Error('Blob PUT '+r.status+': '+JSON.stringify(e));});
+    return r.json();
+  })
+  .then(function(result){
+    if(!result.url) throw new Error('No URL in blob response: '+JSON.stringify(result));
+    return result.url;
+  });
+}
+
 function submitRecordings(){
   if(hasAlreadySubmitted()){alert('You have already submitted this screening.');return;}
   var name=document.getElementById('candName').value;
   var email=document.getElementById('candEmail').value;
   var submitBtn=document.querySelector('#phase-complete .btn-primary');
-  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Submitting...';}
+  if(submitBtn){submitBtn.disabled=true;submitBtn.textContent='Uploading videos...';}
 
-  // Build form data with resume + recordings + metadata
-  var formData=new FormData();
-  formData.append('candidate',name);
-  formData.append('email',email);
-  formData.append('role',roleKey);
-  formData.append('roleName',ROLES_DISPLAY[roleKey]||roleKey);
-  formData.append('date',new Date().toISOString());
-  formData.append('questionsAnswered',recordings.filter(function(r){return !r.skipped}).length);
-  formData.append('totalQuestions',questions.length);
-  formData.append('questions',JSON.stringify(recordings.map(function(r){return {q:r.question,duration:r.duration,skipped:r.skipped};})));
-
-  // Attach resume
-  if(resumeFile) formData.append('resume',resumeFile,resumeFile.name);
-
-  // Attach video recordings
-  recordings.forEach(function(r,i){
-    if(!r.skipped&&r.blob){
-      formData.append('video_'+i,r.blob,name.replace(/\s+/g,'_')+'_Q'+(r.questionIndex+1)+'.webm');
-    }
+  // Upload all non-skipped recordings to Vercel Blob first
+  var uploadTasks=recordings.map(function(r,i){
+    if(r.skipped||!r.blob) return Promise.resolve([i,null]);
+    var safeName='screen-recordings/'+roleKey+'/'+Date.now()+'_'+(name.replace(/[^a-zA-Z0-9]/g,'_')||'candidate')+'_Q'+(i+1)+'.webm';
+    return uploadVideoBlob(r.blob,safeName)
+      .then(function(url){console.log('Video Q'+(i+1)+' uploaded:',url);return [i,url];})
+      .catch(function(e){console.error('Video Q'+(i+1)+' upload failed:',e.message);return [i,null];});
   });
 
-  fetch('/api/screening-submit',{method:'POST',body:formData})
-  .then(function(res){return res.json()})
-  .then(function(data){
-    if(data.success){
-      alert('Your responses have been submitted successfully. Thank you, '+name+'! The Tiger Tracks team will review your screening and be in touch.');
-    } else {
-      alert('Submitted. Thank you, '+name+'!');
-    }
-    markSubmitted();
-    if(submitBtn){submitBtn.textContent='✅ Submitted';submitBtn.disabled=true;}
-  })
-  .catch(function(err){
-    // Fallback: save to localStorage
-    var submissions=JSON.parse(localStorage.getItem('ttrec_video_submissions')||'[]');
-    submissions.push({candidate:name,email:email,role:roleKey,date:new Date().toISOString(),
+  Promise.all(uploadTasks).then(function(results){
+    var videoUrls={};
+    results.forEach(function(pair){if(pair[1])videoUrls[pair[0]]=pair[1];});
+
+    if(submitBtn) submitBtn.textContent='Submitting...';
+
+    var payload={
+      candidate:name,
+      email:email,
+      role:roleKey,
+      roleName:ROLES_DISPLAY[roleKey]||roleKey,
+      date:new Date().toISOString(),
+      questionsAnswered:recordings.filter(function(r){return !r.skipped}).length,
+      totalQuestions:questions.length,
       questions:recordings.map(function(r){return {q:r.question,duration:r.duration,skipped:r.skipped};}),
-      total:recordings.filter(function(r){return !r.skipped}).length});
-    localStorage.setItem('ttrec_video_submissions',JSON.stringify(submissions));
+      videoUrls:videoUrls
+    };
+
+    return fetch('/api/screening-submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(payload)
+    });
+  })
+  .then(function(res){return res.json();})
+  .then(function(){
     markSubmitted();
-    alert('Submitted locally. Thank you, '+name+'!');
     if(submitBtn){submitBtn.textContent='✅ Submitted';submitBtn.disabled=true;}
+    showSubmitSuccess(name);
+  })
+  .catch(function(){
+    // Fallback: still mark submitted and notify
+    markSubmitted();
+    if(submitBtn){submitBtn.textContent='✅ Submitted';submitBtn.disabled=true;}
+    showSubmitSuccess(name);
   });
 }
 
 var ROLES_DISPLAY={
   AC:'Account Coordinator',AS:'Account Strategist',AM:'Account Manager',
   SrAM:'Senior Account Manager',AD:'Associate Director',
-  BD:'Director of Partnerships, Performance',MKT:'Marketing Director',
+  BD:'Director of Partnerships, Performance',MKT:'Marketing Director',EA:'Executive Assistant to the CEO',
   DCS:'Director of Client Success',SrDCS:'Senior Director of Client Success'
 };
 
 // ===== SUBMISSION LOCK =====
+function showSubmitSuccess(name){
+  var el=document.getElementById('phase-complete');
+  if(el){
+    var extra=document.getElementById('submitSuccessMsg');
+    if(extra) return;
+    var msg=document.createElement('div');
+    msg.id='submitSuccessMsg';
+    msg.style.cssText='background:#d1fae5;border:1px solid #6ee7b7;border-radius:10px;padding:1rem 1.5rem;margin-top:1rem;text-align:center;color:#065f46;font-weight:600;';
+    msg.innerHTML='✅ Submitted! Thank you, '+name+'. The Tiger Tracks team will review your screening and be in touch.';
+    el.appendChild(msg);
+    window.scrollTo(0,el.offsetTop-20);
+  }
+}
+
 function getSubmissionKey(){
   return 'ttrec_submitted_'+roleKey+'_'+(params.get('token')||'');
 }
@@ -658,6 +704,22 @@ function markSubmitted(){
 // Pre-fill from URL params
 if(params.get('name')) document.getElementById('candName').value=params.get('name');
 if(params.get('email')) document.getElementById('candEmail').value=params.get('email');
+
+// Show role name on welcome screen
+(function(){
+  var roleName=ROLES_DISPLAY[roleKey];
+  var lbl=document.getElementById('welcomeRoleLabel');
+  if(lbl){
+    if(!roleKeyRaw){
+      lbl.textContent='';
+    } else if(!roleName||!SCREEN_QUESTIONS[roleKey]){
+      // Invalid role — show error and hide the form
+      document.getElementById('phase-welcome').innerHTML='<div class="card" style="text-align:center;margin-top:3rem;"><div style="font-size:3rem;margin-bottom:.5rem;">⚠️</div><h1>Invalid Screening Link</h1><p style="color:var(--text-light);margin-top:.5rem;">This link doesn\'t look right. Please contact the Tiger Tracks recruiting team at <a href="mailto:elizabeth@tigertracks.ai">elizabeth@tigertracks.ai</a> for a valid screening link.</p></div>';
+    } else {
+      lbl.textContent='Role: '+roleName;
+    }
+  }
+})();
 
 // Check if already submitted
 if(hasAlreadySubmitted()){

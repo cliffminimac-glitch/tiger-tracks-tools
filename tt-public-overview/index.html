@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiger Tracks — Performance Marketing at Scale</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink: #0A1119;
+      --charcoal: #1B2126;
+      --teal: #229FA1;
+      --teal-dark: #1A7477;
+      --bone: #F4F1EB;
+      --white: #ffffff;
+      --text: #1B2126;
+      --text-light: #6B7280;
+      --border: #E5E7EB;
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--white);
+      color: var(--text);
+      line-height: 1.65;
+      font-size: 16px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: var(--ink);
+      color: var(--white);
+      padding: 88px 40px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 60% 40%, rgba(34,159,161,.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 1.25rem;
+    }
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(2.4rem, 5.5vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.12;
+      margin-bottom: 1.5rem;
+      max-width: 760px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero h1 span { color: var(--teal); }
+    .hero .lead {
+      font-size: 1.1rem;
+      color: rgba(255,255,255,.72);
+      max-width: 640px;
+      margin: 0 auto 2.5rem;
+      font-weight: 300;
+      line-height: 1.7;
+    }
+    .hero-cta {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--white);
+      text-decoration: none;
+      padding: .85rem 2.25rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .95rem;
+      transition: background .2s;
+    }
+    .hero-cta:hover { background: var(--teal-dark); }
+
+    /* ── LAYOUT ── */
+    .section {
+      padding: 80px 24px;
+    }
+    .section.alt { background: var(--bone); }
+    .inner {
+      max-width: 1060px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: .65rem;
+    }
+    .section-title {
+      font-family: Georgia, serif;
+      font-size: clamp(1.65rem, 3vw, 2.3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: .9rem;
+      color: var(--ink);
+    }
+    .section-intro {
+      font-size: 1rem;
+      color: var(--text-light);
+      max-width: 680px;
+      margin-bottom: 2.5rem;
+      line-height: 1.7;
+    }
+
+    /* ── EXEC SUMMARY ── */
+    .summary-box {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-left: 5px solid var(--teal);
+      border-radius: 0 12px 12px 0;
+      padding: 2rem 2.25rem;
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text);
+      max-width: 860px;
+    }
+    .summary-box strong { color: var(--ink); }
+
+    /* ── ABOUT CARDS ── */
+    .card-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem;
+    }
+    .card .icon { font-size: 1.75rem; margin-bottom: .75rem; }
+    .card h3 {
+      font-family: Georgia, serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: .45rem;
+    }
+    .card p { font-size: .92rem; color: var(--text-light); }
+
+    /* ── SERVICES ── */
+    .service-group { margin-bottom: 2.75rem; }
+    .service-group-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      border-bottom: 2px solid var(--teal);
+      padding-bottom: .4rem;
+      margin-bottom: 1rem;
+    }
+    .service-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(215px, 1fr));
+      gap: 1rem;
+    }
+    .service-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.2rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .service-card:hover {
+      border-color: var(--teal);
+      box-shadow: 0 4px 16px rgba(34,159,161,.1);
+    }
+    .service-card h4 { font-size: .88rem; font-weight: 700; margin-bottom: .35rem; }
+    .service-card p { font-size: .8rem; color: var(--text-light); line-height: 1.55; }
+
+    /* ── SYNERGY ── */
+    .synergy-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .synergy-list li {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      font-size: .92rem;
+      display: flex;
+      align-items: flex-start;
+      gap: .65rem;
+    }
+    .synergy-list li .arr { color: var(--teal); font-weight: 700; flex-shrink: 0; }
+
+    /* ── TIERS ── */
+    .tier-cards {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+    .tier-card {
+      border-radius: 12px;
+      padding: 1.5rem 1.25rem;
+      text-align: center;
+      border: 1px solid var(--border);
+      background: var(--white);
+    }
+    .tier-card.featured {
+      border-color: var(--teal);
+      background: linear-gradient(160deg, rgba(34,159,161,.06) 0%, var(--white) 100%);
+      box-shadow: 0 4px 20px rgba(34,159,161,.12);
+    }
+    .tier-badge {
+      display: inline-block;
+      padding: .2rem .7rem;
+      border-radius: 20px;
+      font-size: .7rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: .8rem;
+    }
+    .tier-badge.t1 { background: var(--teal); color: var(--white); }
+    .tier-badge.t2 { background: var(--charcoal); color: var(--white); }
+    .tier-badge.t3 { background: #d1fae5; color: #065f46; }
+    .tier-badge.t4 { background: #e5e7eb; color: #6b7280; }
+    .tier-card h3 { font-family: Georgia, serif; font-size: .95rem; font-weight: 700; margin-bottom: .3rem; }
+    .tier-card .spend { font-size: 1rem; font-weight: 700; color: var(--teal); margin-bottom: .2rem; }
+    .tier-card .fee { font-size: .8rem; color: var(--text-light); margin-bottom: .2rem; }
+    .tier-card .size { font-size: .75rem; color: var(--text-light); font-style: italic; }
+
+    /* ── EXPANSION ── */
+    .expand-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .expand-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .expand-card .icon { font-size: 1.5rem; margin-bottom: .6rem; }
+    .expand-card h4 { font-weight: 700; font-size: .95rem; margin-bottom: .4rem; }
+    .expand-card p { font-size: .85rem; color: var(--text-light); }
+
+    /* ── WINS ── */
+    .wins-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+    }
+    .win-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem 1.5rem;
+    }
+    .win-stat {
+      font-family: Georgia, serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: .4rem;
+    }
+    .win-label { font-weight: 700; font-size: .9rem; margin-bottom: .3rem; }
+    .win-desc { font-size: .8rem; color: var(--text-light); line-height: 1.55; }
+
+    /* ── CLIENTS ── */
+    .clients-strip {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+    .client-pill {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: .65rem 1.25rem;
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    /* ── TEAM ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+    }
+    .team-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+    .team-card .role-tag {
+      display: inline-block;
+      background: rgba(34,159,161,.1);
+      color: var(--teal-dark);
+      font-size: .72rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: .2rem .6rem;
+      border-radius: 4px;
+      margin-bottom: .6rem;
+    }
+    .team-card h3 { font-weight: 700; font-size: 1rem; margin-bottom: .35rem; }
+    .team-card p { font-size: .85rem; color: var(--text-light); }
+
+    /* ── PARTNERS ── */
+    .partner-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(195px, 1fr));
+      gap: 1rem;
+    }
+    .partner-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      text-align: center;
+    }
+    .partner-card .icon { font-size: 1.75rem; margin-bottom: .5rem; }
+    .partner-card h4 { font-size: .9rem; font-weight: 700; margin-bottom: .3rem; }
+    .partner-card p { font-size: .78rem; color: var(--text-light); }
+
+    /* ── HOW WE SELL ── */
+    .steps { display: flex; flex-direction: column; gap: 1rem; max-width: 860px; }
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+    }
+    .step-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--teal);
+      color: var(--white);
+      font-weight: 700;
+      font-size: .88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step h4 { font-weight: 700; font-size: .95rem; margin-bottom: .2rem; }
+    .step p { font-size: .875rem; color: var(--text-light); }
+
+    /* ── CULTURE ── */
+    .culture-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+    .culture-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+    .culture-card .icon { font-size: 1.5rem; margin-bottom: .6rem; }
+    .culture-card h4 { font-weight: 700; font-size: .95rem; margin-bottom: .4rem; }
+    .culture-card p { font-size: .85rem; color: var(--text-light); }
+
+    /* ── CTA BANNER ── */
+    .cta-banner {
+      background: var(--ink);
+      color: var(--white);
+      text-align: center;
+      padding: 72px 24px;
+    }
+    .cta-banner h2 {
+      font-family: Georgia, serif;
+      font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+    .cta-banner h2 span { color: var(--teal); }
+    .cta-banner p {
+      font-size: 1rem;
+      color: rgba(255,255,255,.65);
+      max-width: 540px;
+      margin: 0 auto 2rem;
+    }
+    .cta-banner a {
+      display: inline-block;
+      background: var(--teal);
+      color: var(--white);
+      text-decoration: none;
+      padding: .85rem 2.25rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: .95rem;
+      transition: background .2s;
+    }
+    .cta-banner a:hover { background: var(--teal-dark); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--charcoal);
+      color: rgba(255,255,255,.55);
+      text-align: center;
+      padding: 2rem 24px;
+      font-size: .82rem;
+    }
+    footer .footer-brand {
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      color: var(--white);
+      margin-bottom: .35rem;
+      font-size: .85rem;
+    }
+    footer a { color: var(--teal); text-decoration: none; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      .wins-grid { grid-template-columns: 1fr 1fr; }
+      .tier-cards { grid-template-columns: 1fr 1fr; }
+      .expand-grid { grid-template-columns: 1fr 1fr; }
+      .culture-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .card-grid-2 { grid-template-columns: 1fr; }
+      .synergy-list { grid-template-columns: 1fr; }
+      .team-grid { grid-template-columns: 1fr; }
+      .wins-grid { grid-template-columns: 1fr 1fr; }
+      .expand-grid { grid-template-columns: 1fr; }
+      .culture-grid { grid-template-columns: 1fr; }
+      .hero { padding: 56px 24px 52px; }
+    }
+    @media (max-width: 480px) {
+      .tier-cards { grid-template-columns: 1fr; }
+      .wins-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="hero-eyebrow">Tiger Tracks · tigertracks.ai</div>
+  <h1>A Single Partner.<br><span>The Full Funnel.</span></h1>
+  <p class="lead">Tiger Tracks is a performance-first digital marketing agency that runs multi-channel ad programs and layers in measurement, creative, and lifecycle services — so results compound across every channel.</p>
+  <a href="https://tigertracks.ai" class="hero-cta" target="_blank" rel="noopener">Visit tigertracks.ai →</a>
+</div>
+
+<!-- ── EXECUTIVE SUMMARY ── -->
+<div class="section">
+  <div class="inner">
+    <div class="section-label">Who We Are</div>
+    <h2 class="section-title">Built for performance. Designed to scale.</h2>
+    <div class="summary-box">
+      Tiger Tracks is a <strong>performance-first digital marketing agency</strong> built around paid media and full-funnel marketing. We operate as a single partner that can run multi-channel ad programs — Google, Meta, TikTok, retail media, programmatic — and layer in measurement, creative, and lifecycle services so results compound across channels.<br><br>
+      Our positioning is deliberate: <strong>paid media leadership paired with creative, measurement, retail media, and lifecycle capabilities</strong> — and a proven expansion playbook to grow client revenue over time. The most durable client relationships aren't built on one channel. They're built on trust, compounding results, and being genuinely irreplaceable.
+    </div>
+    <div class="card-grid-2" style="margin-top:1.5rem;">
+      <div class="card">
+        <div class="icon">🎯</div>
+        <h3>Performance-First</h3>
+        <p>Every engagement is anchored to measurable outcomes — efficient customer acquisition, revenue growth, and compounding ROI across channels.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🔗</div>
+        <h3>Single Partner, Full Funnel</h3>
+        <p>From awareness to conversion to retention — one team, one relationship, full accountability across the marketing stack.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🧠</div>
+        <h3>Tech-Enabled</h3>
+        <p>AI tooling, advanced attribution, and media mix modeling give our clients an analytical edge most agencies can't match.</p>
+      </div>
+      <div class="card">
+        <div class="icon">📈</div>
+        <h3>Built to Compound</h3>
+        <p>Better creative lifts paid performance. Better landing pages lift CVR. Better measurement unlocks budget confidence. Every offering amplifies the others.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SERVICES ── -->
+<div class="section alt">
+  <div class="inner">
+    <div class="section-label">Core Offerings</div>
+    <h2 class="section-title">Everything needed to own the full funnel.</h2>
+    <p class="section-intro">Tiger Tracks delivers a complete digital marketing stack. These channels are the avenues to unlock meaningful revenue — both at the start of a client relationship and as it grows.</p>
+
+    <div class="service-group">
+      <div class="service-group-title">📡 Media Buying</div>
+      <div class="service-cards">
+        <div class="service-card"><h4>🔍 Paid Search</h4><p>Google and Microsoft — keyword strategy, bidding, and full-funnel optimization to capture high-intent demand.</p></div>
+        <div class="service-card"><h4>📱 Paid Social</h4><p>Meta, TikTok, Snap — audience-driven creative testing and platform-native performance strategy.</p></div>
+        <div class="service-card"><h4>🎯 Programmatic</h4><p>Data-driven targeting and measurement beyond walled gardens to support brand and performance goals.</p></div>
+        <div class="service-card"><h4>🛒 Retail Media & Amazon Ads</h4><p>Drive incremental revenue across Amazon, Walmart, Instacart, and other retail networks.</p></div>
+        <div class="service-card"><h4>📺 Connected TV (CTV)</h4><p>Measurable performance through data-driven CTV strategy, audience targeting, and cross-channel attribution.</p></div>
+      </div>
+    </div>
+
+    <div class="service-group">
+      <div class="service-group-title">🎨 Creative</div>
+      <div class="service-cards">
+        <div class="service-card"><h4>🖼️ Image & Video Ad Creative</h4><p>Engaging content that sets the performance foundation across all digital touchpoints.</p></div>
+        <div class="service-card"><h4>📸 UGC / Influencer</h4><p>Authentic, platform-native content and allowlisting that drives trust, engagement, and results.</p></div>
+        <div class="service-card"><h4>✨ Gen-AI Creative Optimization</h4><p>AI-powered creative ideation, testing, and optimization to accelerate iteration and performance.</p></div>
+      </div>
+    </div>
+
+    <div class="service-group">
+      <div class="service-group-title">🌐 Website & Conversion</div>
+      <div class="service-cards">
+        <div class="service-card"><h4>💻 Website Development</h4><p>Conversion-focused web experiences built for testing, analytics, and sustained performance at scale.</p></div>
+        <div class="service-card"><h4>🔬 Conversion Rate Optimization (CRO)</h4><p>Landing page A/B testing and conversion optimization for both paid and organic traffic.</p></div>
+      </div>
+    </div>
+
+    <div class="service-group">
+      <div class="service-group-title">🌱 Organic Growth</div>
+      <div class="service-cards">
+        <div class="service-card"><h4>🔍 SEO + ASO</h4><p>Improve discoverability across web and app touchpoints to increase ROI from existing traffic.</p></div>
+        <div class="service-card"><h4>🤖 GEO (Generative Engine Optimization)</h4><p>Optimize brand visibility within AI-powered discovery environments and emerging search experiences.</p></div>
+      </div>
+    </div>
+
+    <div class="service-group">
+      <div class="service-group-title">📧 Lifecycle Marketing</div>
+      <div class="service-cards">
+        <div class="service-card"><h4>📬 Email + SMS</h4><p>Increase LTV and retention through data-driven messaging, automation, and behavioral segmentation.</p></div>
+        <div class="service-card"><h4>⚙️ Lifecycle Automation</h4><p>Build intelligent trigger-based flows that turn customer behavior into revenue without manual intervention.</p></div>
+      </div>
+    </div>
+
+    <div class="service-group">
+      <div class="service-group-title">📊 Analytics & Measurement</div>
+      <div class="service-cards">
+        <div class="service-card"><h4>📈 Analytics & Attribution</h4><p>Audit and optimize your tracking setup so every decision is grounded in reliable, clean data.</p></div>
+        <div class="service-card"><h4>🧮 Media Mix Modeling (MMM)</h4><p>Quantify true channel impact and guide smarter budget allocation through advanced statistical modeling.</p></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SYNERGY ── -->
+<div class="section">
+  <div class="inner">
+    <div class="section-label">How It Compounds</div>
+    <h2 class="section-title">Each offering makes the others stronger.</h2>
+    <p class="section-intro">The most powerful growth happens when channels aren't siloed. Here's how Tiger Tracks' integrated approach compounds returns over time.</p>
+    <ul class="synergy-list">
+      <li><span class="arr">→</span> Upper-funnel CTV spend improves lower-funnel conversion rates</li>
+      <li><span class="arr">→</span> Better creative improves paid social performance and ROAS</li>
+      <li><span class="arr">→</span> Better website and landing pages lift CVR → grow profitable ad spend</li>
+      <li><span class="arr">→</span> Lifecycle (email + SMS) increases customer LTV → raises CaC tolerance</li>
+      <li><span class="arr">→</span> MMM and measurement increase client confidence in ROI → unlock budget growth</li>
+      <li><span class="arr">→</span> More organic traffic (SEO + GEO) lowers blended CaC across all channels</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ── EXPANSION ── -->
+<div class="section alt">
+  <div class="inner">
+    <div class="section-label">Expansion Opportunities</div>
+    <h2 class="section-title">How we grow with clients over time.</h2>
+    <p class="section-intro">Tiger Tracks treats expansion as a repeatable, structured growth play — not an upsell. The deeper we go with a client, the stickier the relationship and the stronger the results.</p>
+    <div class="expand-grid">
+      <div class="expand-card">
+        <div class="icon">🔒</div>
+        <h4>Stickier Relationships</h4>
+        <p>The more value added across channels, the higher the switching cost — and the deeper the trust that comes with managing the full funnel.</p>
+      </div>
+      <div class="expand-card">
+        <div class="icon">📈</div>
+        <h4>Compounding Performance</h4>
+        <p>Each new service layer creates synergies. Adding creative lifts media. Adding lifecycle lifts LTV. Results accelerate as the stack deepens.</p>
+      </div>
+      <div class="expand-card">
+        <div class="icon">🎯</div>
+        <h4>Structured Expansion Playbook</h4>
+        <p>Account teams identify opportunities, route them to specialists, and run proof-of-concept pilots with clear success metrics before scaling.</p>
+      </div>
+      <div class="expand-card">
+        <div class="icon">🛒</div>
+        <h4>Retail Media & Amazon</h4>
+        <p>A high-value expansion channel for brands with retail presence — incremental revenue with measurable attribution.</p>
+      </div>
+      <div class="expand-card">
+        <div class="icon">📺</div>
+        <h4>CTV & Upper Funnel</h4>
+        <p>Brands already winning on search and social unlock the next growth layer with connected TV, programmatic, and brand measurement.</p>
+      </div>
+      <div class="expand-card">
+        <div class="icon">🧮</div>
+        <h4>Measurement & MMM</h4>
+        <p>Clients who invest in advanced attribution and media mix modeling consistently unlock higher budget approvals and faster scaling decisions.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TIERS ── -->
+<div class="section">
+  <div class="inner">
+    <div class="section-label">Who We Work With</div>
+    <h2 class="section-title">Growth-stage to enterprise.</h2>
+    <p class="section-intro">We work with brands that are serious about performance — from scaling DTC companies to global enterprises managing significant digital budgets.</p>
+    <div class="tier-cards">
+      <div class="tier-card featured">
+        <div class="tier-badge t1">Tier 1</div>
+        <h3>Enterprise</h3>
+        <div class="spend">$1M – $5M/mo</div>
+        <div class="fee">$100K – $500K/mo</div>
+        <div class="size">$250M – $2B revenue</div>
+      </div>
+      <div class="tier-card featured">
+        <div class="tier-badge t2">Tier 2</div>
+        <h3>Growth</h3>
+        <div class="spend">$500K – $1M/mo</div>
+        <div class="fee">$50K – $100K/mo</div>
+        <div class="size">$50M – $250M revenue</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-badge t3">Tier 3</div>
+        <h3>Mid-Market</h3>
+        <div class="spend">$100K – $500K/mo</div>
+        <div class="fee">$10K – $50K/mo</div>
+        <div class="size">$10M – $50M revenue</div>
+      </div>
+      <div class="tier-card">
+        <div class="tier-badge t4">Tier 4</div>
+        <h3>Emerging</h3>
+        <div class="spend">Under $100K/mo</div>
+        <div class="fee">$3K – $10K/mo</div>
+        <div class="size">Under $10M revenue</div>
+      </div>
+    </div>
+
+    <div style="margin-top:2.5rem;">
+      <div class="section-label" style="margin-bottom:.75rem;">Notable Clients</div>
+      <div class="clients-strip">
+        <div class="client-pill">🏆 Athletic Greens</div>
+        <div class="client-pill">🧳 Paravel</div>
+        <div class="client-pill">💊 Rho Nutrition</div>
+        <div class="client-pill">💄 Anastasia Beverly Hills</div>
+        <div class="client-pill">💰 Monarch Money</div>
+        <div class="client-pill">👟 Capezio</div>
+        <div class="client-pill">🌿 Aura Health</div>
+        <div class="client-pill">& more</div>
+      </div>
+      <p style="margin-top:1rem;font-size:.82rem;color:var(--text-light);">Across verticals including health & wellness, apparel, fintech, home services, CPG, food & beverage, and more.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ── WINS ── -->
+<div class="section alt">
+  <div class="inner">
+    <div class="section-label">Real Results</div>
+    <h2 class="section-title">Outcomes that speak for themselves.</h2>
+    <p class="section-intro">Performance compounds when channels are managed together. These are real results from real client relationships.</p>
+    <div class="wins-grid">
+      <div class="win-card">
+        <div class="win-stat">$60K/mo</div>
+        <div class="win-label">Creative-Only Retainer</div>
+        <div class="win-desc">A media buying client expanded to creative — now one of TT's top-3 clients by revenue on creative alone.</div>
+      </div>
+      <div class="win-card">
+        <div class="win-stat">$170K</div>
+        <div class="win-label">Website Rebuild Contract</div>
+        <div class="win-desc">Rebuilt a client's core web experience; transitions to $30K/mo recurring for maintenance and CRO testing.</div>
+      </div>
+      <div class="win-card">
+        <div class="win-stat">20+</div>
+        <div class="win-label">Client Case Studies</div>
+        <div class="win-desc">Documented results across 16+ verticals — from DTC to B2B SaaS to multi-location services.</div>
+      </div>
+      <div class="win-card">
+        <div class="win-stat">Multi-channel</div>
+        <div class="win-label">Athletic Greens</div>
+        <div class="win-desc">A flagship multi-channel engagement spanning Meta, Google, TikTok, and more — a marquee strategic client win.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── TEAM ── -->
+<div class="section">
+  <div class="inner">
+    <div class="section-label">Team & Structure</div>
+    <h2 class="section-title">The people behind the performance.</h2>
+    <p class="section-intro">Tiger Tracks operates a pod-based model with clear swim lanes — so clients always know who owns their relationship and accountability never gets lost in layers.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="role-tag">Leadership</div>
+        <h3>Executive Team</h3>
+        <p>Ex-Google leadership driving growth, GTM strategy, and the company's Expansions initiative. Actively involved in strategic client relationships and key account decisions.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-tag">Operations & Expansion</div>
+        <h3>Operations Lead</h3>
+        <p>Coordinates the Offerings and Expansions playbook — routing cross-sell opportunities to the right specialists and ensuring seamless execution across service lines.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-tag">Partnerships & BD</div>
+        <h3>Business Development</h3>
+        <p>A dedicated BD team focused on Tier 1–2 enterprise and growth accounts — running a structured discovery, audit, and proposal process for every opportunity.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-tag">Client Success</div>
+        <h3>Pod-Based Account Teams</h3>
+        <p>Account Directors, Senior Account Managers, Account Managers, and Account Strategists structured in pods — each with clear ownership, direct accountability, and dedicated specialist support.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-tag">Capabilities</div>
+        <h3>Channel Specialists</h3>
+        <p>Dedicated specialists across paid search, paid social, programmatic, retail media, CTV, creative, lifecycle, SEO/ASO, and measurement — tapped in when needed at account level.</p>
+      </div>
+      <div class="team-card">
+        <div class="role-tag">Marketing</div>
+        <h3>External Positioning</h3>
+        <p>Manages the capabilities deck, client-facing assets, and brand materials that communicate TT's full service menu and differentiated positioning in the market.</p>
+      </div>
+    </div>
+
+    <div style="margin-top:2rem;background:var(--bone);border:1px solid var(--border);border-radius:10px;padding:1.5rem 1.75rem;max-width:760px;">
+      <strong style="font-size:.9rem;">Account Management Ladder:</strong>
+      <span style="font-size:.88rem;color:var(--text-light);margin-left:.5rem;">Account Coordinator → Account Strategist → Account Manager → Senior Account Manager → Client Strategy Lead → Associate Director</span>
+    </div>
+  </div>
+</div>
+
+<!-- ── PARTNERS ── -->
+<div class="section alt">
+  <div class="inner">
+    <div class="section-label">Partnership Ecosystem</div>
+    <h2 class="section-title">Growing together with the right partners.</h2>
+    <p class="section-intro">Referral-sourced opportunities produce higher quality prospects, shorter sales cycles, and stronger long-term relationships. We actively invest in building and maintaining our partner ecosystem.</p>
+    <div class="partner-cards">
+      <div class="partner-card">
+        <div class="icon">💼</div>
+        <h4>PE / VC Investors</h4>
+        <p>Portfolio companies needing performance marketing scale at a critical growth stage</p>
+      </div>
+      <div class="partner-card">
+        <div class="icon">🏢</div>
+        <h4>Strategic Agencies</h4>
+        <p>Non-performance agencies looking for a trusted execution and media partner</p>
+      </div>
+      <div class="partner-card">
+        <div class="icon">🧩</div>
+        <h4>Consultants & Advisors</h4>
+        <p>Advisors working with growth-stage brands on go-to-market and scaling strategy</p>
+      </div>
+      <div class="partner-card">
+        <div class="icon">📣</div>
+        <h4>Fractional CMOs</h4>
+        <p>Marketing leaders advising multiple companies who need a strong execution layer</p>
+      </div>
+      <div class="partner-card">
+        <div class="icon">⚙️</div>
+        <h4>Tech Partners</h4>
+        <p>Martech, ecommerce, and analytics platforms serving shared client bases</p>
+      </div>
+    </div>
+    <div style="margin-top:1.75rem;background:var(--white);border:1px solid var(--border);border-left:4px solid var(--teal);border-radius:0 10px 10px 0;padding:1.25rem 1.5rem;font-size:.95rem;max-width:680px;">
+      <strong>Interested in partnering?</strong> Referral partners earn 100% of the first month's fee for every qualified referral that closes. If you work with growth-stage brands that need performance marketing at scale, <a href="https://tigertracks.ai" target="_blank" rel="noopener" style="color:var(--teal);font-weight:600;">let's talk</a>.
+    </div>
+  </div>
+</div>
+
+<!-- ── HOW WE SELL ── -->
+<div class="section">
+  <div class="inner">
+    <div class="section-label">How We Engage</div>
+    <h2 class="section-title">Insight first. Pitch second.</h2>
+    <p class="section-intro">Every new relationship starts with genuine discovery — not a pitch deck. Our process is designed to surface real opportunity before we recommend anything.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div>
+          <h4>Discovery</h4>
+          <p>We take time to understand your brand goals, current spend, performance gaps, and decision-making process — before making a single recommendation.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div>
+          <h4>Audit</h4>
+          <p>A comprehensive performance audit across active channels — identifying efficiency gaps, growth levers, and the highest-ROI opportunities specific to your business.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div>
+          <h4>Strategy & Proposal</h4>
+          <p>We present audit findings, a prioritized growth strategy, and a transparent proposal — with clear pricing and measurable success criteria.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div>
+          <h4>Onboarding & Kickoff</h4>
+          <p>A structured kickoff ensures your team is fully supported from day one — clean handoffs, fast time-to-value, and zero friction for the account team taking over.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CULTURE ── -->
+<div class="section alt">
+  <div class="inner">
+    <div class="section-label">Culture & People</div>
+    <h2 class="section-title">High performance with humanity.</h2>
+    <p class="section-intro">Tiger Tracks invests seriously in building a team that's great to work with — for clients and for each other. Culture isn't decoration here; it's a competitive advantage.</p>
+    <div class="culture-grid">
+      <div class="culture-card">
+        <div class="icon">🎓</div>
+        <h4>Structured Onboarding & Training</h4>
+        <p>Formal onboarding programs, role milestone templates, and a training library ensure new hires ramp quickly and managers have clear visibility into progress.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon">🤝</div>
+        <h4>Regular Cadences & Rituals</h4>
+        <p>Weekly 1:1s, monthly feedback sessions, business reviews, and AI roundtables keep teams aligned, growing, and ahead of the market.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon">🌴</div>
+        <h4>Team Retreats & Connection</h4>
+        <p>Annual leadership retreats, regular team events, and dedicated culture moments build the relationships that make the work better.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon">🏆</div>
+        <h4>Recognition-Driven</h4>
+        <p>Client wins, shoutouts, and performance milestones are celebrated publicly and regularly — because great work deserves to be seen.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon">🤖</div>
+        <h4>AI-Forward by Default</h4>
+        <p>Internal AI roundtables, generative creative tooling, and automation-first workflows keep the team operating at a pace traditional agencies can't match.</p>
+      </div>
+      <div class="culture-card">
+        <div class="icon">📊</div>
+        <h4>Data Over Opinion</h4>
+        <p>Every major decision — from budget allocation to hiring — is grounded in data. Gut instinct is welcome; unsupported assertions are not.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CTA ── -->
+<div class="cta-banner">
+  <h2>Ready to make your<br><span>media work harder?</span></h2>
+  <p>Whether you're looking for a new agency partner, a referral relationship, or just want to see what a real performance audit looks like — let's talk.</p>
+  <a href="https://tigertracks.ai" target="_blank" rel="noopener">Get in touch →</a>
+</div>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-brand">Tiger Tracks</div>
+  <p>Performance Marketing at Scale &nbsp;·&nbsp; <a href="https://tigertracks.ai" target="_blank" rel="noopener">tigertracks.ai</a></p>
+  <p style="margin-top:.35rem;">© 2026 Tiger Tracks. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

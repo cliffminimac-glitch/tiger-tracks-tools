@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tiger Tracks — BD Strategy Brief</title>
+<link href="https://fonts.googleapis.com/css2?family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0A1119;
+    --charcoal: #1B2126;
+    --charcoal-mid: #232B32;
+    --teal: #229FA1;
+    --teal-dark: #1A7477;
+    --bone: #F4F1EB;
+    --bone-dim: #E4E0D8;
+    --white: #FFFFFF;
+    --mid: #A1A1A1;
+    --serif: Georgia, 'IM Fell English', 'Times New Roman', serif;
+    --sans: Calibri, 'Trebuchet MS', 'Segoe UI', system-ui, sans-serif;
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: var(--sans);
+  }
+
+  .deck {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── SLIDES ── */
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    padding: 0;
+    overflow: hidden;
+  }
+  .slide.active { display: flex; }
+
+  /* ── NAVIGATION ── */
+  .nav {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    z-index: 100;
+  }
+  .nav-btn {
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,.2);
+    background: rgba(255,255,255,.08);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(6px);
+    transition: background .15s;
+  }
+  .nav-btn:hover { background: rgba(255,255,255,.18); }
+  .nav-counter {
+    font-family: var(--sans);
+    font-size: .78rem;
+    color: rgba(255,255,255,.45);
+    letter-spacing: .12em;
+    min-width: 3rem;
+    text-align: center;
+  }
+  .nav-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: rgba(255,255,255,.25);
+    cursor: pointer;
+    transition: background .15s;
+  }
+  .nav-dot.active { background: var(--teal); }
+
+  /* ═══════════════════════════════════════
+     SLIDE 1 — TITLE
+  ═══════════════════════════════════════ */
+  #s1 {
+    background: var(--charcoal);
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .s1-eyebrow {
+    font-family: var(--sans);
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .22em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.75rem;
+  }
+  .s1-title {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 5vw, 3.6rem);
+    font-weight: 400;
+    color: var(--bone);
+    line-height: 1.18;
+    max-width: 780px;
+    margin: 0 auto 1.4rem;
+  }
+  .s1-rule {
+    width: 56px;
+    height: 2px;
+    background: var(--teal);
+    margin: 0 auto 1.5rem;
+    border-radius: 2px;
+  }
+  .s1-sub {
+    font-family: var(--sans);
+    font-size: 1rem;
+    color: var(--mid);
+    letter-spacing: .04em;
+  }
+  .s1-date {
+    position: absolute;
+    bottom: 3.5rem;
+    right: 3rem;
+    font-family: var(--sans);
+    font-size: .72rem;
+    letter-spacing: .1em;
+    color: rgba(161,161,161,.5);
+    text-transform: uppercase;
+  }
+  .s1-mark {
+    position: absolute;
+    bottom: 3.5rem;
+    left: 3rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+  }
+  .s1-mark-bar {
+    width: 3px;
+    height: 20px;
+    background: var(--teal);
+    border-radius: 2px;
+  }
+  .s1-mark-text {
+    font-family: var(--serif);
+    font-size: .85rem;
+    color: rgba(244,241,235,.35);
+    font-style: italic;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 2 — TWO-COLUMN STRATEGY
+  ═══════════════════════════════════════ */
+  #s2 { background: var(--bone); flex-direction: row; }
+
+  .s2-left {
+    width: 46%;
+    background: var(--charcoal);
+    padding: 3.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .s2-left::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(34,159,161,.06);
+  }
+  .s2-left-eyebrow {
+    font-family: var(--sans);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.25rem;
+  }
+  .s2-left-title {
+    font-family: var(--serif);
+    font-size: 1.65rem;
+    color: var(--bone);
+    line-height: 1.28;
+    margin-bottom: 2rem;
+  }
+  .s2-company-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+  }
+  .s2-company {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    padding: .55rem .85rem;
+    background: rgba(255,255,255,.04);
+    border-radius: 8px;
+    border-left: 2px solid rgba(34,159,161,.35);
+  }
+  .s2-company-name {
+    font-family: var(--sans);
+    font-size: .85rem;
+    color: var(--bone);
+    font-weight: 600;
+  }
+
+  .s2-right {
+    flex: 1;
+    padding: 3.5rem 3.5rem 3.5rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .s2-right-eyebrow {
+    font-family: var(--sans);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 1.25rem;
+  }
+  .s2-right-title {
+    font-family: var(--serif);
+    font-size: 1.55rem;
+    color: var(--ink);
+    line-height: 1.28;
+    margin-bottom: .5rem;
+  }
+  .s2-right-sub {
+    font-family: var(--sans);
+    font-size: .82rem;
+    color: #6b7280;
+    margin-bottom: 2rem;
+    font-style: italic;
+  }
+  .s2-bullets { display: flex; flex-direction: column; gap: .85rem; }
+  .s2-bullet {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .s2-bullet-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    margin-top: .45rem;
+    flex-shrink: 0;
+  }
+  .s2-bullet-text {
+    font-family: var(--sans);
+    font-size: .9rem;
+    color: #374151;
+    line-height: 1.55;
+  }
+  .s2-bullet-text strong { color: var(--ink); font-weight: 700; }
+
+  /* ═══════════════════════════════════════
+     SLIDE 3 — 3-UP PILLARS
+  ═══════════════════════════════════════ */
+  #s3 {
+    background: var(--bone);
+    padding: 3rem 3.5rem 5rem;
+    flex-direction: column;
+  }
+  .s3-header { margin-bottom: 2.25rem; }
+  .s3-eyebrow {
+    font-family: var(--sans);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: .6rem;
+  }
+  .s3-title {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .s3-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    flex: 1;
+  }
+  .s3-card {
+    background: var(--charcoal);
+    border-radius: 14px;
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+  }
+  .s3-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--teal), transparent);
+    border-radius: 0 0 14px 14px;
+  }
+  .s3-card-num {
+    font-family: var(--serif);
+    font-size: 2.5rem;
+    color: rgba(34,159,161,.18);
+    font-style: italic;
+    position: absolute;
+    top: 1.25rem; right: 1.5rem;
+    line-height: 1;
+  }
+  .s3-card-label {
+    font-family: var(--sans);
+    font-size: .62rem;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: .75rem;
+  }
+  .s3-card-title {
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    color: var(--bone);
+    margin-bottom: 1.25rem;
+    line-height: 1.3;
+  }
+  .s3-card-items { display: flex; flex-direction: column; gap: .55rem; }
+  .s3-item {
+    display: flex;
+    gap: .6rem;
+    align-items: flex-start;
+  }
+  .s3-item-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(34,159,161,.6);
+    margin-top: .42rem;
+    flex-shrink: 0;
+  }
+  .s3-item-text {
+    font-family: var(--sans);
+    font-size: .8rem;
+    color: var(--mid);
+    line-height: 1.5;
+  }
+  .s3-item-text strong { color: var(--bone); font-weight: 700; }
+  .s3-item-spend {
+    font-family: var(--sans);
+    font-size: .72rem;
+    color: var(--teal);
+    font-weight: 700;
+    margin-left: auto;
+    flex-shrink: 0;
+    padding-left: .5rem;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 4 — KPI DASHBOARD
+  ═══════════════════════════════════════ */
+  #s4 {
+    background: var(--ink);
+    padding: 3rem 3.5rem 5rem;
+    flex-direction: column;
+  }
+  .s4-header { margin-bottom: 2.25rem; }
+  .s4-eyebrow {
+    font-family: var(--sans);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: .6rem;
+  }
+  .s4-title {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    color: var(--bone);
+    font-weight: 400;
+  }
+  .s4-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 1.25rem;
+    flex: 1;
+  }
+  .s4-tile {
+    background: var(--charcoal);
+    border-radius: 14px;
+    padding: 2rem 2.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border: 1px solid rgba(255,255,255,.04);
+    position: relative;
+    overflow: hidden;
+  }
+  .s4-tile::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--teal);
+    opacity: .6;
+  }
+  .s4-tile-label {
+    font-family: var(--sans);
+    font-size: .68rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--mid);
+    margin-bottom: 1rem;
+  }
+  .s4-tile-val {
+    font-family: var(--serif);
+    font-size: clamp(2.4rem, 4vw, 3.2rem);
+    color: var(--teal);
+    line-height: 1;
+    margin-bottom: .5rem;
+  }
+  .s4-tile-desc {
+    font-family: var(--sans);
+    font-size: .8rem;
+    color: var(--mid);
+    line-height: 1.45;
+  }
+  .s4-tile-sub {
+    font-family: var(--sans);
+    font-size: .72rem;
+    color: rgba(161,161,161,.55);
+    margin-top: .35rem;
+  }
+
+  /* ═══════════════════════════════════════
+     SLIDE 5 — OPERATING CADENCE
+  ═══════════════════════════════════════ */
+  #s5 {
+    background: var(--bone);
+    padding: 3rem 3.5rem 5rem;
+    flex-direction: column;
+  }
+  .s5-header { margin-bottom: 2.25rem; }
+  .s5-eyebrow {
+    font-family: var(--sans);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: .6rem;
+  }
+  .s5-title {
+    font-family: var(--serif);
+    font-size: 1.75rem;
+    color: var(--ink);
+    font-weight: 400;
+  }
+  .s5-rows { display: flex; flex-direction: column; gap: 1.1rem; flex: 1; justify-content: center; }
+  .s5-row {
+    display: flex;
+    gap: 1.75rem;
+    align-items: stretch;
+  }
+  .s5-cadence-label {
+    width: 110px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+  }
+  .s5-cadence-pill {
+    display: inline-block;
+    padding: .35rem .85rem;
+    border-radius: 20px;
+    font-family: var(--sans);
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .pill-weekly { background: rgba(34,159,161,.12); color: var(--teal-dark); }
+  .pill-monthly { background: rgba(27,33,38,.1); color: #374151; }
+  .pill-quarterly { background: rgba(10,17,25,.07); color: #374151; }
+  .s5-row-items {
+    flex: 1;
+    background: #fff;
+    border-radius: 10px;
+    padding: .9rem 1.25rem;
+    display: flex;
+    gap: 1.5rem;
+    border: 1px solid var(--bone-dim);
+  }
+  .s5-row-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+  }
+  .s5-row-divider {
+    width: 1px;
+    background: var(--bone-dim);
+    flex-shrink: 0;
+  }
+  .s5-item-head {
+    font-family: var(--sans);
+    font-size: .76rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: .1rem;
+  }
+  .s5-item-body {
+    font-family: var(--sans);
+    font-size: .78rem;
+    color: #6b7280;
+    line-height: 1.45;
+  }
+  .s5-item-body strong { color: var(--ink); }
+  .s5-teal { color: var(--teal); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- ══════════════════════════════
+       SLIDE 1 — TITLE
+  ══════════════════════════════ -->
+  <div class="slide active" id="s1">
+    <div class="s1-eyebrow">Tiger Tracks — Confidential</div>
+    <div class="s1-title">BD Strategy Brief</div>
+    <div class="s1-rule"></div>
+    <div class="s1-sub">Qru Meeting Prep &nbsp;·&nbsp; Partner Pipeline &nbsp;·&nbsp; Q2 Target Selection</div>
+    <div class="s1-mark">
+      <div class="s1-mark-bar"></div>
+      <div class="s1-mark-text">Week of March 17, 2026</div>
+    </div>
+    <div class="s1-date">For: Cliff &nbsp;/&nbsp; Pranav</div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 2 — TWO-COLUMN STRATEGY
+  ══════════════════════════════ -->
+  <div class="slide" id="s2">
+    <div class="s2-left">
+      <div class="s2-left-eyebrow">Intro Loop — Pranav</div>
+      <div class="s2-left-title">Pipeline Follow-Up<br>Needed</div>
+      <div class="s2-company-list">
+        <div class="s2-company"><div class="s2-company-name">Fetch Rewards</div></div>
+        <div class="s2-company"><div class="s2-company-name">Grubhub</div></div>
+        <div class="s2-company"><div class="s2-company-name">CookUnity</div></div>
+        <div class="s2-company"><div class="s2-company-name">Misfits Market</div></div>
+        <div class="s2-company"><div class="s2-company-name">Hone Health</div></div>
+        <div class="s2-company"><div class="s2-company-name">Bible Chat</div></div>
+        <div class="s2-company"><div class="s2-company-name">Beautiful.ai</div></div>
+      </div>
+    </div>
+    <div class="s2-right">
+      <div class="s2-right-eyebrow">Ashley's Status — Intros Made</div>
+      <div class="s2-right-title">Where We Stand</div>
+      <div class="s2-right-sub">"I've introduced you to Headspace — happy to provide an extra nudge there, or for any of the below."</div>
+      <div class="s2-bullets">
+        <div class="s2-bullet">
+          <div class="s2-bullet-dot"></div>
+          <div class="s2-bullet-text"><strong>Headspace</strong> — Intro made. Nudge available if conversation hasn't started.</div>
+        </div>
+        <div class="s2-bullet">
+          <div class="s2-bullet-dot"></div>
+          <div class="s2-bullet-text"><strong>Anastasia Beverly Hills</strong> — Intro available. Confirm if Pranav wants the connection activated.</div>
+        </div>
+        <div class="s2-bullet">
+          <div class="s2-bullet-dot"></div>
+          <div class="s2-bullet-text"><strong>Astound</strong> — Intro available. Awaiting direction.</div>
+        </div>
+        <div class="s2-bullet">
+          <div class="s2-bullet-dot"></div>
+          <div class="s2-bullet-text"><strong>Bombas</strong> — Intro available. Strong DTC fit.</div>
+        </div>
+        <div class="s2-bullet">
+          <div class="s2-bullet-dot"></div>
+          <div class="s2-bullet-text"><strong>Ask:</strong> Which of the Pranav companies listed need a nudge vs. a new intro?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 3 — 3-UP PILLARS
+  ══════════════════════════════ -->
+  <div class="slide" id="s3">
+    <div class="s3-header">
+      <div class="s3-eyebrow">Monday — Qru Brand Strategy</div>
+      <div class="s3-title">Priority Target Tiers</div>
+    </div>
+    <div class="s3-cards">
+
+      <!-- Tier 1 -->
+      <div class="s3-card">
+        <div class="s3-card-num">1</div>
+        <div class="s3-card-label">Tier 1 &nbsp;·&nbsp; $10M+ Digital Spend</div>
+        <div class="s3-card-title">High-Priority<br>Targets</div>
+        <div class="s3-card-items">
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Olaplex</strong> — Andrew Reuben (VP Global Digital). Creative fatigue + attribution across DTC/retail.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>K18</strong> — VP, Global Consumer. DTC velocity under Unilever integration.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Rhone</strong> — CMO. Scaling beyond male audiences + Nordstrom digital halo.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Nanit</strong> — Sara Plotkin (VP). Subscription trial-to-conversion + LTV bidding.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Snipes</strong> — CMO. US market penetration + digital-to-retail foot traffic.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tier 2 -->
+      <div class="s3-card">
+        <div class="s3-card-num">2</div>
+        <div class="s3-card-label">Tier 2 &nbsp;·&nbsp; $2–10M Digital Spend</div>
+        <div class="s3-card-title">Strong Growth<br>Prospects</div>
+        <div class="s3-card-items">
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Bero Brewing</strong> — SVP Marketing. NA beer category + launch-phase DTC.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Eataly</strong> — Sr. Digital Director. Digital-to-in-store attribution across North America.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Grüns</strong> — VP of Brand. Supplement CAC pressure + Meta creative fatigue.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Ollie</strong> — Shelby Silver (Sr. Director). Pet food subscription economics + Amazon halo.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Strategic -->
+      <div class="s3-card">
+        <div class="s3-card-num">3</div>
+        <div class="s3-card-label">Strategic &nbsp;·&nbsp; Long-Game Relationships</div>
+        <div class="s3-card-title">High-Value<br>Founder Pipeline</div>
+        <div class="s3-card-items">
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Craig Dubitsky</strong> — Happy Coffee. Track record: Hello Products sold to Colgate. Treat as high-value founder relationship.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text"><strong>Moët Hennessy</strong> — Route-to-Consumer challenge. High-income audience targeting + CTV. Not a standard performance pitch.</div>
+          </div>
+          <div class="s3-item">
+            <div class="s3-item-dot"></div>
+            <div class="s3-item-text">These are <strong>relationship-first</strong>, revenue-later plays. Handle personally. Do not route through standard outreach.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 4 — KPI DASHBOARD
+  ══════════════════════════════ -->
+  <div class="slide" id="s4">
+    <div class="s4-header">
+      <div class="s4-eyebrow">Pipeline at a Glance</div>
+      <div class="s4-title">BD Metrics — March 2026</div>
+    </div>
+    <div class="s4-grid">
+      <div class="s4-tile">
+        <div class="s4-tile-label">Active Pipeline</div>
+        <div>
+          <div class="s4-tile-val">11</div>
+          <div class="s4-tile-desc">Total companies across Pranav intro loop + Qru targets</div>
+          <div class="s4-tile-sub">Fetch, Grubhub, CookUnity, Misfits, Hone, Bible Chat, Beautiful.ai + 4 Tier 2</div>
+        </div>
+      </div>
+      <div class="s4-tile">
+        <div class="s4-tile-label">Tier 1 Targets</div>
+        <div>
+          <div class="s4-tile-val">5</div>
+          <div class="s4-tile-desc">Brands with $10M+ digital spend identified for Qru Monday</div>
+          <div class="s4-tile-sub">Est. combined spend: $80M–$135M</div>
+        </div>
+      </div>
+      <div class="s4-tile">
+        <div class="s4-tile-label">Intros Made</div>
+        <div>
+          <div class="s4-tile-val">4</div>
+          <div class="s4-tile-desc">Warm introductions already made or available to activate</div>
+          <div class="s4-tile-sub">Headspace (active) + Anastasia BH, Astound, Bombas (ready)</div>
+        </div>
+      </div>
+      <div class="s4-tile">
+        <div class="s4-tile-label">Strategic Long-Game</div>
+        <div>
+          <div class="s4-tile-val">2</div>
+          <div class="s4-tile-desc">High-value founder / enterprise relationships in play</div>
+          <div class="s4-tile-sub">Craig Dubitsky (Happy Coffee) + Moët Hennessy Route-to-Consumer</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════
+       SLIDE 5 — OPERATING CADENCE
+  ══════════════════════════════ -->
+  <div class="slide" id="s5">
+    <div class="s5-header">
+      <div class="s5-eyebrow">Discussion Points for Cliff</div>
+      <div class="s5-title">BD Operating Cadence + Decisions Needed</div>
+    </div>
+    <div class="s5-rows">
+
+      <div class="s5-row">
+        <div class="s5-cadence-label">
+          <span class="s5-cadence-pill pill-weekly">This Week</span>
+        </div>
+        <div class="s5-row-items">
+          <div class="s5-row-item">
+            <div class="s5-item-head">Qru Target Selection</div>
+            <div class="s5-item-body">Of Tier 1 — <strong>Olaplex, K18, Rhone</strong> — which aligns best with current Tiger Tracks revenue expansion goals?</div>
+          </div>
+          <div class="s5-row-divider"></div>
+          <div class="s5-row-item">
+            <div class="s5-item-head">Pranav Nudge Priorities</div>
+            <div class="s5-item-body">Which companies on Pranav's list need a nudge vs. a new intro from Ashley? Confirm before Monday.</div>
+          </div>
+          <div class="s5-row-divider"></div>
+          <div class="s5-row-item">
+            <div class="s5-item-head">Activate Intros</div>
+            <div class="s5-item-body">Anastasia BH, Astound, and Bombas are warm and ready. Greenlight Ashley to activate?</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s5-row">
+        <div class="s5-cadence-label">
+          <span class="s5-cadence-pill pill-monthly">Monthly</span>
+        </div>
+        <div class="s5-row-items">
+          <div class="s5-row-item">
+            <div class="s5-item-head">Pranav Pipeline Review</div>
+            <div class="s5-item-body">Full check-in on all 7 intro-loop companies. Stage updates, nudges needed, any wins to close.</div>
+          </div>
+          <div class="s5-row-divider"></div>
+          <div class="s5-row-item">
+            <div class="s5-item-head">Moët Hennessy Positioning</div>
+            <div class="s5-item-body">Refine the Route-to-Consumer angle. High-income targeting + CTV — develop a tailored brief, not a standard pitch deck.</div>
+          </div>
+          <div class="s5-row-divider"></div>
+          <div class="s5-row-item">
+            <div class="s5-item-head">Qru Follow-Through</div>
+            <div class="s5-item-body">Track engagement from Monday's meeting. Advance Tier 1 conversations to discovery calls within 30 days.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="s5-row">
+        <div class="s5-cadence-label">
+          <span class="s5-cadence-pill pill-quarterly">Quarterly</span>
+        </div>
+        <div class="s5-row-items">
+          <div class="s5-row-item">
+            <div class="s5-item-head">Revenue Expansion Targeting</div>
+            <div class="s5-item-body">Reassess Tier 1 / Tier 2 list against $80K MRR goal progress. Reprioritize as needed.</div>
+          </div>
+          <div class="s5-row-divider"></div>
+          <div class="s5-row-item">
+            <div class="s5-item-head">Craig Dubitsky Relationship</div>
+            <div class="s5-item-body">High-value founder relationship. No hard pitch. Consistent light touch — position Tiger Tracks ahead of his next venture.</div>
+          </div>
+          <div class="s5-row-divider"></div>
+          <div class="s5-row-item">
+            <div class="s5-item-head">Partner Network Audit</div>
+            <div class="s5-item-body">Review all active intro loops, relationship investments, and strategic plays against closed pipeline.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div><!-- /deck -->
+
+<!-- ── NAVIGATION ── -->
+<div class="nav" id="nav">
+  <button class="nav-btn" onclick="move(-1)">&#8592;</button>
+  <div style="display:flex;gap:.5rem;" id="dots"></div>
+  <button class="nav-btn" onclick="move(1)">&#8594;</button>
+</div>
+
+<script>
+  var slides = document.querySelectorAll('.slide');
+  var dotsEl = document.getElementById('dots');
+  var cur = 0;
+  var n = slides.length;
+
+  // Build dots
+  for(var i=0;i<n;i++){
+    var d=document.createElement('div');
+    d.className='nav-dot'+(i===0?' active':'');
+    d.setAttribute('data-i',i);
+    d.onclick=function(){go(+this.getAttribute('data-i'));};
+    dotsEl.appendChild(d);
+  }
+
+  function go(idx){
+    slides[cur].classList.remove('active');
+    dotsEl.children[cur].classList.remove('active');
+    cur=(idx+n)%n;
+    slides[cur].classList.add('active');
+    dotsEl.children[cur].classList.add('active');
+  }
+  function move(d){ go(cur+d); }
+
+  document.addEventListener('keydown',function(e){
+    if(e.key==='ArrowRight'||e.key==='ArrowDown') move(1);
+    if(e.key==='ArrowLeft'||e.key==='ArrowUp') move(-1);
+  });
+</script>
+</body>
+</html>

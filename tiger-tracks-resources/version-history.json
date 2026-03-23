@@ -1,0 +1,20 @@
+{
+  "site": "tiger-tracks-resources",
+  "label": "Resources (Knowledge Base)",
+  "url": "https://tt-resources.vercel.app",
+  "privacy": "standard",
+  "current_version": 1,
+  "authorized_editors": [
+    "Eliz"
+  ],
+  "pending_changes": [],
+  "history": [
+    {
+      "version": 1,
+      "label": "v1.0 — Baseline",
+      "date": "2026-03-16",
+      "author": "System",
+      "note": "Initial baseline captured under Zero-Footprint QA Protocol."
+    }
+  ]
+}

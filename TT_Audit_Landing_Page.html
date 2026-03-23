@@ -1,0 +1,1071 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Full-Funnel Growth Audit  -  Tiger Tracks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --ink:     #0A1119;
+      --charcoal:#1B2126;
+      --teal:    #229FA1;
+      --tealD:   #1A7477;
+      --white:   #FFFFFF;
+      --bone:    #F4F1EB;
+      --boneD:   #E8E4DC;
+      --gray:    #9E9E9E;
+      --midgray: #5C6670;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--ink);
+      color: var(--white);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(10, 17, 25, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(34, 159, 161, 0.15);
+      padding: 0 48px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--teal);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: Georgia, serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--white);
+      letter-spacing: -0.5px;
+    }
+
+    .nav-wordmark {
+      font-family: Georgia, serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--white);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .nav-cta {
+      background: var(--teal);
+      color: var(--white);
+      padding: 10px 22px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--tealD); }
+
+    /* ── Sections ─────────────────────────────────────────── */
+    section { width: 100%; }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 48px;
+    }
+
+    /* ── HERO ─────────────────────────────────────────────── */
+    .hero {
+      background: var(--ink);
+      padding: 100px 48px 96px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 700px;
+      height: 500px;
+      background: radial-gradient(ellipse at center, rgba(34,159,161,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(34,159,161,0.4);
+      border-radius: 100px;
+      padding: 6px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--teal);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(38px, 5.5vw, 64px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--white);
+      max-width: 800px;
+      margin: 0 auto 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero h1 .teal { color: var(--teal); }
+
+    .hero-sub {
+      font-size: 18px;
+      color: rgba(255,255,255,0.65);
+      max-width: 500px;
+      margin: 0 auto 48px;
+      line-height: 1.65;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--teal);
+      color: var(--white);
+      padding: 16px 36px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+      display: inline-block;
+    }
+    .btn-primary:hover { background: var(--tealD); transform: translateY(-1px); }
+
+    .btn-ghost {
+      color: rgba(255,255,255,0.55);
+      font-size: 14px;
+      text-decoration: none;
+    }
+    .btn-ghost span { color: var(--teal); }
+
+    /* ── PROOF BAR ────────────────────────────────────────── */
+    .proof-bar {
+      background: var(--charcoal);
+      border-top: 1px solid rgba(34,159,161,0.2);
+      border-bottom: 1px solid rgba(34,159,161,0.2);
+      padding: 36px 48px;
+    }
+
+    .proof-bar-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 28px;
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .proof-item {
+      text-align: center;
+      padding: 0 24px;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .proof-item:last-child { border-right: none; }
+
+    .proof-client {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray);
+      margin-bottom: 8px;
+    }
+
+    .proof-stat {
+      font-family: Georgia, serif;
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .proof-desc {
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.4;
+    }
+
+    /* ── AG1 CASE STUDY ───────────────────────────────────── */
+    .ag1-section {
+      background: var(--ink);
+      border-top: 1px solid rgba(34,159,161,0.12);
+      border-bottom: 1px solid rgba(34,159,161,0.12);
+      padding: 88px 48px;
+    }
+
+    .ag1-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+
+
+    .ag1-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 20px;
+    }
+
+    .ag1-eyebrow::before {
+      content: '';
+      display: inline-block;
+      width: 24px;
+      height: 2px;
+      background: var(--teal);
+    }
+
+    .ag1-section h2 {
+      font-family: Georgia, serif;
+      font-size: clamp(22px, 2.8vw, 34px);
+      font-weight: 700;
+      color: var(--white);
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+
+    .ag1-narrative {
+      font-size: 15px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.7;
+      margin-bottom: 16px;
+    }
+
+    /* Right side: AG1 metrics */
+    .ag1-attribution {
+      font-size: 10px;
+      font-style: italic;
+      color: rgba(255,255,255,0.18);
+      margin-top: 20px;
+      line-height: 1.5;
+    }
+
+    .ag1-metrics-panel {
+      background: var(--charcoal);
+      border-radius: 16px;
+      padding: 40px;
+      border: 1px solid rgba(34,159,161,0.15);
+      margin-top: 148px;
+    }
+
+    .ag1-logo-wrap {
+      margin-bottom: 28px;
+    }
+
+    .ag1-logo-img {
+      height: 88px;
+      width: auto;
+      border-radius: 8px;
+      display: block;
+    }
+
+    .ag1-metric {
+      background: rgba(34,159,161,0.08);
+      border: 1px solid rgba(34,159,161,0.2);
+      border-radius: 10px;
+      padding: 20px 18px;
+      margin-bottom: 16px;
+    }
+    .ag1-metric:last-child {
+      margin-bottom: 0;
+    }
+
+    .ag1-metric .m-val {
+      font-family: Georgia, serif;
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .ag1-metric .m-lbl {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.4;
+    }
+
+
+
+    .ag1-metric-wide .wide-val {
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: -0.01em;
+    }
+
+    /* ── WHAT WE AUDIT (bone bg) ──────────────────────────── */
+    .what-section {
+      background: var(--bone);
+      padding: 88px 48px;
+    }
+
+    .section-tag {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 14px;
+    }
+
+    .section-h2 {
+      font-family: Georgia, serif;
+      font-size: clamp(28px, 3.5vw, 42px);
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-sub {
+      font-size: 17px;
+      color: var(--midgray);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 52px;
+    }
+
+    .audit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .audit-card {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 32px 28px;
+      border: 1px solid var(--boneD);
+      transition: box-shadow 0.2s;
+    }
+    .audit-card:hover { box-shadow: 0 8px 32px rgba(10,17,25,0.1); }
+
+    .audit-card-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .audit-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(34,159,161,0.1);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .audit-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .audit-card h3 {
+      font-family: Georgia, serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+      margin-top: 8px;
+    }
+
+    .audit-card-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+    }
+
+    .audit-card-items li {
+      font-size: 13px;
+      color: var(--midgray);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .audit-card-items li::before {
+      content: '→';
+      color: var(--teal);
+      font-weight: 600;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── HOW IT WORKS (dark bg) ───────────────────────────── */
+    .how-section {
+      background: var(--ink);
+      padding: 88px 48px;
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+    }
+
+    .step {
+      background: var(--charcoal);
+      border-radius: 12px;
+      padding: 36px 28px;
+      position: relative;
+      margin: 1px;
+    }
+
+    .step-num {
+      font-family: Georgia, serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: rgba(34,159,161,0.2);
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+
+    .step h3 {
+      font-family: Georgia, serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+
+    .step p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.65;
+    }
+
+    .step-time {
+      display: inline-block;
+      margin-top: 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--teal);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    /* ── WHAT YOU GET (bone) ──────────────────────────────── */
+    .walkaway-section {
+      background: var(--bone);
+      padding: 88px 48px;
+    }
+
+    .walkaway-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: start;
+    }
+
+    .walkaway-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .walkaway-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .walkaway-check {
+      width: 28px;
+      height: 28px;
+      background: var(--teal);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .walkaway-text strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .walkaway-text span {
+      font-size: 14px;
+      color: var(--midgray);
+    }
+
+    .walkaway-callout {
+      background: var(--ink);
+      border-radius: 16px;
+      padding: 40px;
+    }
+
+    .walkaway-stats-col {
+      display: flex;
+      flex-direction: column;
+      padding-top: 220px;
+    }
+
+    .walkaway-callout .callout-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--teal);
+      margin-bottom: 28px;
+      display: block;
+    }
+
+
+
+    .mini-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .mini-stat {
+      background: white;
+      border: 1px solid rgba(34,159,161,0.25);
+      border-radius: 8px;
+      padding: 18px 20px;
+    }
+
+    .mini-stat .val {
+      font-family: Georgia, serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--teal);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .mini-stat .lbl {
+      font-size: 12px;
+      color: var(--midgray);
+      line-height: 1.4;
+    }
+
+    /* ── BOOK SECTION ─────────────────────────────────────── */
+    .book-section {
+      background: var(--ink);
+      padding: 96px 48px;
+      text-align: center;
+      border-top: 1px solid rgba(34,159,161,0.15);
+    }
+
+    .book-section h2 {
+      font-family: Georgia, serif;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .book-section p {
+      font-size: 17px;
+      color: rgba(255,255,255,0.55);
+      max-width: 480px;
+      margin: 0 auto 48px;
+    }
+
+    .calendly-placeholder {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--charcoal);
+      border-radius: 16px;
+      border: 1px solid rgba(34,159,161,0.2);
+      padding: 64px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .calendly-placeholder .cal-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(34,159,161,0.15);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .calendly-placeholder .cal-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .calendly-placeholder h3 {
+      font-family: Georgia, serif;
+      font-size: 22px;
+      color: var(--white);
+      margin-bottom: 6px;
+    }
+
+    .calendly-placeholder p {
+      font-size: 14px;
+      color: rgba(255,255,255,0.4);
+      margin: 0 0 24px;
+    }
+
+    .trust-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      margin-top: 40px;
+      flex-wrap: wrap;
+    }
+
+    .trust-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .trust-item .trust-check {
+      color: var(--teal);
+      font-weight: 700;
+      font-size: 14px;
+    }
+
+    /* ── FOOTER ───────────────────────────────────────────── */
+    footer {
+      background: var(--charcoal);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 36px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo {
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    footer p {
+      font-size: 13px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .teal-line {
+      height: 3px;
+      background: linear-gradient(90deg, transparent, var(--teal), transparent);
+      border: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">TT</div>
+      <span class="nav-wordmark">Tiger Tracks</span>
+    </a>
+    <a href="#book" class="nav-cta">Book Your Free Audit</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="container" style="position:relative;z-index:1;">
+      <div class="hero-tag">Full-Funnel Growth Audit</div>
+      <h1>
+        Your Revenue<br>
+        Is Leaking.
+        <span class="teal"> We&rsquo;ll Find It.</span>
+      </h1>
+      <p class="hero-sub">
+        A 90-day roadmap built around your actual numbers  -  across paid, organic, creative, and attribution. No commitment. No fluff. Just findings.
+      </p>
+      <div class="hero-cta-group">
+        <a href="#book" class="btn-primary">Get Your Free Audit &rarr;</a>
+        <a href="#how" class="btn-ghost">See how it works <span>&darr;</span></a>
+      </div>
+    </div>
+  </section>
+
+  <hr class="teal-line">
+
+  <!-- SOCIAL PROOF BAR -->
+  <section class="proof-bar">
+    <div class="container">
+      <p class="proof-bar-label">Results from recent engagements</p>
+      <div class="proof-grid">
+
+        <div class="proof-item">
+          <p class="proof-client">Rho Nutrition</p>
+          <p class="proof-stat">+78%</p>
+          <p class="proof-desc">Revenue during partnership</p>
+        </div>
+        <div class="proof-item">
+          <p class="proof-client">Monarch Money</p>
+          <p class="proof-stat">+368%</p>
+          <p class="proof-desc">Increase in users</p>
+        </div>
+        <div class="proof-item">
+          <p class="proof-client">Aura Health</p>
+          <p class="proof-stat">&minus;37%</p>
+          <p class="proof-desc">Cost per trial YoY</p>
+        </div>
+        <div class="proof-item">
+          <p class="proof-client">Anastasia Beverly Hills</p>
+          <p class="proof-stat">+22%</p>
+          <p class="proof-desc">Meta ROAS improvement</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AG1 CASE STUDY -->
+  <section class="ag1-section">
+    <div class="container">
+      <div class="ag1-inner">
+
+        <!-- LEFT: Narrative -->
+        <div>
+          <div class="ag1-logo-wrap">
+            <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCADjAaIDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwDwSiiirOUKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAFAJ6An6Cja391vyNfb3wF8Jf8Ip8PLFJ4wl/fD7Xc8cgsPlU/Rcf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Kz9Q1vStNQvqGp2NqgGS086IB+Zrz/xF8c/A+jo4h1F9SnX/AJZ2URfJ/wB44X8iaBNpbnqFc74z8aaF4NsftOvX8dvuGY4R80sn+6g5P16V83eMv2iNe1SOS38OWkekQtx5zESzY9sjav5GvF9Rv7vU7yS71G6nu7qQ5aWZy7H8TVWIdTsej/Fn4vat45keytPM0/QQcC2Vvmm95COv+70HvXl9FFMxbvuFFFFABRRRQAV6n+zP/wAlc0//AK9bj/0CvLK9G/Z/1Ww0X4nWN7q13DZ2i286tNM21QSmACfegcd0fb1cD8ef+SR+Jf8Ar3X/ANGLWh/wsvwV/wBDRpH/AIErXFfGfx54V1T4Y69Zadr+m3V3NCqxwxThmY71PAH0NSjeTVj4+oooqjnCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooACAetS29xPbEm2mlhJ7xuV/lUVFAGpH4h1qIYi1nVEHot5KP5NUM+r6lPnz9Rvpc9d9w7fzNUaKAAjJJPJPeiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAP//Z" alt="AG1" class="ag1-logo-img" />
+          </div>
+          <div class="ag1-eyebrow">Case Study</div>
+          <h2>How AG1 Added 51% More Customers  -  While Cutting CAC</h2>
+          <p class="ag1-narrative">
+            AG1 came to Tiger Tracks with a familiar problem: strong top-line growth masking quietly deteriorating unit economics. Rising CAC was eating into profitability as they scaled, and their internal team couldn&rsquo;t pinpoint exactly where efficiency was leaking.
+          </p>
+          <p class="ag1-narrative">
+            Our audit identified a legacy campaign structure limiting Meta&rsquo;s learning velocity, creative fatigue driving up costs, and a brand search overinvestment masking where new customers were actually originating. The roadmap we delivered addressed all three  -  and within one year, the numbers moved significantly.
+          </p>
+        </div>
+
+        <!-- RIGHT: Stacked metrics + attribution -->
+        <div class="ag1-metrics-panel">
+          <div class="ag1-metric">
+            <div class="m-val">+51%</div>
+            <div class="m-lbl">Monthly acquired customers YoY</div>
+          </div>
+          <div class="ag1-metric">
+            <div class="m-val">&minus;5%</div>
+            <div class="m-lbl">Customer acquisition cost YoY</div>
+          </div>
+          <div class="ag1-metric">
+            <div class="m-val">&minus;31%</div>
+            <div class="m-lbl">Brand Search CAC reduction</div>
+          </div>
+          <p class="ag1-attribution">
+            Results from Tiger Tracks&rsquo; Meta campaign restructure and Google Brand Search audit, 2023&ndash;2024.
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT WE AUDIT -->
+  <section class="what-section">
+    <div class="container">
+      <p class="section-tag">What we look at</p>
+      <h2 class="section-h2">The full picture,<br>not just your paid accounts.</h2>
+      <p class="section-sub">Most audits stop at campaign performance. We look at the entire system  -  where you&rsquo;re spending, what you&rsquo;re making, and where growth is getting left on the table.</p>
+
+      <div class="audit-grid">
+
+        <div class="audit-card">
+          <div class="audit-card-header">
+            <div class="audit-icon">
+              <!-- Bar chart icon -->
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="2" y="10" width="3" height="8" rx="1" fill="#229FA1"/>
+                <rect x="7.5" y="6" width="3" height="12" rx="1" fill="#229FA1"/>
+                <rect x="13" y="2" width="3" height="16" rx="1" fill="#229FA1" opacity="0.6"/>
+                <rect x="2" y="19" width="14" height="1" rx="0.5" fill="#229FA1" opacity="0.4"/>
+              </svg>
+            </div>
+            <h3>Paid Channels</h3>
+          </div>
+          <ul class="audit-card-items">
+            <li>Meta, Google, TikTok, Amazon  -  every active channel</li>
+            <li>Budget allocation vs. actual opportunity by channel</li>
+            <li>Bid strategy, audience overlap, and creative fatigue</li>
+            <li>Where spend is wasted and where it&rsquo;s underinvested</li>
+          </ul>
+        </div>
+
+        <div class="audit-card">
+          <div class="audit-card-header">
+            <div class="audit-icon">
+              <!-- Search/magnifying glass icon -->
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8.5" cy="8.5" r="5.5" stroke="#229FA1" stroke-width="2"/>
+                <path d="M13 13L17 17" stroke="#229FA1" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Organic &amp; Search</h3>
+          </div>
+          <ul class="audit-card-items">
+            <li>SEO fundamentals and content health</li>
+            <li>Brand search share vs. competitors</li>
+            <li>GEO/AEO visibility  -  how you appear in AI search results</li>
+            <li>Organic revenue contribution vs. paid reliance</li>
+          </ul>
+        </div>
+
+        <div class="audit-card">
+          <div class="audit-card-header">
+            <div class="audit-icon">
+              <!-- Target/crosshair icon -->
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="7.5" stroke="#229FA1" stroke-width="1.8"/>
+                <circle cx="10" cy="10" r="4" stroke="#229FA1" stroke-width="1.8"/>
+                <circle cx="10" cy="10" r="1.5" fill="#229FA1"/>
+                <line x1="10" y1="1" x2="10" y2="4" stroke="#229FA1" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="10" y1="16" x2="10" y2="19" stroke="#229FA1" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="1" y1="10" x2="4" y2="10" stroke="#229FA1" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="16" y1="10" x2="19" y2="10" stroke="#229FA1" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <h3>Creative &amp; Conversion</h3>
+          </div>
+          <ul class="audit-card-items">
+            <li>Creative testing cadence &amp; volume</li>
+            <li>UGC vs. studio performance</li>
+            <li>Landing page CVR vs. benchmarks</li>
+            <li>CRO above the fold</li>
+          </ul>
+        </div>
+
+        <div class="audit-card">
+          <div class="audit-card-header">
+            <div class="audit-icon">
+              <!-- Line chart / attribution icon -->
+              <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <polyline points="2,15 6,9 10,12 14,5 18,7" stroke="#229FA1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <circle cx="6" cy="9" r="1.5" fill="#229FA1"/>
+                <circle cx="10" cy="12" r="1.5" fill="#229FA1"/>
+                <circle cx="14" cy="5" r="1.5" fill="#229FA1"/>
+                <line x1="2" y1="18" x2="18" y2="18" stroke="#229FA1" stroke-width="1.5" stroke-linecap="round" opacity="0.4"/>
+              </svg>
+            </div>
+            <h3>Attribution &amp; Unit Economics</h3>
+          </div>
+          <ul class="audit-card-items">
+            <li>Pixel and conversion event accuracy</li>
+            <li>Attribution model vs. actual customer path</li>
+            <li>CAC broken out by channel  -  not just blended</li>
+            <li>LTV:CAC ratio and EBITDA-tied efficiency targets</li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section" id="how">
+    <div class="container">
+      <p class="section-tag" style="color:var(--teal);">How it works</p>
+      <h2 class="section-h2" style="color:var(--white);margin-bottom:52px;">Three steps. Two weeks.<br>A roadmap you can act on.</h2>
+      <div class="steps-grid">
+        <div class="step">
+          <div class="step-num">01</div>
+          <h3>Grant View-Only Access</h3>
+          <p>We send a short setup guide for your active channels  -  Meta, Google, TikTok, and any others. Read-only access, takes about 2 minutes.</p>
+          <span class="step-time">Day 1</span>
+        </div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <h3>We Audit Your Full Program</h3>
+          <p>Our team goes deep across campaigns, creative, organic, tracking, and unit economics. We build a findings deck with specific, prioritized recommendations.</p>
+          <span class="step-time">Days 2&ndash;10</span>
+        </div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <h3>We Walk You Through It</h3>
+          <p>A 60-minute call where we present findings and your 90-day roadmap. Whether or not you work with us, it&rsquo;s yours to keep.</p>
+          <span class="step-time">Day 14</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WHAT YOU WALK AWAY WITH -->
+  <section class="walkaway-section">
+    <div class="container">
+      <div class="walkaway-inner">
+        <div>
+          <p class="section-tag">What you get</p>
+          <h2 class="section-h2">A roadmap, not a pitch deck.</h2>
+          <p class="section-sub" style="margin-bottom:40px;">Everything we find is yours  -  whether we work together or not.</p>
+          <ul class="walkaway-list">
+            <li class="walkaway-item">
+              <div class="walkaway-check">&#10003;</div>
+              <div class="walkaway-text">
+                <strong>Full-funnel findings by channel</strong>
+                <span>Paid, organic, creative, and attribution  -  with specific observations, not vague suggestions</span>
+              </div>
+            </li>
+            <li class="walkaway-item">
+              <div class="walkaway-check">&#10003;</div>
+              <div class="walkaway-text">
+                <strong>Prioritized 90-day action plan</strong>
+                <span>Ranked by expected impact and ease of implementation  -  highest ROI first</span>
+              </div>
+            </li>
+            <li class="walkaway-item">
+              <div class="walkaway-check">&#10003;</div>
+              <div class="walkaway-text">
+                <strong>CAC and unit economics analysis</strong>
+                <span>Every finding tied back to your actual numbers, not just platform metrics</span>
+              </div>
+            </li>
+            <li class="walkaway-item">
+              <div class="walkaway-check">&#10003;</div>
+              <div class="walkaway-text">
+                <strong>Creative velocity benchmark</strong>
+                <span>Where you stand vs. best-in-class brands at your spend level</span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="walkaway-stats-col">
+          <div class="mini-stats">
+            <div class="mini-stat">
+              <div class="val">7&ndash;10</div>
+              <div class="lbl">Days to complete</div>
+            </div>
+            <div class="mini-stat">
+              <div class="val">$0</div>
+              <div class="lbl">Cost to you</div>
+            </div>
+            <div class="mini-stat">
+              <div class="val">100%</div>
+              <div class="lbl">Yours to keep</div>
+            </div>
+            <div class="mini-stat">
+              <div class="val">5+</div>
+              <div class="lbl">Channels covered</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOK -->
+  <section class="book-section" id="book">
+    <div class="container">
+      <h2>Ready to see what we find?</h2>
+      <p>Pick a time. We&rsquo;ll diagnose what&rsquo;s leaking and outline the highest-impact fixes  -  no strings attached.</p>
+
+      <!-- Start of HubSpot Meetings Embed Script -->
+      <div class="meetings-iframe-container" data-src="https://meetings.hubspot.com/kaika/landing-page-meeting-booked?embed=true" style="max-width:720px;margin:0 auto;min-height:700px;"></div>
+      <script type="text/javascript" src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"></script>
+      <!-- End of HubSpot Meetings Embed Script -->
+
+      <div class="trust-row">
+        <div class="trust-item"><span class="trust-check">&#10003;</span> No commitment required</div>
+        <div class="trust-item"><span class="trust-check">&#10003;</span> View-only platform access</div>
+        <div class="trust-item"><span class="trust-check">&#10003;</span> Findings are yours to keep</div>
+        <div class="trust-item"><span class="trust-check">&#10003;</span> Results in 7&ndash;10 days</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span class="footer-logo">Tiger Tracks</span>
+    <p>&copy; 2026 Tiger Tracks &middot; tigertracks.ai</p>
+  </footer>
+
+</body>
+</html>

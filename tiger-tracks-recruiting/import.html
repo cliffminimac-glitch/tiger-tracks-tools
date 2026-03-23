@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Importing candidates...</title>
+<style>
+body { font-family: sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #1B2126; color: #fff; flex-direction: column; gap: 1rem; }
+.spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,.2); border-top-color: #229FA1; border-radius: 50%; animation: spin .8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+p { color: rgba(255,255,255,.7); font-size: .9rem; }
+</style>
+</head>
+<body>
+<div class="spinner"></div>
+<p id="msg">Importing candidates...</p>
+<script>
+var params = new URLSearchParams(window.location.search);
+var data = params.get('d');
+if (!data) { document.getElementById('msg').textContent = 'No data provided.'; }
+else {
+  try {
+    var incoming = JSON.parse(atob(data));
+    var existing = JSON.parse(localStorage.getItem('ttrec_candidates') || '[]');
+    var incomingMap = {};
+    incoming.forEach(function(c){ incomingMap[c.id] = c; });
+    var updated = 0, added = 0;
+    existing = existing.map(function(c){
+      if (incomingMap[c.id]) { updated++; return incomingMap[c.id]; }
+      return c;
+    });
+    incoming.forEach(function(c) {
+      if (!existing.some(function(e){ return e.id === c.id; })) { existing.push(c); added++; }
+    });
+    localStorage.setItem('ttrec_candidates', JSON.stringify(existing));
+    document.getElementById('msg').textContent = '✅ ' + added + ' added, ' + updated + ' updated! Redirecting...';
+    setTimeout(function(){ window.location.href = '/'; }, 1200);
+  } catch(e) {
+    document.getElementById('msg').textContent = 'Error: ' + e.message;
+  }
+}
+</script>
+</body>
+</html>
