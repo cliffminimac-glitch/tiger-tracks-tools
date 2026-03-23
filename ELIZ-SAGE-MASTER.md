@@ -292,7 +292,9 @@ A second Slack bot (separate from Sage) created at Eliz's request for site creat
 
 ## Fragile Things — New Machine Attention Required
 
-1. **Git author email.** Must be `cliffminimac@gmail.com` for Vercel CI deployments. If commits use system default (`cliffsimmons@Cliffs-Mac-mini.local`), Vercel rejects them with "Git author must have access to the team." Set per-repo: `git config user.email "cliffminimac@gmail.com"`. Set globally: `git config --global user.email "cliffminimac@gmail.com"`.
+1. **Vercel deploy method: CLI is primary. Use `vercel --prod --yes`.** REST API is NOT a fallback — the CLI works. Any reference to "CLI broken" is incorrect. Token: `vca_5NvFzSJwRc9ERPzE1fmrC1IcZJhKtWOm515nNqbidp1z37YuYb3KfwTL`.
+
+2. **Git author email.** Must be `cliffminimac@gmail.com` for Vercel CI deployments. If commits use system default (`cliffsimmons@Cliffs-Mac-mini.local`), Vercel rejects them with "Git author must have access to the team." Set per-repo: `git config user.email "cliffminimac@gmail.com"`. Set globally: `git config --global user.email "cliffminimac@gmail.com"`.
 
 2. **Vercel Blob CDN caching.** Never overwrite a Blob key. Always write new timestamped key. CDN caches for ~5 min after overwrite — old data will be served to users. Key format: `{baseKey}__{Date.now()}.json`. Dedup in GET by sorting descending and taking first per base key.
 

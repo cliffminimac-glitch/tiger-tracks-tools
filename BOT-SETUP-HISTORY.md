@@ -122,6 +122,11 @@ All live in `/Users/cliffsimmons/.openclaw/workspace/`:
 **Why:** Vercel checks the commit author against team members. The Mac mini's system default is `cliffsimmons@Cliffs-Mac-mini.local` which is not a Vercel team member. Vercel rejects deployment with "Git author must have access to the team." This caused multiple failed deploys (tt-retreat, tt-checkins) before the pattern was identified.
 **Fix:** `git config user.email "cliffminimac@gmail.com"` per repo, or globally.
 
+### 4a. Vercel CLI is the primary deploy method — not REST API
+**Decision:** Use `vercel --prod --yes` as the standard deploy command.
+**Why this needs to be explicit:** Some documentation (and one external reference) described the CLI as "broken" and suggested using the REST API as a fallback. This is wrong. The CLI works. Every successful deploy on 2026-03-23 used the CLI. The single deploy failure was caused by the git author email issue (see #4 above), not the CLI itself.
+**Rule:** Never switch to REST API deployment unless the CLI is genuinely broken AND verified broken. Default is always `vercel --prod --yes`.
+
 ### 5. Resend `batch.send()` for email reminders
 **Decision:** `send-reminders.js` uses `resend.batch.send()` to send all 22 reminder emails in a single API call.
 **Why:** Sequential sends timed out at ~10/22 emails on Vercel's 10-second serverless limit. `batch.send()` parallelizes all 22 in one call. `maxDuration: 60` set in `vercel.json` for this function.
