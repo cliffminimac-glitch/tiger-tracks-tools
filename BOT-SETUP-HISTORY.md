@@ -89,7 +89,7 @@ All live in `/Users/cliffsimmons/.openclaw/workspace/`:
 
 **Why Vercel:** Zero-downtime deploys, serverless API routes, Vercel Blob for persistence, automatic HTTPS, global CDN, git-connected deploys, Vercel Cron for automation. Tools are now Mac-independent.
 
-**Vercel CLI auth:** `cliffminimac-glitch` GitHub account. CLI token: `vca_10oiS71DHWo2TMg5IcrRr1EG8739yJPGVEkisUdSyx1Ykhhh332pqIBY`.
+**Vercel CLI auth:** `cliffminimac-glitch` GitHub account. CLI token: `vca_5NvFzSJwRc9ERPzE1fmrC1IcZJhKtWOm515nNqbidp1z37YuYb3KfwTL`.
 
 ### Phase 3: Cloudflare DNS
 **2026-03-09.** All `*.cliffeliz.ai` subdomains updated from A records (Mac mini IP) to CNAME records (`cname.vercel-dns.com`, proxy OFF). Done via Cloudflare API.
