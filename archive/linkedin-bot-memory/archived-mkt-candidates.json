@@ -1,0 +1,22 @@
+[
+  {
+    "id": "dom_1773166390958_1",
+    "name": "Marissa Notaro",
+    "headline": "Strategic Marketing Leader | HubSpot Super User | Demand Gen Expert",
+    "location": "New York City Metropolitan Area",
+    "company": "CyberSN",
+    "jobTitle": "Marketing Director",
+    "positionId": "pos_dom",
+    "roleKey": "MKT",
+    "position": "Director of Marketing",
+    "stage": "contacted",
+    "score": 90,
+    "source": "linkedin_recruiter",
+    "createdAt": "2026-03-10T18:13:10.958Z",
+    "updated": "2026-03-13T19:44:15.130Z",
+    "history": [{"stage":"contacted","date":"2026-03-13T19:44:15.130Z","note":""}],
+    "archived": true,
+    "archivedAt": "2026-03-16T01:45:00.000Z",
+    "archivedReason": "Role not visible to team"
+  }
+]
